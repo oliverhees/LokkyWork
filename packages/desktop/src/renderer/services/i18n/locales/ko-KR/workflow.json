@@ -60,7 +60,10 @@
       "inputMode": "Input mode",
       "prompt": "Prompt",
       "promptPlaceholder": "Prompt for this step. Use {{input}} for the previous step's output in template mode.",
-      "noModels": "No models configured"
+      "noModels": "No models configured",
+      "skills": "Skills",
+      "skillsPlaceholder": "Select skills",
+      "noSkills": "No skills available"
     },
     "inputMode": {
       "none": "None (own prompt only)",

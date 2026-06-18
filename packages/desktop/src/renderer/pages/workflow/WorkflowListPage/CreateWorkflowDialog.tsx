@@ -5,6 +5,7 @@
  */
 
 import type { IWorkflow, IWorkflowStep, TWorkflowInputMode, TWorkflowStepBackend } from '@/common/types/workflow/workflowTypes';
+import { ipcBridge } from '@/common';
 import { uuid } from '@/common/utils';
 import { Button, Form, Input, Message, Select } from '@arco-design/web-react';
 import { ArrowDown, ArrowUp, Delete, Plus } from '@icon-park/react';
@@ -12,6 +13,7 @@ import ModalWrapper from '@renderer/components/base/ModalWrapper';
 import { useModelProviderList } from '@renderer/hooks/agent/useModelProviderList';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import useSWR from 'swr';
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -84,6 +86,22 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
     }
     return opts;
   }, [providers, getAvailableModels]);
+
+  // Available skills for per-step selection. A step persists skill names
+  // (string[]); the executor passes them through as extra.preset_enabled_skills.
+  // Selecting from the real /api/skills index keeps the names valid.
+  const { data: availableSkills } = useSWR('workflow-available-skills', () => ipcBridge.fs.listAvailableSkills.invoke());
+  const skillOptions = useMemo(() => {
+    const seen = new Set<string>();
+    const opts: { value: string; label: string }[] = [];
+    for (const skill of availableSkills ?? []) {
+      if (skill?.name && !seen.has(skill.name)) {
+        seen.add(skill.name);
+        opts.push({ value: skill.name, label: skill.name });
+      }
+    }
+    return opts;
+  }, [availableSkills]);
 
   const handleAddStep = () => {
     setSteps((prev) => [...prev, createDraftStep()]);
@@ -214,6 +232,16 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
                       {INPUT_MODE_OPTIONS.map((mode) => (
                         <Option key={mode} value={mode}>
                           {t(`workflow.form.inputMode.${mode}`)}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className='min-w-0 md:col-span-2'>
+                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.skills')}</label>
+                    <Select size='small' mode='multiple' showSearch allowClear placeholder={t('workflow.form.step.skillsPlaceholder')} notFoundContent={t('workflow.form.step.noSkills')} value={step.skills ?? []} onChange={(value) => updateStep(step.id, { skills: ((value as string[]) ?? []).filter(Boolean) })}>
+                      {skillOptions.map((skill) => (
+                        <Option key={skill.value} value={skill.value}>
+                          {skill.label}
                         </Option>
                       ))}
                     </Select>

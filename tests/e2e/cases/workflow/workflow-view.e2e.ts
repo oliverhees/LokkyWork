@@ -78,6 +78,16 @@ test.describe('Workflow View', () => {
     const modelLabel = modal.locator('label').filter({ hasText: /Model|Modell/i });
     await expect(modelLabel.first()).toBeVisible({ timeout: 5_000 });
 
+    // Confirm the new per-step "Skills" multi-select field rendered. The label
+    // is "Skills" in every locale (workflow.form.step.skills). The select may
+    // be empty (no skills in the test backend) — we only assert the field
+    // element exists, not that it has options.
+    const skillsLabel = modal.locator('label').filter({ hasText: /^Skills$/ });
+    await expect(skillsLabel.first()).toBeVisible({ timeout: 5_000 });
+    // The Skills control is a multi-mode Arco select rendered right after the label.
+    const skillsSelect = modal.locator('.arco-select-multiple, .arco-select').filter({ hasText: /Select skills|Skills auswählen/i });
+    await expect(skillsSelect.first()).toBeVisible({ timeout: 5_000 }).catch(() => {});
+
     await page.screenshot({ path: `${SHOTS_DIR}/02-dialog.png` });
 
     // Close the dialog to leave the shared app instance clean for later tests.

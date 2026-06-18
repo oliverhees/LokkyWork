@@ -60,7 +60,10 @@
       "inputMode": "Eingabemodus",
       "prompt": "Prompt",
       "promptPlaceholder": "Prompt für diesen Schritt. Nutze {{input}} für die Ausgabe des vorherigen Schritts im Template-Modus.",
-      "noModels": "Keine Modelle konfiguriert"
+      "noModels": "Keine Modelle konfiguriert",
+      "skills": "Skills",
+      "skillsPlaceholder": "Skills auswählen",
+      "noSkills": "Keine Skills verfügbar"
     },
     "inputMode": {
       "none": "Keine (nur eigener Prompt)",
