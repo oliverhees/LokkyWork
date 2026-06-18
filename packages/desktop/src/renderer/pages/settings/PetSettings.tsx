@@ -20,6 +20,7 @@ const PetSettings: React.FC = () => {
   const [size, setSize] = useState(280);
   const [dnd, setDnd] = useState(false);
   const [confirmEnabled, setConfirmEnabled] = useState(true);
+  const [skin, setSkin] = useState('default');
   const { t } = useTranslation();
   const viewMode = useSettingsViewMode();
   const isPageMode = viewMode === 'page';
@@ -30,6 +31,7 @@ const PetSettings: React.FC = () => {
     setSize(configService.get('pet.size') ?? 280);
     setDnd(configService.get('pet.dnd') ?? false);
     setConfirmEnabled(configService.get('pet.confirmEnabled') ?? true);
+    setSkin(configService.get('pet.skin') ?? 'default');
   }, []);
 
   const handleEnabledChange = useCallback((checked: boolean) => {
@@ -72,6 +74,19 @@ const PetSettings: React.FC = () => {
     });
   }, []);
 
+  const handleSkinChange = useCallback(
+    (val: string) => {
+      const prevSkin = skin;
+      setSkin(val);
+      configService.setLocal('pet.skin', val);
+      systemSettings.setPetSkin.invoke({ skin: val }).catch(() => {
+        setSkin(prevSkin);
+        configService.setLocal('pet.skin', prevSkin);
+      });
+    },
+    [skin]
+  );
+
   if (!isDesktop) {
     return (
       <SettingsPageWrapper>
@@ -100,6 +115,16 @@ const PetSettings: React.FC = () => {
           <Radio value={200}>{t('pet.sizeSmall', { px: 200 })}</Radio>
           <Radio value={280}>{t('pet.sizeMedium', { px: 280 })}</Radio>
           <Radio value={360}>{t('pet.sizeLarge', { px: 360 })}</Radio>
+        </Radio.Group>
+      ),
+    },
+    {
+      key: 'skin',
+      label: t('pet.skin'),
+      component: (
+        <Radio.Group value={skin} onChange={handleSkinChange} disabled={!enabled}>
+          <Radio value='default'>{t('pet.skinDefault')}</Radio>
+          <Radio value='dragon-3d'>{t('pet.skinDragon3d')}</Radio>
         </Radio.Group>
       ),
     },

@@ -13,5 +13,8 @@
   "resetPosition": "位置をリセット",
   "hide": "非表示",
   "showHide": "表示/非表示",
-  "desktopOnly": "デスクトップペットはデスクトップアプリでのみ利用可能です。WebUIブラウザモードでは使用できません。"
+  "desktopOnly": "デスクトップペットはデスクトップアプリでのみ利用可能です。WebUIブラウザモードでは使用できません。",
+  "skin": "ペットスキン",
+  "skinDefault": "クラシック",
+  "skinDragon3d": "Dragon 3D"
 }

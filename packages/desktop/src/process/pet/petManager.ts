@@ -18,6 +18,7 @@ import {
   unhookPetConfirm,
 } from './petConfirmManager';
 import type { PetSize, PetState } from './petTypes';
+import { ProcessConfig } from '@process/utils/initStorage';
 
 /**
  * Check whether the current environment can support desktop pet windows.
@@ -41,6 +42,16 @@ const RENDERER_DIR = path.join(__dirname, '..', '..', 'renderer', 'pet');
 
 let petWindow: BrowserWindow | null = null;
 let petHitWindow: BrowserWindow | null = null;
+// Active pet skin ('default' or a public/community-skins/<id> folder name).
+// Pre-loaded from config so loadContent() can pass it on the initial window
+// load; the pet window is created after startup, so this async read resolves
+// in time. Updated at runtime via reloadPetSkin().
+let currentPetSkin = 'default';
+ProcessConfig.get('pet.skin')
+  .then((skin) => {
+    currentPetSkin = (skin as string | undefined) ?? 'default';
+  })
+  .catch(() => {});
 let stateMachine: PetStateMachine | null = null;
 let idleTicker: PetIdleTicker | null = null;
 let eventBridge: PetEventBridge | null = null;
@@ -340,22 +351,35 @@ function computeInitialPosition(size: number): { x: number; y: number } {
 function loadContent(): void {
   if (!petWindow || !petHitWindow) return;
   const rendererUrl = process.env['ELECTRON_RENDERER_URL'];
+  // Only the visible pet window needs the skin; the hit-detection window has no visuals.
+  const skinQuery = currentPetSkin !== 'default' ? `?skin=${encodeURIComponent(currentPetSkin)}` : '';
 
   if (!app.isPackaged && rendererUrl) {
-    petWindow.loadURL(`${rendererUrl}/pet/pet.html`).catch((error) => {
+    petWindow.loadURL(`${rendererUrl}/pet/pet.html${skinQuery}`).catch((error) => {
       console.error('[Pet] loadURL failed for pet window:', error);
     });
     petHitWindow.loadURL(`${rendererUrl}/pet/pet-hit.html`).catch((error) => {
       console.error('[Pet] loadURL failed for pet-hit window:', error);
     });
   } else {
-    petWindow.loadFile(path.join(RENDERER_DIR, 'pet.html')).catch((error) => {
+    const petQuery = currentPetSkin !== 'default' ? { query: { skin: currentPetSkin } } : undefined;
+    petWindow.loadFile(path.join(RENDERER_DIR, 'pet.html'), petQuery).catch((error) => {
       console.error('[Pet] loadFile failed for pet window:', error);
     });
     petHitWindow.loadFile(path.join(RENDERER_DIR, 'pet-hit.html')).catch((error) => {
       console.error('[Pet] loadFile failed for pet-hit window:', error);
     });
   }
+}
+
+/**
+ * Switch the pet skin at runtime without destroying the window. Called from the
+ * settings bridge when the user picks a different skin.
+ */
+export function reloadPetSkin(skin: string): void {
+  currentPetSkin = skin || 'default';
+  if (!petWindow || petWindow.isDestroyed()) return;
+  loadContent();
 }
 
 // ---------------------------------------------------------------------------

@@ -13,5 +13,8 @@
   "resetPosition": "Redefinir Posição",
   "hide": "Ocultar",
   "showHide": "Mostrar/Ocultar",
-  "desktopOnly": "O Mascote de Mesa está disponível apenas no aplicativo para desktop. Ele não pode ser usado no modo navegador WebUI."
+  "desktopOnly": "O Mascote de Mesa está disponível apenas no aplicativo para desktop. Ele não pode ser usado no modo navegador WebUI.",
+  "skin": "Skin do Pet",
+  "skinDefault": "Clássico",
+  "skinDragon3d": "Dragon 3D"
 }

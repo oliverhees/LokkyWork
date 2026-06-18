@@ -1,10 +1,20 @@
 const LOAD_TIMEOUT = 3000;
 const FADE_MS = 150;
-const PET_STATES_BASE_PATH = '../pet-states';
+const DEFAULT_STATES_PATH = '../pet-states';
+// A non-default skin loads its state SVGs from public/community-skins/<skin>/.
+// Both vector skins ("dragon-hd") and raster skins ("dragon-3d", whose SVGs
+// embed a PNG via <image>) work through this same path — no renderer change
+// needed per skin type.
+const skin = new URLSearchParams(window.location.search).get('skin') || 'default';
+const COMMUNITY_SKIN_PATH = skin !== 'default' ? `../community-skins/${encodeURIComponent(skin)}` : null;
 let currentObject: HTMLObjectElement | null = document.getElementById('pet') as HTMLObjectElement;
 
 function getStateAssetPath(state: string): string {
-  return `${PET_STATES_BASE_PATH}/${state}.svg`;
+  return COMMUNITY_SKIN_PATH ? `${COMMUNITY_SKIN_PATH}/${state}.svg` : `${DEFAULT_STATES_PATH}/${state}.svg`;
+}
+
+function getDefaultAssetPath(state: string): string {
+  return `${DEFAULT_STATES_PATH}/${state}.svg`;
 }
 
 function setupTransitions(_target: HTMLObjectElement | null): void {
@@ -36,6 +46,12 @@ function loadSvg(svgPath: string): void {
   const timeout = setTimeout(() => {
     if (!loaded) {
       newObj.remove();
+      // Community skin state asset missing — retry with the default skin so the
+      // pet never gets stuck on a blank frame when a skin lacks a given state.
+      if (COMMUNITY_SKIN_PATH && !svgPath.startsWith(DEFAULT_STATES_PATH)) {
+        const failedState = svgPath.split('/').pop()?.replace('.svg', '') ?? '';
+        if (failedState) loadSvg(getDefaultAssetPath(failedState));
+      }
     }
   }, LOAD_TIMEOUT);
 
@@ -80,6 +96,13 @@ if (currentObject) {
   currentObject.addEventListener('load', () => {
     setupTransitions(currentObject);
   });
+}
+
+// pet.html hard-codes the default idle.svg. For a community skin, swap to the
+// skin's idle immediately on load so the skin applies before the first state
+// event fires (otherwise the default idle flashes first).
+if (COMMUNITY_SKIN_PATH) {
+  loadSvg(getStateAssetPath('idle'));
 }
 
 window.petAPI.onStateChange((state: string) => {
