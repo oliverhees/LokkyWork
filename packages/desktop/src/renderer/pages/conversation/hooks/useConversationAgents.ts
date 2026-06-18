@@ -7,6 +7,7 @@
 import useSWR from 'swr';
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
+import { applyAssistantDeOverrides } from '@renderer/utils/assistant/assistantDeOverrides';
 import { DETECTED_AGENTS_SWR_KEY, fetchDetectedAgents } from '@/renderer/utils/model/agentTypes';
 import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import { isSupportedNewConversationAgent } from '@/renderer/utils/model/agentTypeSupportPolicy';
@@ -40,7 +41,7 @@ export const useConversationAgents = (): UseConversationAgentsResult => {
   // Preset assistants from the backend-maintained catalog
   const { data: presetAssistants, isLoading: isLoadingPresets } = useSWR('assistants.presets', async () => {
     try {
-      const list = await ipcBridge.assistants.list.invoke();
+      const list = applyAssistantDeOverrides(await ipcBridge.assistants.list.invoke());
       return list.filter((assistant) => assistant.enabled !== false);
     } catch (error) {
       console.error('Failed to load assistants for conversation selector:', error);
