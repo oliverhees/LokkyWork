@@ -388,7 +388,7 @@ const Layout: React.FC<{
                     </div>
                   </Tooltip>
                 ) : (
-                  <div className='text-16px text-t-primary collapsed-hidden font-semibold'>AionUi</div>
+                  <div className='text-16px text-t-primary collapsed-hidden font-semibold'>LokkyWork</div>
                 )}
                 {isMobile && !collapsed && (
                   <button
