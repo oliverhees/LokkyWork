@@ -151,6 +151,20 @@ const WorkflowEditorPage: React.FC = () => {
     setSelectedStepId(node.id);
   }, []);
 
+  // Reorder the linear chain by dragging a node vertically: derive the new
+  // order from the resulting top-to-bottom node positions. setSteps triggers a
+  // node rebuild, snapping nodes back into clean positions in the new order.
+  // The linear invariant is preserved (order is re-derived, never a DAG).
+  const handleNodeDragStop = useCallback(() => {
+    setSteps((prev) => {
+      if (prev.length < 2) return prev;
+      const yById = new Map(nodes.map((node) => [node.id, node.position.y]));
+      const reordered = [...prev].toSorted((a, b) => (yById.get(a.id) ?? 0) - (yById.get(b.id) ?? 0));
+      if (reordered.every((step, index) => step.id === prev[index].id)) return prev;
+      return reordered;
+    });
+  }, [nodes]);
+
   const updateStep = useCallback((stepId: string, patch: Partial<DraftStep>) => {
     setSteps((prev) => prev.map((step) => (step.id === stepId ? { ...step, ...patch } : step)));
   }, []);
@@ -253,7 +267,7 @@ const WorkflowEditorPage: React.FC = () => {
                   <Empty description={t('workflow.editor.noSteps')} />
                 </div>
               ) : (
-                <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodeClick={handleNodeClick} nodeTypes={NODE_TYPES} nodesDraggable={!editingLocked} fitView proOptions={{ hideAttribution: true }}>
+                <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodeClick={handleNodeClick} onNodeDragStop={handleNodeDragStop} nodeTypes={NODE_TYPES} nodesDraggable={!editingLocked} fitView proOptions={{ hideAttribution: true }}>
                   <Background />
                   <Controls />
                 </ReactFlow>
