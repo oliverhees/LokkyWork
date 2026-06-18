@@ -255,7 +255,7 @@
   "deleteInvalidKeys": "유효하지 않은 키 삭제",
   "testAllKeys": "모든 키 테스트",
   "addModelPlaceholder": "모델 ID 선택 또는 입력",
-  "customModelSupportNote": "참고: 현재 Aion CLI만 사용자 지정 모델을 지원합니다.",
+  "customModelSupportNote": "참고: 현재 Lokky CLI만 사용자 지정 모델을 지원합니다.",
   "addModelHint": "모델 ID를 선택하거나 입력하면 이 공급자에 추가됩니다.",
   "addModelSelectedHint": "모델 추가 준비 완료: {{model}}",
   "currentModelsLabel": "현재 모델",
@@ -950,7 +950,7 @@
   "agentManagement": {
     "localAgents": "로컬 에이전트",
     "remoteAgents": "원격 에이전트",
-    "localAgentsDescription": "Aion CLI는 내장 에이전트로 앱에 포함되어 있어 설치가 필요하지 않습니다. 다른 에이전트는 해당 CLI를 로컬에 설치한 후 자동으로 감지됩니다.",
+    "localAgentsDescription": "Lokky CLI는 내장 에이전트로 앱에 포함되어 있어 설치가 필요하지 않습니다. 다른 에이전트는 해당 CLI를 로컬에 설치한 후 자동으로 감지됩니다.",
     "localAgentsSetupLink": "설치 가이드",
     "goToChat": "채팅 시작",
     "remoteAgentsDescription": "현재는 OpenClaw 원격 연결만 지원하며, 다른 에이전트는 개발 중입니다.",

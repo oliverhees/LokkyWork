@@ -255,7 +255,7 @@
   "deleteInvalidKeys": "Ungültige Schlüssel löschen",
   "testAllKeys": "Alle Schlüssel testen",
   "addModelPlaceholder": "Modell-ID auswählen oder eingeben",
-  "customModelSupportNote": "Hinweis: Aion CLI und Gemini CLI-Agent unterstützen derzeit benutzerdefinierte Modelle.",
+  "customModelSupportNote": "Hinweis: Lokky CLI und Gemini CLI-Agent unterstützen derzeit benutzerdefinierte Modelle.",
   "addModelHint": "Modell-ID auswählen oder eingeben und sie wird diesem Anbieter hinzugefügt.",
   "addModelSelectedHint": "Bereit, Modell hinzuzufügen: {{model}}",
   "currentModelsLabel": "Aktuelle Modelle",

@@ -104,7 +104,7 @@
       "selectFolder": "Ordner auswählen",
       "clearFolder": "Leeren",
       "model": "Modell",
-      "aionrsModelRequired": "Bitte wähle ein Modell für Aion CLI",
+      "aionrsModelRequired": "Bitte wähle ein Modell für Lokky CLI",
       "aionrsNoProvider": "Keine verfügbaren Modelle"
     },
     "freq": {
