@@ -1,7 +1,7 @@
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
   <style>
-    .d{transform-origin:50% 90%;animation:a 0.6s ease-in-out infinite}
-    @keyframes a{0%,100%{transform:rotate(0deg)}25%{transform:rotate(1.4deg)}75%{transform:rotate(-1.4deg)}}
+    .d{transform-box:fill-box;transform-origin:50% 88%;animation:a 0.5s ease-in-out infinite}
+    @keyframes a{0%,100%{transform:rotate(0)}25%{transform:rotate(2.5deg)}75%{transform:rotate(-2.5deg)}}
   </style>
   <image class="d" href="poke-right.png" x="0" y="0" width="100" height="100"/>
 </svg>

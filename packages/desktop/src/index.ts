@@ -805,8 +805,10 @@ const handleAppReady = async (): Promise<void> => {
             // Read pet sub-settings before creating the pet so flags are honored
             // on the first createPetWindow() call (which is sync).
             const confirmEnabled = (await ProcessConfig.get('pet.confirmEnabled')) ?? true;
-            const { createPetWindow, setPetConfirmEnabled } = await import('./process/pet/petManager');
+            const skin = (await ProcessConfig.get('pet.skin')) ?? 'default';
+            const { createPetWindow, setPetConfirmEnabled, reloadPetSkin } = await import('./process/pet/petManager');
             setPetConfirmEnabled(confirmEnabled);
+            reloadPetSkin(skin);
             createPetWindow();
           }
         } catch (error) {

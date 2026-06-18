@@ -16,5 +16,8 @@
   "desktopOnly": "O Mascote de Mesa está disponível apenas no aplicativo para desktop. Ele não pode ser usado no modo navegador WebUI.",
   "skin": "Skin do Pet",
   "skinDefault": "Clássico",
-  "skinDragon3d": "Dragon 3D"
+  "skinDragon3d": "Dragon 3D",
+  "skinDragon2d": "Dragon 2D",
+  "skinGroupClassic": "Clássico",
+  "skinGroupDragon": "Dragões"
 }

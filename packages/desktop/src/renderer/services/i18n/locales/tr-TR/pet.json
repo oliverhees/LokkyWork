@@ -16,5 +16,8 @@
   "desktopOnly": "Masaüstü evcil hayvanı yalnızca masaüstü uygulamasında kullanılabilir. WebUI tarayıcı modunda kullanılamaz.",
   "skin": "Evcil Hayvan Görünümü",
   "skinDefault": "Klasik",
-  "skinDragon3d": "Dragon 3D"
+  "skinDragon3d": "Dragon 3D",
+  "skinDragon2d": "Dragon 2D",
+  "skinGroupClassic": "Klasik",
+  "skinGroupDragon": "Ejderhalar"
 }

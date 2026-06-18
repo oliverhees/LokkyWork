@@ -1,7 +1,7 @@
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
   <style>
-    .d{transform-origin:50% 90%;animation:a 2.8s ease-in-out infinite}
-    @keyframes a{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.8px)}}
+    .d{transform-box:fill-box;transform-origin:50% 88%;animation:a 2.8s ease-in-out infinite}
+    @keyframes a{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
   </style>
   <image class="d" href="attention.png" x="0" y="0" width="100" height="100"/>
 </svg>

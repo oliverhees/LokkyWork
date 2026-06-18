@@ -18,7 +18,6 @@ import {
   unhookPetConfirm,
 } from './petConfirmManager';
 import type { PetSize, PetState } from './petTypes';
-import { ProcessConfig } from '@process/utils/initStorage';
 
 /**
  * Check whether the current environment can support desktop pet windows.
@@ -43,15 +42,11 @@ const RENDERER_DIR = path.join(__dirname, '..', '..', 'renderer', 'pet');
 let petWindow: BrowserWindow | null = null;
 let petHitWindow: BrowserWindow | null = null;
 // Active pet skin ('default' or a public/community-skins/<id> folder name).
-// Pre-loaded from config so loadContent() can pass it on the initial window
-// load; the pet window is created after startup, so this async read resolves
-// in time. Updated at runtime via reloadPetSkin().
+// Set synchronously before createPetWindow() via reloadPetSkin() from the startup
+// flow in index.ts (where pet.skin is awaited from config), and updated at runtime
+// when the user switches skin in settings. Avoids a race where loadContent() would
+// run before an async config read resolved.
 let currentPetSkin = 'default';
-ProcessConfig.get('pet.skin')
-  .then((skin) => {
-    currentPetSkin = (skin as string | undefined) ?? 'default';
-  })
-  .catch(() => {});
 let stateMachine: PetStateMachine | null = null;
 let idleTicker: PetIdleTicker | null = null;
 let eventBridge: PetEventBridge | null = null;
