@@ -11,6 +11,25 @@
     "edit": "Bearbeiten",
     "viewChat": "Chat ansehen"
   },
+  "editor": {
+    "title": "Workflow-Editor",
+    "back": "Zurück",
+    "notFound": "Workflow nicht gefunden",
+    "noSteps": "Dieser Workflow hat noch keine Schritte.",
+    "addStep": "Schritt hinzufügen",
+    "save": "Speichern",
+    "saved": "Workflow gespeichert",
+    "saveError": "Workflow konnte nicht gespeichert werden",
+    "run": "Starten",
+    "cancel": "Abbrechen",
+    "inspector": {
+      "title": "Schritt bearbeiten"
+    },
+    "node": {
+      "backend": "Backend",
+      "noConversation": "Noch kein Chat"
+    }
+  },
   "deleteSuccess": "Workflow gelöscht",
   "deleteConfirm": "Diesen Workflow löschen?",
   "runError": "Workflow konnte nicht gestartet werden",

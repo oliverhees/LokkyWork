@@ -23,15 +23,8 @@ const WorkflowListPage: React.FC = () => {
   const resolveModel = useWorkflowModelResolver();
 
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [editWorkflow, setEditWorkflow] = useState<IWorkflow | undefined>(undefined);
 
   const handleNew = useCallback(() => {
-    setEditWorkflow(undefined);
-    setDialogVisible(true);
-  }, []);
-
-  const handleEdit = useCallback((workflow: IWorkflow) => {
-    setEditWorkflow(workflow);
     setDialogVisible(true);
   }, []);
 
@@ -67,12 +60,12 @@ const WorkflowListPage: React.FC = () => {
         ) : (
           <div className='flex w-full flex-col gap-12px'>
             {workflows.map((workflow) => (
-              <WorkflowRow key={workflow.id} workflow={workflow} resolveModel={resolveModel} onEdit={handleEdit} onDelete={deleteWorkflow} />
+              <WorkflowRow key={workflow.id} workflow={workflow} resolveModel={resolveModel} onDelete={deleteWorkflow} />
             ))}
           </div>
         )}
 
-        <CreateWorkflowDialog visible={dialogVisible} editWorkflow={editWorkflow} onClose={() => setDialogVisible(false)} onSave={handleSave} />
+        <CreateWorkflowDialog visible={dialogVisible} onClose={() => setDialogVisible(false)} onSave={handleSave} />
       </div>
     </div>
   );

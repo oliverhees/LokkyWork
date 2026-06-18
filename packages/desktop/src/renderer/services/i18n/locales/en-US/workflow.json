@@ -11,6 +11,25 @@
     "edit": "Edit",
     "viewChat": "View Chat"
   },
+  "editor": {
+    "title": "Workflow Editor",
+    "back": "Back",
+    "notFound": "Workflow not found",
+    "noSteps": "This workflow has no steps yet.",
+    "addStep": "Add Step",
+    "save": "Save",
+    "saved": "Workflow saved",
+    "saveError": "Failed to save workflow",
+    "run": "Run",
+    "cancel": "Cancel",
+    "inspector": {
+      "title": "Edit Step"
+    },
+    "node": {
+      "backend": "Backend",
+      "noConversation": "No conversation yet"
+    }
+  },
   "deleteSuccess": "Workflow deleted",
   "deleteConfirm": "Delete this workflow?",
   "runError": "Failed to run workflow",

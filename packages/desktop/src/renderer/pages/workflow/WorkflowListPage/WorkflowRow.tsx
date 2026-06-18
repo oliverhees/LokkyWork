@@ -11,12 +11,12 @@ import type { WorkflowModelResolver } from '@renderer/services/workflow/Workflow
 import useWorkflowExecution from '@renderer/pages/workflow/hooks/useWorkflowExecution';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import WorkflowExecutionPanel from './WorkflowExecutionPanel';
 
 type WorkflowRowProps = {
   workflow: IWorkflow;
   resolveModel: WorkflowModelResolver;
-  onEdit: (workflow: IWorkflow) => void;
   onDelete: (id: string) => Promise<void>;
 };
 
@@ -24,9 +24,14 @@ type WorkflowRowProps = {
  * A single workflow card. Owns its own {@link useWorkflowExecution} instance so
  * each workflow can run independently (single concurrent run per row).
  */
-const WorkflowRow: React.FC<WorkflowRowProps> = ({ workflow, resolveModel, onEdit, onDelete }) => {
+const WorkflowRow: React.FC<WorkflowRowProps> = ({ workflow, resolveModel, onDelete }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { execution, running, error, start, cancel } = useWorkflowExecution({ resolveModel });
+
+  const handleEdit = useCallback(() => {
+    navigate(`/workflow/${workflow.id}`);
+  }, [navigate, workflow.id]);
 
   const handleRun = useCallback(() => {
     void start(workflow);
@@ -59,7 +64,7 @@ const WorkflowRow: React.FC<WorkflowRowProps> = ({ workflow, resolveModel, onEdi
               {t('workflow.actions.run')}
             </Button>
           )}
-          <Button type='text' size='small' icon={<Edit size='14' />} onClick={() => onEdit(workflow)}>
+          <Button type='text' size='small' icon={<Edit size='14' />} onClick={handleEdit}>
             {t('workflow.actions.edit')}
           </Button>
           <Popconfirm title={t('workflow.deleteConfirm')} onOk={handleDelete}>

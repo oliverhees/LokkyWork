@@ -4,26 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { IWorkflow, IWorkflowStep, TWorkflowInputMode, TWorkflowStepBackend } from '@/common/types/workflow/workflowTypes';
-import { ipcBridge } from '@/common';
+import type { IWorkflow, IWorkflowStep } from '@/common/types/workflow/workflowTypes';
 import { uuid } from '@/common/utils';
-import { Button, Form, Input, Message, Select } from '@arco-design/web-react';
+import { Button, Form, Input, Message } from '@arco-design/web-react';
 import { ArrowDown, ArrowUp, Delete, Plus } from '@icon-park/react';
 import ModalWrapper from '@renderer/components/base/ModalWrapper';
-import { useModelProviderList } from '@renderer/hooks/agent/useModelProviderList';
-import React, { useEffect, useMemo, useState } from 'react';
+import type { DraftStep } from '@renderer/pages/workflow/WorkflowEditorPage/StepConfigPanel';
+import StepConfigPanel from '@renderer/pages/workflow/WorkflowEditorPage/StepConfigPanel';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import useSWR from 'swr';
 
 const FormItem = Form.Item;
-const TextArea = Input.TextArea;
-const Option = Select.Option;
-
-/** Draft step shape — same as IWorkflowStep but `order` is derived on save. */
-type DraftStep = Omit<IWorkflowStep, 'order'>;
-
-const BACKEND_OPTIONS: TWorkflowStepBackend[] = ['acp', 'gemini', 'codex', 'aionrs', 'openclaw', 'nanobot'];
-const INPUT_MODE_OPTIONS: TWorkflowInputMode[] = ['none', 'append', 'template'];
 
 type CreateWorkflowDialogProps = {
   visible: boolean;
@@ -64,44 +55,6 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
       setSteps([createDraftStep()]);
     }
   }, [visible, editWorkflow, form]);
-
-  const backendOptions = useMemo(() => BACKEND_OPTIONS, []);
-
-  // Deduplicated list of real, configured model names. The step persists only
-  // the model name; useWorkflowModelResolver matches it back against the
-  // provider list, so a free-text value that no provider offers would make
-  // every step fail with "No model configured". Selecting from this list keeps
-  // the stored value resolvable.
-  const { providers, getAvailableModels } = useModelProviderList();
-  const modelOptions = useMemo(() => {
-    const seen = new Set<string>();
-    const opts: string[] = [];
-    for (const provider of providers) {
-      for (const modelName of getAvailableModels(provider)) {
-        if (!seen.has(modelName)) {
-          seen.add(modelName);
-          opts.push(modelName);
-        }
-      }
-    }
-    return opts;
-  }, [providers, getAvailableModels]);
-
-  // Available skills for per-step selection. A step persists skill names
-  // (string[]); the executor passes them through as extra.preset_enabled_skills.
-  // Selecting from the real /api/skills index keeps the names valid.
-  const { data: availableSkills } = useSWR('workflow-available-skills', () => ipcBridge.fs.listAvailableSkills.invoke());
-  const skillOptions = useMemo(() => {
-    const seen = new Set<string>();
-    const opts: { value: string; label: string }[] = [];
-    for (const skill of availableSkills ?? []) {
-      if (skill?.name && !seen.has(skill.name)) {
-        seen.add(skill.name);
-        opts.push({ value: skill.name, label: skill.name });
-      }
-    }
-    return opts;
-  }, [availableSkills]);
 
   const handleAddStep = () => {
     setSteps((prev) => [...prev, createDraftStep()]);
@@ -201,56 +154,7 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
                   </div>
                 </div>
 
-                <div className='grid gap-x-12px gap-y-10px md:grid-cols-2'>
-                  <div className='min-w-0'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.name')}</label>
-                    <Input size='small' value={step.name} placeholder={t('workflow.form.step.namePlaceholder')} onChange={(value) => updateStep(step.id, { name: value })} />
-                  </div>
-                  <div className='min-w-0'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.backend')}</label>
-                    <Select size='small' value={step.backend} onChange={(value) => updateStep(step.id, { backend: value as TWorkflowStepBackend })}>
-                      {backendOptions.map((backend) => (
-                        <Option key={backend} value={backend}>
-                          {backend}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className='min-w-0'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.model')}</label>
-                    <Select size='small' showSearch allowClear value={step.model ?? undefined} placeholder={t('workflow.form.step.modelPlaceholder')} notFoundContent={t('workflow.form.step.noModels')} onChange={(value) => updateStep(step.id, { model: (value as string | undefined) || undefined })}>
-                      {modelOptions.map((modelName) => (
-                        <Option key={modelName} value={modelName}>
-                          {modelName}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className='min-w-0'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.inputMode')}</label>
-                    <Select size='small' value={step.input_mode} onChange={(value) => updateStep(step.id, { input_mode: value as TWorkflowInputMode })}>
-                      {INPUT_MODE_OPTIONS.map((mode) => (
-                        <Option key={mode} value={mode}>
-                          {t(`workflow.form.inputMode.${mode}`)}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className='min-w-0 md:col-span-2'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.skills')}</label>
-                    <Select size='small' mode='multiple' showSearch allowClear placeholder={t('workflow.form.step.skillsPlaceholder')} notFoundContent={t('workflow.form.step.noSkills')} value={step.skills ?? []} onChange={(value) => updateStep(step.id, { skills: ((value as string[]) ?? []).filter(Boolean) })}>
-                      {skillOptions.map((skill) => (
-                        <Option key={skill.value} value={skill.value}>
-                          {skill.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <div className='min-w-0 md:col-span-2'>
-                    <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.prompt')}</label>
-                    <TextArea value={step.prompt_template} placeholder={t('workflow.form.step.promptPlaceholder')} autoSize={{ minRows: 2, maxRows: 6 }} onChange={(value) => updateStep(step.id, { prompt_template: value })} />
-                  </div>
-                </div>
+                <StepConfigPanel step={step} onChange={(patch) => updateStep(step.id, patch)} />
               </div>
             ))}
           </div>
