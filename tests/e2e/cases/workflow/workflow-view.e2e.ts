@@ -24,7 +24,12 @@ const CREATE_DIALOG_TITLE = /Create Workflow|Workflow erstellen|创建工作流|
  * (aioncore) is known. Mirrors helpers/navigation.ts#ensureRendererReady.
  */
 async function ensureRendererReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => window.location.href !== 'about:blank' && typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number', { timeout: 30_000 });
+  await page.waitForFunction(
+    () =>
+      window.location.href !== 'about:blank' &&
+      typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number',
+    { timeout: 30_000 }
+  );
 }
 
 test.describe('Workflow View', () => {
@@ -43,12 +48,17 @@ test.describe('Workflow View', () => {
     // (AuthContext: isDesktopRuntime => status 'authenticated'), so /workflows
     // is reachable directly without a login step.
     // Wait until React Router has mounted and the sidebar is rendered.
-    await page.waitForFunction(() => (document.body.textContent?.length ?? 0) > 200, { timeout: 20_000 }).catch(() => {});
+    await page
+      .waitForFunction(() => (document.body.textContent?.length ?? 0) > 200, { timeout: 20_000 })
+      .catch(() => {});
 
     // Navigate via the Sider "Workflows" entry — it calls React Router's
     // navigate('/workflows') internally, which is the robust path the app
     // itself uses (raw location.hash assignment races the router's redirects).
-    const workflowEntry = page.locator('div').filter({ hasText: /^Workflows$/ }).last();
+    const workflowEntry = page
+      .locator('div')
+      .filter({ hasText: /^Workflows$/ })
+      .last();
     await expect(workflowEntry).toBeVisible({ timeout: 15_000 });
     await workflowEntry.click();
     await page.waitForFunction(() => window.location.hash === '#/workflows', { timeout: 10_000 });
@@ -85,12 +95,20 @@ test.describe('Workflow View', () => {
     const skillsLabel = modal.locator('label').filter({ hasText: /^Skills$/ });
     await expect(skillsLabel.first()).toBeVisible({ timeout: 5_000 });
     // The Skills control is a multi-mode Arco select rendered right after the label.
-    const skillsSelect = modal.locator('.arco-select-multiple, .arco-select').filter({ hasText: /Select skills|Skills auswählen/i });
-    await expect(skillsSelect.first()).toBeVisible({ timeout: 5_000 }).catch(() => {});
+    const skillsSelect = modal
+      .locator('.arco-select-multiple, .arco-select')
+      .filter({ hasText: /Select skills|Skills auswählen/i });
+    await expect(skillsSelect.first())
+      .toBeVisible({ timeout: 5_000 })
+      .catch(() => {});
 
     await page.screenshot({ path: `${SHOTS_DIR}/02-dialog.png` });
 
     // Close the dialog to leave the shared app instance clean for later tests.
-    await page.locator('.aionui-modal-close-btn').first().click().catch(() => {});
+    await page
+      .locator('.aionui-modal-close-btn')
+      .first()
+      .click()
+      .catch(() => {});
   });
 });

@@ -57,7 +57,12 @@ function createDraftStep(): DraftStep {
 }
 
 /** Build react-flow nodes from the ordered draft-step chain (linear). */
-function buildNodes(steps: DraftStep[], fallbackLabel: (index: number) => string, execution: IWorkflowExecution | null, onViewChat: (conversationId: string) => void): Node[] {
+function buildNodes(
+  steps: DraftStep[],
+  fallbackLabel: (index: number) => string,
+  execution: IWorkflowExecution | null,
+  onViewChat: (conversationId: string) => void
+): Node[] {
   // step_results are index-aligned with the ordered chain; resolve by step_id
   // first (robust), falling back to position.
   const resultById = new Map(execution?.step_results.map((r) => [r.step_id, r]) ?? []);
@@ -136,7 +141,10 @@ const WorkflowEditorPage: React.FC = () => {
   const fallbackLabel = useMemo(() => (index: number) => t('workflow.form.step.title', { index }), [t]);
 
   // Open a step's conversation — same target as WorkflowExecutionPanel's link.
-  const handleViewChat = useCallback((conversationId: string) => navigate(`/conversation/${conversationId}`), [navigate]);
+  const handleViewChat = useCallback(
+    (conversationId: string) => navigate(`/conversation/${conversationId}`),
+    [navigate]
+  );
 
   // Derive nodes/edges from the linear chain. Reusing the react-flow state
   // setters keeps user-driven drag positions until the chain itself changes.
@@ -227,13 +235,30 @@ const WorkflowEditorPage: React.FC = () => {
         <Button type='text' size='small' icon={<Left size='16' />} onClick={() => navigate('/workflows')}>
           {t('workflow.editor.back')}
         </Button>
-        <div className='min-w-0 flex-1 truncate text-16px font-medium text-t-primary'>{workflow ? workflow.name || workflow.id : t('workflow.editor.title')}</div>
+        <div className='min-w-0 flex-1 truncate text-16px font-medium text-t-primary'>
+          {workflow ? workflow.name || workflow.id : t('workflow.editor.title')}
+        </div>
         {workflow ? (
           <div className='flex shrink-0 items-center gap-8px'>
-            <Button type='outline' size='small' shape='round' icon={<Plus size='14' />} disabled={editingLocked} onClick={handleAddStep}>
+            <Button
+              type='outline'
+              size='small'
+              shape='round'
+              icon={<Plus size='14' />}
+              disabled={editingLocked}
+              onClick={handleAddStep}
+            >
               {t('workflow.editor.addStep')}
             </Button>
-            <Button type='outline' size='small' shape='round' icon={<Save size='14' />} loading={saving} disabled={editingLocked} onClick={() => void handleSave()}>
+            <Button
+              type='outline'
+              size='small'
+              shape='round'
+              icon={<Save size='14' />}
+              loading={saving}
+              disabled={editingLocked}
+              onClick={() => void handleSave()}
+            >
               {t('workflow.editor.save')}
             </Button>
             {running ? (
@@ -241,7 +266,14 @@ const WorkflowEditorPage: React.FC = () => {
                 {t('workflow.editor.cancel')}
               </Button>
             ) : (
-              <Button type='primary' size='small' shape='round' icon={<Play size='14' />} disabled={steps.length === 0} onClick={() => void handleRun()}>
+              <Button
+                type='primary'
+                size='small'
+                shape='round'
+                icon={<Play size='14' />}
+                disabled={steps.length === 0}
+                onClick={() => void handleRun()}
+              >
                 {t('workflow.editor.run')}
               </Button>
             )}
@@ -261,13 +293,28 @@ const WorkflowEditorPage: React.FC = () => {
         ) : (
           <>
             <div className='relative min-h-0 flex-1'>
-              {runError ? <div className='absolute inset-x-0 top-0 z-10 bg-fill-2 px-16px py-8px text-13px text-[var(--color-danger-6)]'>{t('workflow.runError')}</div> : null}
+              {runError ? (
+                <div className='absolute inset-x-0 top-0 z-10 bg-fill-2 px-16px py-8px text-13px text-[var(--color-danger-6)]'>
+                  {t('workflow.runError')}
+                </div>
+              ) : null}
               {steps.length === 0 ? (
                 <div className='flex size-full items-center justify-center'>
                   <Empty description={t('workflow.editor.noSteps')} />
                 </div>
               ) : (
-                <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onNodeClick={handleNodeClick} onNodeDragStop={handleNodeDragStop} nodeTypes={NODE_TYPES} nodesDraggable={!editingLocked} fitView proOptions={{ hideAttribution: true }}>
+                <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onNodeClick={handleNodeClick}
+                  onNodeDragStop={handleNodeDragStop}
+                  nodeTypes={NODE_TYPES}
+                  nodesDraggable={!editingLocked}
+                  fitView
+                  proOptions={{ hideAttribution: true }}
+                >
                   <Background />
                   <Controls />
                 </ReactFlow>
@@ -277,8 +324,18 @@ const WorkflowEditorPage: React.FC = () => {
             {selectedStep ? (
               <div className='flex w-[min(360px,calc(100vw-32px))] shrink-0 flex-col border-0 border-l border-solid border-[var(--color-border-2)] bg-fill-1'>
                 <div className='flex shrink-0 items-center justify-between gap-8px border-0 border-b border-solid border-[var(--color-border-2)] px-16px py-12px'>
-                  <span className='min-w-0 flex-1 truncate text-14px font-medium text-t-primary'>{t('workflow.editor.inspector.title')}</span>
-                  <Button type='text' size='mini' status='danger' title={t('workflow.form.removeStep')} disabled={editingLocked} icon={<Delete size='14' />} onClick={() => handleRemoveStep(selectedStep.id)} />
+                  <span className='min-w-0 flex-1 truncate text-14px font-medium text-t-primary'>
+                    {t('workflow.editor.inspector.title')}
+                  </span>
+                  <Button
+                    type='text'
+                    size='mini'
+                    status='danger'
+                    title={t('workflow.form.removeStep')}
+                    disabled={editingLocked}
+                    icon={<Delete size='14' />}
+                    onClick={() => handleRemoveStep(selectedStep.id)}
+                  />
                 </div>
                 <div className='min-h-0 flex-1 overflow-y-auto px-16px py-14px'>
                   <StepConfigPanel step={selectedStep} onChange={(patch) => updateStep(selectedStep.id, patch)} />

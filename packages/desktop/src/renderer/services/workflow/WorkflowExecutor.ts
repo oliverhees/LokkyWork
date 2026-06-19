@@ -30,7 +30,12 @@
 import { ipcBridge } from '@/common';
 import type { IConversationTurnCompletedEvent, IResponseMessage } from '@/common/adapter/ipcBridge';
 import type { TProviderWithModel } from '@/common/config/storage';
-import type { IWorkflow, IWorkflowExecution, IWorkflowStep, IWorkflowStepResult } from '@/common/types/workflow/workflowTypes';
+import type {
+  IWorkflow,
+  IWorkflowExecution,
+  IWorkflowStep,
+  IWorkflowStepResult,
+} from '@/common/types/workflow/workflowTypes';
 import { buildAgentConversationParams } from '@/common/utils/buildAgentConversationParams';
 import { uuid } from '@/common/utils';
 
@@ -41,7 +46,9 @@ import { uuid } from '@/common/utils';
  * and supplies this resolver. Returning `undefined` means "no explicit model";
  * the executor then falls back to {@link WorkflowExecutorOptions.defaultModel}.
  */
-export type WorkflowModelResolver = (step: IWorkflowStep) => TProviderWithModel | undefined | Promise<TProviderWithModel | undefined>;
+export type WorkflowModelResolver = (
+  step: IWorkflowStep
+) => TProviderWithModel | undefined | Promise<TProviderWithModel | undefined>;
 
 export type WorkflowExecutorOptions = {
   /** Resolves the {@link TProviderWithModel} for a step. */
@@ -96,7 +103,9 @@ function buildPrompt(step: IWorkflowStep, previousOutput: string, outputsByStepI
     case 'append':
       return previousOutput ? `${step.prompt_template}\n\n${previousOutput}` : step.prompt_template;
     case 'template':
-      return step.prompt_template.replace(INPUT_PLACEHOLDER, previousOutput).replace(STEP_OUTPUT_PLACEHOLDER, (_match, stepId: string) => outputsByStepId.get(stepId) ?? '');
+      return step.prompt_template
+        .replace(INPUT_PLACEHOLDER, previousOutput)
+        .replace(STEP_OUTPUT_PLACEHOLDER, (_match, stepId: string) => outputsByStepId.get(stepId) ?? '');
     default:
       return step.prompt_template;
   }
@@ -134,7 +143,10 @@ function waitForTurnCompleted(conversationId: string, signal?: AbortSignal): Pro
  * failures — those are recorded on the execution; it only rejects for
  * programmer errors outside the step loop.
  */
-export async function executeWorkflow(workflow: IWorkflow, options: WorkflowExecutorOptions): Promise<IWorkflowExecution> {
+export async function executeWorkflow(
+  workflow: IWorkflow,
+  options: WorkflowExecutorOptions
+): Promise<IWorkflowExecution> {
   const { resolveModel, defaultModel, workspace, onUpdate, signal } = options;
   const steps = [...workflow.steps].toSorted((a, b) => a.order - b.order);
   const now = Date.now();

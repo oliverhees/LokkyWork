@@ -37,16 +37,40 @@ const WorkflowListPage: React.FC = () => {
   );
 
   return (
-    <div className={classNames('w-full min-h-full box-border overflow-y-auto', isMobile ? 'px-16px py-14px' : 'px-12px py-24px md:px-40px md:py-32px')}>
-      <div className={classNames('mx-auto flex w-full max-w-800px box-border flex-col', isMobile ? 'gap-14px' : 'gap-16px')}>
+    <div
+      className={classNames(
+        'w-full min-h-full box-border overflow-y-auto',
+        isMobile ? 'px-16px py-14px' : 'px-12px py-24px md:px-40px md:py-32px'
+      )}
+    >
+      <div
+        className={classNames(
+          'mx-auto flex w-full max-w-800px box-border flex-col',
+          isMobile ? 'gap-14px' : 'gap-16px'
+        )}
+      >
         <div className={classNames('flex w-full flex-col', isMobile ? 'gap-6px' : 'gap-8px')}>
           <div className='flex w-full items-start justify-between gap-12px sm:gap-16px max-[520px]:flex-wrap'>
-            <h1 className={classNames('m-0 min-w-0 flex-1 font-bold text-t-primary', isMobile ? 'text-24px leading-[1.2]' : 'text-28px leading-[1.15]')}>{t('workflow.title')}</h1>
+            <h1
+              className={classNames(
+                'm-0 min-w-0 flex-1 font-bold text-t-primary',
+                isMobile ? 'text-24px leading-[1.2]' : 'text-28px leading-[1.15]'
+              )}
+            >
+              {t('workflow.title')}
+            </h1>
             <Button type='primary' shape='round' className='shrink-0' onClick={handleNew}>
               {t('workflow.newWorkflow')}
             </Button>
           </div>
-          <p className={classNames('m-0 w-full text-t-secondary', isMobile ? 'text-13px leading-20px' : 'text-14px leading-22px')}>{t('workflow.description')}</p>
+          <p
+            className={classNames(
+              'm-0 w-full text-t-secondary',
+              isMobile ? 'text-13px leading-20px' : 'text-14px leading-22px'
+            )}
+          >
+            {t('workflow.description')}
+          </p>
         </div>
 
         {loading ? (
@@ -60,7 +84,12 @@ const WorkflowListPage: React.FC = () => {
         ) : (
           <div className='flex w-full flex-col gap-12px'>
             {workflows.map((workflow) => (
-              <WorkflowRow key={workflow.id} workflow={workflow} resolveModel={resolveModel} onDelete={deleteWorkflow} />
+              <WorkflowRow
+                key={workflow.id}
+                workflow={workflow}
+                resolveModel={resolveModel}
+                onDelete={deleteWorkflow}
+              />
             ))}
           </div>
         )}

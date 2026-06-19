@@ -58,15 +58,26 @@ const StepNode: React.FC<NodeProps> = ({ data }) => {
   const { label, backend, order, status, active, output, conversationId, onViewChat } = data as StepNodeData;
 
   const preview = output?.trim();
-  const truncated = preview && preview.length > OUTPUT_PREVIEW_LIMIT ? `${preview.slice(0, OUTPUT_PREVIEW_LIMIT)}…` : preview;
+  const truncated =
+    preview && preview.length > OUTPUT_PREVIEW_LIMIT ? `${preview.slice(0, OUTPUT_PREVIEW_LIMIT)}…` : preview;
 
-  const ringClass = active ? 'border-[var(--color-primary-6)] shadow-md' : status === 'completed' ? 'border-[var(--color-success-6)]' : status === 'error' ? 'border-[var(--color-danger-6)]' : 'border-[var(--color-border-2)]';
+  const ringClass = active
+    ? 'border-[var(--color-primary-6)] shadow-md'
+    : status === 'completed'
+      ? 'border-[var(--color-success-6)]'
+      : status === 'error'
+        ? 'border-[var(--color-danger-6)]'
+        : 'border-[var(--color-border-2)]';
 
   return (
-    <div className={`min-w-200px max-w-260px rounded-12px border border-solid bg-fill-1 px-14px py-12px shadow-sm ${ringClass}`}>
+    <div
+      className={`min-w-200px max-w-260px rounded-12px border border-solid bg-fill-1 px-14px py-12px shadow-sm ${ringClass}`}
+    >
       <Handle type='target' position={Position.Top} />
       <div className='flex items-center gap-8px'>
-        <span className='inline-flex size-22px shrink-0 items-center justify-center rounded-full bg-fill-3 text-12px font-medium text-t-secondary'>{order}</span>
+        <span className='inline-flex size-22px shrink-0 items-center justify-center rounded-full bg-fill-3 text-12px font-medium text-t-secondary'>
+          {order}
+        </span>
         <span className='min-w-0 flex-1 truncate text-14px font-medium text-t-primary'>{label}</span>
         {status ? (
           <Tag size='small' color={STATUS_COLOR[status]}>
@@ -80,7 +91,11 @@ const StepNode: React.FC<NodeProps> = ({ data }) => {
           {backend}
         </Tag>
       </div>
-      {truncated ? <div className='mt-8px max-h-60px overflow-hidden border-0 border-t border-solid border-[var(--color-border-2)] pt-8px text-12px leading-18px text-t-secondary'>{truncated}</div> : null}
+      {truncated ? (
+        <div className='mt-8px max-h-60px overflow-hidden border-0 border-t border-solid border-[var(--color-border-2)] pt-8px text-12px leading-18px text-t-secondary'>
+          {truncated}
+        </div>
+      ) : null}
       {conversationId ? (
         <div className='nodrag mt-8px'>
           <Button type='text' size='mini' icon={<Right size='14' />} onClick={onViewChat}>

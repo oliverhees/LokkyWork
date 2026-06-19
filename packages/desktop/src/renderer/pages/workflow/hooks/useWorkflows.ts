@@ -17,7 +17,12 @@
  */
 
 import type { IWorkflow } from '@/common/types/workflow/workflowTypes';
-import { createWorkflow as createWorkflowDefinition, deleteWorkflow as deleteWorkflowFromStore, listWorkflows, saveWorkflow } from '@renderer/services/workflow/workflowStore';
+import {
+  createWorkflow as createWorkflowDefinition,
+  deleteWorkflow as deleteWorkflowFromStore,
+  listWorkflows,
+  saveWorkflow,
+} from '@renderer/services/workflow/workflowStore';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type UseWorkflowsResult = {
@@ -72,7 +77,9 @@ export function useWorkflows(): UseWorkflowsResult {
     setError(null);
     try {
       const saved = await saveWorkflow(createWorkflowDefinition(partial));
-      setWorkflows((prev) => (prev.some((wf) => wf.id === saved.id) ? prev.map((wf) => (wf.id === saved.id ? saved : wf)) : [...prev, saved]));
+      setWorkflows((prev) =>
+        prev.some((wf) => wf.id === saved.id) ? prev.map((wf) => (wf.id === saved.id ? saved : wf)) : [...prev, saved]
+      );
       return saved;
     } catch (err) {
       const wrapped = err instanceof Error ? err : new Error('Failed to create workflow');
@@ -85,7 +92,9 @@ export function useWorkflows(): UseWorkflowsResult {
     setError(null);
     try {
       const saved = await saveWorkflow(workflow);
-      setWorkflows((prev) => (prev.some((wf) => wf.id === saved.id) ? prev.map((wf) => (wf.id === saved.id ? saved : wf)) : [...prev, saved]));
+      setWorkflows((prev) =>
+        prev.some((wf) => wf.id === saved.id) ? prev.map((wf) => (wf.id === saved.id ? saved : wf)) : [...prev, saved]
+      );
       return saved;
     } catch (err) {
       const wrapped = err instanceof Error ? err : new Error('Failed to update workflow');

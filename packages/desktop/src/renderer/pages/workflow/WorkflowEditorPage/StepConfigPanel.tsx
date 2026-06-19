@@ -72,7 +72,9 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
   // Available skills for per-step selection. A step persists skill names
   // (string[]); the executor passes them through as extra.preset_enabled_skills.
   // Selecting from the real /api/skills index keeps the names valid.
-  const { data: availableSkills } = useSWR('workflow-available-skills', () => ipcBridge.fs.listAvailableSkills.invoke());
+  const { data: availableSkills } = useSWR('workflow-available-skills', () =>
+    ipcBridge.fs.listAvailableSkills.invoke()
+  );
   const skillOptions = useMemo(() => {
     const seen = new Set<string>();
     const opts: { value: string; label: string }[] = [];
@@ -89,11 +91,20 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
     <div className='grid gap-x-12px gap-y-10px md:grid-cols-2'>
       <div className='min-w-0'>
         <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.name')}</label>
-        <Input size='small' value={step.name} placeholder={t('workflow.form.step.namePlaceholder')} onChange={(value) => onChange({ name: value })} />
+        <Input
+          size='small'
+          value={step.name}
+          placeholder={t('workflow.form.step.namePlaceholder')}
+          onChange={(value) => onChange({ name: value })}
+        />
       </div>
       <div className='min-w-0'>
         <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.backend')}</label>
-        <Select size='small' value={step.backend} onChange={(value) => onChange({ backend: value as TWorkflowStepBackend })}>
+        <Select
+          size='small'
+          value={step.backend}
+          onChange={(value) => onChange({ backend: value as TWorkflowStepBackend })}
+        >
           {BACKEND_OPTIONS.map((backend) => (
             <Option key={backend} value={backend}>
               {backend}
@@ -103,7 +114,15 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
       </div>
       <div className='min-w-0'>
         <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.model')}</label>
-        <Select size='small' showSearch allowClear value={step.model ?? undefined} placeholder={t('workflow.form.step.modelPlaceholder')} notFoundContent={t('workflow.form.step.noModels')} onChange={(value) => onChange({ model: (value as string | undefined) || undefined })}>
+        <Select
+          size='small'
+          showSearch
+          allowClear
+          value={step.model ?? undefined}
+          placeholder={t('workflow.form.step.modelPlaceholder')}
+          notFoundContent={t('workflow.form.step.noModels')}
+          onChange={(value) => onChange({ model: (value as string | undefined) || undefined })}
+        >
           {modelOptions.map((modelName) => (
             <Option key={modelName} value={modelName}>
               {modelName}
@@ -112,8 +131,14 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
         </Select>
       </div>
       <div className='min-w-0'>
-        <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.inputMode')}</label>
-        <Select size='small' value={step.input_mode} onChange={(value) => onChange({ input_mode: value as TWorkflowInputMode })}>
+        <label className='mb-6px block text-12px font-medium text-t-secondary'>
+          {t('workflow.form.step.inputMode')}
+        </label>
+        <Select
+          size='small'
+          value={step.input_mode}
+          onChange={(value) => onChange({ input_mode: value as TWorkflowInputMode })}
+        >
           {INPUT_MODE_OPTIONS.map((mode) => (
             <Option key={mode} value={mode}>
               {t(`workflow.form.inputMode.${mode}`)}
@@ -123,7 +148,16 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
       </div>
       <div className='min-w-0 md:col-span-2'>
         <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.skills')}</label>
-        <Select size='small' mode='multiple' showSearch allowClear placeholder={t('workflow.form.step.skillsPlaceholder')} notFoundContent={t('workflow.form.step.noSkills')} value={step.skills ?? []} onChange={(value) => onChange({ skills: ((value as string[]) ?? []).filter(Boolean) })}>
+        <Select
+          size='small'
+          mode='multiple'
+          showSearch
+          allowClear
+          placeholder={t('workflow.form.step.skillsPlaceholder')}
+          notFoundContent={t('workflow.form.step.noSkills')}
+          value={step.skills ?? []}
+          onChange={(value) => onChange({ skills: ((value as string[]) ?? []).filter(Boolean) })}
+        >
           {skillOptions.map((skill) => (
             <Option key={skill.value} value={skill.value}>
               {skill.label}
@@ -133,7 +167,12 @@ const StepConfigPanel: React.FC<StepConfigPanelProps> = ({ step, onChange }) => 
       </div>
       <div className='min-w-0 md:col-span-2'>
         <label className='mb-6px block text-12px font-medium text-t-secondary'>{t('workflow.form.step.prompt')}</label>
-        <TextArea value={step.prompt_template} placeholder={t('workflow.form.step.promptPlaceholder')} autoSize={{ minRows: 2, maxRows: 6 }} onChange={(value) => onChange({ prompt_template: value })} />
+        <TextArea
+          value={step.prompt_template}
+          placeholder={t('workflow.form.step.promptPlaceholder')}
+          autoSize={{ minRows: 2, maxRows: 6 }}
+          onChange={(value) => onChange({ prompt_template: value })}
+        />
       </div>
     </div>
   );

@@ -11,7 +11,12 @@ import { resetGuidLastSelectedAgent } from '../../helpers/navigation';
 const SHOTS_DIR = '/tmp/workflow-shots';
 
 async function ensureRendererReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => window.location.href !== 'about:blank' && typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number', { timeout: 30_000 });
+  await page.waitForFunction(
+    () =>
+      window.location.href !== 'about:blank' &&
+      typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number',
+    { timeout: 30_000 }
+  );
 }
 
 test.beforeAll(() => {
@@ -53,7 +58,11 @@ test('guid assistant list renders German builtin names', async ({ page }) => {
   console.log(`[PROBE] preset pills rendered: ${count}`);
 
   // Dump the visible card names so we have textual proof of language.
-  const names = await page.evaluate(() => Array.from(document.querySelectorAll('[data-testid^="preset-pill-"]')).map((el) => el.textContent?.replace(/\s+/g, ' ').trim().slice(0, 80)));
+  const names = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('[data-testid^="preset-pill-"]')).map((el) =>
+      el.textContent?.replace(/\s+/g, ' ').trim().slice(0, 80)
+    )
+  );
   console.log('[PROBE] card texts:', JSON.stringify(names));
 
   await page.screenshot({ path: `${SHOTS_DIR}/06-assistants-de.png` });

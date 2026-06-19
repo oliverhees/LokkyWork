@@ -123,7 +123,11 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
     >
       <div className='overflow-y-auto px-24px pb-16px pr-18px max-h-[min(70vh,680px)]'>
         <Form form={form} layout='vertical'>
-          <FormItem label={t('workflow.form.name')} field='name' rules={[{ required: true, message: t('workflow.form.nameRequired') }]}>
+          <FormItem
+            label={t('workflow.form.name')}
+            field='name'
+            rules={[{ required: true, message: t('workflow.form.nameRequired') }]}
+          >
             <Input placeholder={t('workflow.form.namePlaceholder')} />
           </FormItem>
 
@@ -144,13 +148,39 @@ const CreateWorkflowDialog: React.FC<CreateWorkflowDialogProps> = ({ visible, on
         ) : (
           <div className='mt-12px flex flex-col gap-12px'>
             {steps.map((step, index) => (
-              <div key={step.id} className='rounded-12px border border-solid border-[var(--color-border-2)] bg-fill-1 px-14px py-12px'>
+              <div
+                key={step.id}
+                className='rounded-12px border border-solid border-[var(--color-border-2)] bg-fill-1 px-14px py-12px'
+              >
                 <div className='mb-10px flex items-center justify-between gap-8px'>
-                  <span className='text-13px font-medium text-t-primary'>{t('workflow.form.step.title', { index: index + 1 })}</span>
+                  <span className='text-13px font-medium text-t-primary'>
+                    {t('workflow.form.step.title', { index: index + 1 })}
+                  </span>
                   <div className='flex items-center gap-4px'>
-                    <Button type='text' size='mini' disabled={index === 0} title={t('workflow.form.moveUp')} icon={<ArrowUp size='14' />} onClick={() => handleMoveStep(index, -1)} />
-                    <Button type='text' size='mini' disabled={index === steps.length - 1} title={t('workflow.form.moveDown')} icon={<ArrowDown size='14' />} onClick={() => handleMoveStep(index, 1)} />
-                    <Button type='text' size='mini' status='danger' title={t('workflow.form.removeStep')} icon={<Delete size='14' />} onClick={() => handleRemoveStep(step.id)} />
+                    <Button
+                      type='text'
+                      size='mini'
+                      disabled={index === 0}
+                      title={t('workflow.form.moveUp')}
+                      icon={<ArrowUp size='14' />}
+                      onClick={() => handleMoveStep(index, -1)}
+                    />
+                    <Button
+                      type='text'
+                      size='mini'
+                      disabled={index === steps.length - 1}
+                      title={t('workflow.form.moveDown')}
+                      icon={<ArrowDown size='14' />}
+                      onClick={() => handleMoveStep(index, 1)}
+                    />
+                    <Button
+                      type='text'
+                      size='mini'
+                      status='danger'
+                      title={t('workflow.form.removeStep')}
+                      icon={<Delete size='14' />}
+                      onClick={() => handleRemoveStep(step.id)}
+                    />
                   </div>
                 </div>
 

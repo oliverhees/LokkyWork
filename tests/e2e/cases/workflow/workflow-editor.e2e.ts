@@ -23,7 +23,12 @@ const WF_NAME = 'Test';
 const STEP_NAME = 'Recherche';
 
 async function ensureRendererReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => window.location.href !== 'about:blank' && typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number', { timeout: 30_000 });
+  await page.waitForFunction(
+    () =>
+      window.location.href !== 'about:blank' &&
+      typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number',
+    { timeout: 30_000 }
+  );
 }
 
 test.describe('Workflow Editor (visual canvas)', () => {
@@ -38,8 +43,13 @@ test.describe('Workflow Editor (visual canvas)', () => {
 
     // Wait for the router + sidebar, then navigate to /workflows via the Sider
     // entry (it uses React Router's navigate, the robust path).
-    await page.waitForFunction(() => (document.body.textContent?.length ?? 0) > 200, { timeout: 20_000 }).catch(() => {});
-    const workflowEntry = page.locator('div').filter({ hasText: /^Workflows$/ }).last();
+    await page
+      .waitForFunction(() => (document.body.textContent?.length ?? 0) > 200, { timeout: 20_000 })
+      .catch(() => {});
+    const workflowEntry = page
+      .locator('div')
+      .filter({ hasText: /^Workflows$/ })
+      .last();
     await expect(workflowEntry).toBeVisible({ timeout: 15_000 });
     await workflowEntry.click();
     await page.waitForFunction(() => window.location.hash === '#/workflows', { timeout: 10_000 });
@@ -50,7 +60,9 @@ test.describe('Workflow Editor (visual canvas)', () => {
     await newBtn.click();
 
     const dialog = page.locator('.arco-modal');
-    await expect(page.locator('.aionui-modal-title').filter({ hasText: CREATE_DIALOG_TITLE }).first()).toBeVisible({ timeout: 10_000 });
+    await expect(page.locator('.aionui-modal-title').filter({ hasText: CREATE_DIALOG_TITLE }).first()).toBeVisible({
+      timeout: 10_000,
+    });
 
     // Workflow name: the first textbox in the Form (Name field).
     const nameInput = dialog.locator('input.arco-input').first();
@@ -59,7 +71,9 @@ test.describe('Workflow Editor (visual canvas)', () => {
     // The dialog seeds one step. Fill the step's "name" field — it's the small
     // Input directly under the step's "Step name" label. Use the step-name
     // placeholder to target it precisely (en "e.g. Draft" / de "z. B. Entwurf").
-    const stepNameInput = dialog.locator('input[placeholder*="Draft"], input[placeholder*="Entwurf"], input[placeholder*="草稿"]').first();
+    const stepNameInput = dialog
+      .locator('input[placeholder*="Draft"], input[placeholder*="Entwurf"], input[placeholder*="草稿"]')
+      .first();
     await expect(stepNameInput).toBeVisible({ timeout: 5_000 });
     await stepNameInput.fill(STEP_NAME);
 
@@ -85,7 +99,9 @@ test.describe('Workflow Editor (visual canvas)', () => {
     const node = page.locator('.react-flow__node');
     await expect(node.first()).toBeVisible({ timeout: 15_000 });
     // The node should carry the step label we set.
-    await expect(page.locator('.react-flow__node').filter({ hasText: STEP_NAME }).first()).toBeVisible({ timeout: 10_000 });
+    await expect(page.locator('.react-flow__node').filter({ hasText: STEP_NAME }).first()).toBeVisible({
+      timeout: 10_000,
+    });
 
     await page.screenshot({ path: `${SHOTS_DIR}/03-canvas.png` });
 
@@ -98,18 +114,39 @@ test.describe('Workflow Editor (visual canvas)', () => {
     // enough via en/de). Backend, Model, Skills, input mode, Prompt.
     const panelRegion = page.locator('.react-flow').locator('xpath=ancestor::div[1]'); // editor root
     // Simpler: assert key labels are visible anywhere in the inspector column.
-    await expect(page.locator('label').filter({ hasText: /Model|Modell/i }).last()).toBeVisible({ timeout: 5_000 });
-    await expect(page.locator('label').filter({ hasText: /^Skills$/ }).last()).toBeVisible({ timeout: 5_000 });
-    await expect(page.locator('label').filter({ hasText: /Backend/i }).last()).toBeVisible({ timeout: 5_000 });
+    await expect(
+      page
+        .locator('label')
+        .filter({ hasText: /Model|Modell/i })
+        .last()
+    ).toBeVisible({ timeout: 5_000 });
+    await expect(
+      page
+        .locator('label')
+        .filter({ hasText: /^Skills$/ })
+        .last()
+    ).toBeVisible({ timeout: 5_000 });
+    await expect(
+      page
+        .locator('label')
+        .filter({ hasText: /Backend/i })
+        .last()
+    ).toBeVisible({ timeout: 5_000 });
     void panelRegion;
 
     await page.screenshot({ path: `${SHOTS_DIR}/04-inspector.png` });
 
     // ── Cleanup: go back and delete the "Test" workflow ─────────────────────
-    const back = page.locator('.arco-btn').filter({ hasText: /^(Back|Zurück|返回)$/i }).first();
+    const back = page
+      .locator('.arco-btn')
+      .filter({ hasText: /^(Back|Zurück|返回)$/i })
+      .first();
     await back.click().catch(() => {});
     await page.waitForFunction(() => window.location.hash === '#/workflows', { timeout: 10_000 }).catch(() => {});
-    const delBtn = page.locator('.arco-btn').filter({ hasText: /^(Delete|Löschen|删除)$/i }).first();
+    const delBtn = page
+      .locator('.arco-btn')
+      .filter({ hasText: /^(Delete|Löschen|删除)$/i })
+      .first();
     if (await delBtn.isVisible().catch(() => false)) {
       await delBtn.click();
       const confirm = page.locator('.arco-popconfirm .arco-btn-primary, .arco-popover .arco-btn-primary').first();

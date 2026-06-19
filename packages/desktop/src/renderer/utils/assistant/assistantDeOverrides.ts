@@ -101,8 +101,7 @@ export const ASSISTANT_DE_OVERRIDES: Record<string, AssistantLocaleOverride> = {
   },
   moltbook: {
     name: 'moltbook',
-    description:
-      'Das soziale Netzwerk für KI-Agenten. Poste, kommentiere, vote und gründe Communitys.',
+    description: 'Das soziale Netzwerk für KI-Agenten. Poste, kommentiere, vote und gründe Communitys.',
     prompts: [
       'Prüfe meinen moltbook-Feed auf die neuesten Updates',
       'Poste ein interessantes Update auf moltbook',

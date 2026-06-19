@@ -51,8 +51,12 @@ const WorkflowRow: React.FC<WorkflowRowProps> = ({ workflow, resolveModel, onDel
       <div className='flex items-start justify-between gap-12px'>
         <div className='min-w-0 flex-1'>
           <div className='truncate text-15px font-medium text-t-primary'>{workflow.name || workflow.id}</div>
-          <div className='mt-2px text-13px text-t-secondary'>{t('workflow.stepCount', { count: workflow.steps.length })}</div>
-          {workflow.description ? <div className='mt-6px break-words text-13px leading-20px text-t-secondary'>{workflow.description}</div> : null}
+          <div className='mt-2px text-13px text-t-secondary'>
+            {t('workflow.stepCount', { count: workflow.steps.length })}
+          </div>
+          {workflow.description ? (
+            <div className='mt-6px break-words text-13px leading-20px text-t-secondary'>{workflow.description}</div>
+          ) : null}
         </div>
         <div className='flex shrink-0 items-center gap-6px'>
           {running ? (
@@ -60,7 +64,14 @@ const WorkflowRow: React.FC<WorkflowRowProps> = ({ workflow, resolveModel, onDel
               {t('workflow.execution.cancel')}
             </Button>
           ) : (
-            <Button type='primary' size='small' shape='round' icon={<Play size='14' />} disabled={workflow.steps.length === 0} onClick={handleRun}>
+            <Button
+              type='primary'
+              size='small'
+              shape='round'
+              icon={<Play size='14' />}
+              disabled={workflow.steps.length === 0}
+              onClick={handleRun}
+            >
               {t('workflow.actions.run')}
             </Button>
           )}

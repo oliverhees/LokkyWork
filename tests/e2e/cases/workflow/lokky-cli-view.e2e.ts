@@ -10,7 +10,12 @@ import { test, expect } from '../../fixtures';
 const SHOTS_DIR = '/tmp/workflow-shots';
 
 async function ensureRendererReady(page: import('@playwright/test').Page): Promise<void> {
-  await page.waitForFunction(() => window.location.href !== 'about:blank' && typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number', { timeout: 30_000 });
+  await page.waitForFunction(
+    () =>
+      window.location.href !== 'about:blank' &&
+      typeof (window as unknown as { __backendPort?: number }).__backendPort === 'number',
+    { timeout: 30_000 }
+  );
 }
 
 test.beforeAll(() => {
@@ -34,8 +39,12 @@ test('guid agent picker + placeholder show Lokky CLI', async ({ page }) => {
       const res = await fetch(`http://127.0.0.1:${p}/api/agents`);
       if (!res.ok) return { status: res.status, names: null as unknown };
       const json = (await res.json()) as unknown;
-      const arr = Array.isArray(json) ? json : ((json as Record<string, unknown>)?.data ?? (json as Record<string, unknown>)?.agents);
-      const names = Array.isArray(arr) ? (arr as Record<string, unknown>[]).map((a) => ({ name: a.name, type: a.agent_type ?? a.type })) : null;
+      const arr = Array.isArray(json)
+        ? json
+        : ((json as Record<string, unknown>)?.data ?? (json as Record<string, unknown>)?.agents);
+      const names = Array.isArray(arr)
+        ? (arr as Record<string, unknown>[]).map((a) => ({ name: a.name, type: a.agent_type ?? a.type }))
+        : null;
       return { status: res.status, names };
     } catch (e) {
       return { status: -1, error: String(e) };
@@ -48,7 +57,9 @@ test('guid agent picker + placeholder show Lokky CLI', async ({ page }) => {
   await page.waitForTimeout(800); // let the agent label resolve from fetchDetectedAgents
 
   const placeholder = await page.evaluate(() => {
-    const ta = Array.from(document.querySelectorAll('textarea,input')).find((el) => (el as HTMLInputElement).placeholder && (el as HTMLInputElement).placeholder.length > 5) as HTMLInputElement | undefined;
+    const ta = Array.from(document.querySelectorAll('textarea,input')).find(
+      (el) => (el as HTMLInputElement).placeholder && (el as HTMLInputElement).placeholder.length > 5
+    ) as HTMLInputElement | undefined;
     return ta?.placeholder ?? '';
   });
   console.log('[PROBE] input placeholder:', JSON.stringify(placeholder));
