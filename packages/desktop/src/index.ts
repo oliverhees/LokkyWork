@@ -675,6 +675,17 @@ const handleAppReady = async (): Promise<void> => {
   // route through the renderer via BroadcastChannel; running them here would
   // deadlock because the renderer does not exist yet. See scheduleBackendMigrations().
 
+  // Start the PII anonymization proxy if the user enabled it (CODE-33). Failure
+  // here must not block startup — the app just runs without the proxy.
+  try {
+    if (await ProcessConfig.get('pii.proxyEnabled')) {
+      const { startPiiProxy } = await import('./process/services/piiProxyLifecycle');
+      await startPiiProxy();
+    }
+  } catch (error) {
+    console.error('[AionUi] Failed to start PII proxy:', error);
+  }
+
   try {
     initializeZoomFactor(await ProcessConfig.get('ui.zoomFactor'));
     mark('initializeZoomFactor');
@@ -944,7 +955,15 @@ installQuitCleanup({
   },
   // Stop aioncore subprocess — backend shutdown kills all agent children
   // transitively (no separate frontend workerTaskManager remains).
-  stopBackend: () => backendManager.stop(),
+  stopBackend: async () => {
+    try {
+      const { stopPiiProxy } = await import('./process/services/piiProxyLifecycle');
+      await stopPiiProxy();
+    } catch (error) {
+      console.error('[AionUi] Failed to stop PII proxy:', error);
+    }
+    await backendManager.stop();
+  },
   destroyPetWindow: async () => {
     const { destroyPetWindow } = await import('./process/pet/petManager');
     destroyPetWindow();
