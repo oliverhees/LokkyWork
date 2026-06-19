@@ -48,6 +48,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Feedback: forward diagnostics logs to the main process console
   logFeedbackEvent: (payload: { details?: unknown; level: 'info' | 'warn' | 'error'; message: string }) =>
     ipcRenderer.send('feedback:renderer-log', payload),
+  // PII proxy: start/stop the local anonymization proxy at runtime (CODE-33)
+  syncPiiProxy: (enabled: boolean): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('pii-proxy:sync', enabled),
 });
 
 // Synchronously fetch the aioncore port and expose it to the renderer
