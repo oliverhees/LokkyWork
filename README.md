@@ -36,15 +36,35 @@ LokkyWork richtet sich gezielt an die **deutschsprachige Community**: vollständ
 
 ### Fertige Pakete herunterladen (empfohlen)
 
-Lade das Paket für dein Betriebssystem von der **[Releases-Seite](https://github.com/oliverhees/LokkyWork/releases)** und installiere es:
+Lade das Paket für dein Betriebssystem von der **[Releases-Seite](https://github.com/oliverhees/LokkyWork/releases)**. Das `aioncore`-Backend ist im Paket enthalten und startet automatisch — keine separate Installation nötig.
 
-| Plattform   | Datei                                 | Installation                                                                                                                                                               |
-| ----------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Windows** | `LokkyWork-<version>-win-x64.exe`     | Installer ausführen. Beim ersten Start ggf. „Weitere Informationen → Trotzdem ausführen" (SmartScreen), da die Community-Edition nicht signiert ist.                       |
-| **macOS**   | `LokkyWork-<version>-mac-<arch>.dmg`  | DMG öffnen, App nach „Programme" ziehen. Beim ersten Start Rechtsklick → „Öffnen" (Gatekeeper), da nicht notarisiert. `arch` = `arm64` (Apple Silicon) oder `x64` (Intel). |
-| **Linux**   | `LokkyWork-<version>-linux-amd64.deb` | `sudo dpkg -i LokkyWork-*.deb` (oder per Doppelklick über das Software-Center). Danach im App-Menü als **LokkyWork** verfügbar.                                            |
+#### 🪟 Windows
 
-> Das `aioncore`-Backend wird mitgeliefert und startet automatisch — keine separate Installation nötig.
+1. Datei `LokkyWork-<version>-win-x64.exe` herunterladen.
+2. Doppelklick auf die Datei — der Installer startet.
+3. Erscheint die Meldung **„Der Computer wurde durch Windows geschützt"** (SmartScreen): auf **Weitere Informationen** klicken, dann **Trotzdem ausführen**. (Die Community-Edition ist noch nicht code-signiert — der Hinweis ist normal.)
+4. Installationsordner bestätigen und **Installieren** wählen.
+5. LokkyWork über das **Startmenü** oder die Desktop-Verknüpfung starten.
+
+> Für ARM-Geräte (z. B. Surface Pro X): `LokkyWork-<version>-win-arm64.exe` verwenden.
+
+#### 🍎 macOS
+
+1. Passendes DMG laden:
+   - **Apple Silicon** (M1–M4): `LokkyWork-<version>-mac-arm64.dmg`
+   - **Intel**: `LokkyWork-<version>-mac-x64.dmg`
+   - Im Zweifel: ** → Über diesen Mac** zeigt den Chip an.
+2. DMG öffnen und **LokkyWork** in den **Programme**-Ordner ziehen.
+3. Beim ersten Start: **Rechtsklick auf LokkyWork → Öffnen → Öffnen** (Gatekeeper, da die App noch nicht notarisiert ist). Ein normaler Doppelklick blockiert die App beim ersten Mal.
+4. Falls macOS meldet, die App sei **„beschädigt"**: einmalig im Terminal `xattr -cr /Applications/LokkyWork.app` ausführen, dann erneut öffnen.
+
+#### 🐧 Linux (Debian/Ubuntu)
+
+1. Datei `LokkyWork-<version>-linux-amd64.deb` herunterladen.
+2. Installieren: `sudo dpkg -i LokkyWork-*.deb` (oder Doppelklick → über das Software-Center installieren).
+3. LokkyWork erscheint anschließend im App-Menü.
+
+> Für ARM-Systeme: `LokkyWork-<version>-linux-arm64.deb` verwenden.
 
 ### Aus dem Quellcode bauen (für Entwickler)
 
