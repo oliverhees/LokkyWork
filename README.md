@@ -34,6 +34,12 @@ LokkyWork richtet sich gezielt an die **deutschsprachige Community**: vollständ
 
 ## Installation
 
+> ### ⬇️ Windows-Installer direkt herunterladen
+>
+> **[➡️ LokkyWork für Windows herunterladen (.exe)](https://github.com/oliverhees/LokkyWork/releases/latest/download/LokkyWork-2.1.21-win-x64.exe)**
+>
+> Heruntergeladene Datei ausführen → bei der Meldung **„Der Computer wurde durch Windows geschützt"** auf **Weitere Informationen → Trotzdem ausführen** → installieren. Ausführliche Schritte und macOS/Linux siehe unten.
+
 ### Fertige Pakete herunterladen (empfohlen)
 
 Lade das Paket für dein Betriebssystem von der **[Releases-Seite](https://github.com/oliverhees/LokkyWork/releases)**. Das `aioncore`-Backend ist im Paket enthalten und startet automatisch — keine separate Installation nötig.
