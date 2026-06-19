@@ -22,13 +22,13 @@ LokkyWork richtet sich gezielt an die **deutschsprachige Community**: vollständ
 
 ## Was LokkyWork zusätzlich bietet
 
-| Funktion | Status |
-| --- | --- |
-| 🇩🇪 **Vollständig deutsche Oberfläche** (Desktop + Mobile) | ✅ Enthalten |
+| Funktion                                                                                                                          | Status       |
+| --------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 🇩🇪 **Vollständig deutsche Oberfläche** (Desktop + Mobile)                                                                         | ✅ Enthalten |
 | 🐉 **Dragon-3D-Pet-Skin** — hochauflösender Begleiter-Drache mit 21 animierten Zuständen, frei wählbar neben dem klassischen Skin | ✅ Enthalten |
-| 🔒 **DSGVO-freundliche Voreinstellungen** | 🛠️ Geplant |
-| 🕵️ **Anonymisierung sensibler Daten** vor dem Versand an KI-Modelle | 🛠️ Geplant |
-| 🧩 **Deutsche Tool- & Workflow-Integrationen** | 🛠️ Geplant |
+| 🔒 **DSGVO-freundliche Voreinstellungen**                                                                                         | 🛠️ Geplant   |
+| 🕵️ **Anonymisierung sensibler Daten** vor dem Versand an KI-Modelle                                                               | 🛠️ Geplant   |
+| 🧩 **Deutsche Tool- & Workflow-Integrationen**                                                                                    | 🛠️ Geplant   |
 
 ---
 
@@ -38,11 +38,11 @@ LokkyWork richtet sich gezielt an die **deutschsprachige Community**: vollständ
 
 Lade das Paket für dein Betriebssystem von der **[Releases-Seite](https://github.com/oliverhees/LokkyWork/releases)** und installiere es:
 
-| Plattform | Datei | Installation |
-| --- | --- | --- |
-| **Windows** | `LokkyWork-<version>-win-x64.exe` | Installer ausführen. Beim ersten Start ggf. „Weitere Informationen → Trotzdem ausführen" (SmartScreen), da die Community-Edition nicht signiert ist. |
-| **macOS** | `LokkyWork-<version>-mac-<arch>.dmg` | DMG öffnen, App nach „Programme" ziehen. Beim ersten Start Rechtsklick → „Öffnen" (Gatekeeper), da nicht notarisiert. `arch` = `arm64` (Apple Silicon) oder `x64` (Intel). |
-| **Linux** | `LokkyWork-<version>-linux-amd64.deb` | `sudo dpkg -i LokkyWork-*.deb` (oder per Doppelklick über das Software-Center). Danach im App-Menü als **LokkyWork** verfügbar. |
+| Plattform   | Datei                                 | Installation                                                                                                                                                               |
+| ----------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Windows** | `LokkyWork-<version>-win-x64.exe`     | Installer ausführen. Beim ersten Start ggf. „Weitere Informationen → Trotzdem ausführen" (SmartScreen), da die Community-Edition nicht signiert ist.                       |
+| **macOS**   | `LokkyWork-<version>-mac-<arch>.dmg`  | DMG öffnen, App nach „Programme" ziehen. Beim ersten Start Rechtsklick → „Öffnen" (Gatekeeper), da nicht notarisiert. `arch` = `arm64` (Apple Silicon) oder `x64` (Intel). |
+| **Linux**   | `LokkyWork-<version>-linux-amd64.deb` | `sudo dpkg -i LokkyWork-*.deb` (oder per Doppelklick über das Software-Center). Danach im App-Menü als **LokkyWork** verfügbar.                                            |
 
 > Das `aioncore`-Backend wird mitgeliefert und startet automatisch — keine separate Installation nötig.
 
