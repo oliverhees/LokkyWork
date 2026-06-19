@@ -1,7 +1,7 @@
-appId: com.aionui.app
-productName: AionUi
-executableName: AionUi
-copyright: Copyright © 2024 AionUi
+appId: com.lokkywork.app
+productName: LokkyWork
+executableName: LokkyWork
+copyright: © 2024 AionUi · LokkyWork Community Edition
 
 protocols:
   - name: AionUi Protocol
@@ -172,15 +172,15 @@ linux:
   icon: resources/app.png
   artifactName: ${productName}-${version}-${os}-${arch}.${ext}
   category: Utility
-  maintainer: aionui
-  vendor: aionui
+  maintainer: lokkywork
+  vendor: lokkywork
   synopsis: ${description}
   description: ${description}
   desktop:
     entry:
-      Name: AionUi
+      Name: LokkyWork
       Comment: ${description}
-      Icon: aionui
+      Icon: lokkywork
       Categories: Office;Utility;
       MimeType: x-scheme-handler/aionui;
 
@@ -221,7 +221,7 @@ electronDownload:
 
 publish:
   provider: github
-  owner: iOfficeAI
-  repo: AionUi
+  owner: oliverhees
+  repo: LokkyWork
   publishAutoUpdate: true
   releaseType: release

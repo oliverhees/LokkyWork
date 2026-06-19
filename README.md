@@ -34,14 +34,31 @@ LokkyWork richtet sich gezielt an die **deutschsprachige Community**: vollständ
 
 ## Installation
 
-LokkyWork teilt die technische Basis mit AionUi. Bis eigene Releases bereitstehen, gelten die Voraussetzungen und der Build-Prozess von AionUi:
+### Fertige Pakete herunterladen (empfohlen)
+
+Lade das Paket für dein Betriebssystem von der **[Releases-Seite](https://github.com/oliverhees/LokkyWork/releases)** und installiere es:
+
+| Plattform | Datei | Installation |
+| --- | --- | --- |
+| **Windows** | `LokkyWork-<version>-win-x64.exe` | Installer ausführen. Beim ersten Start ggf. „Weitere Informationen → Trotzdem ausführen" (SmartScreen), da die Community-Edition nicht signiert ist. |
+| **macOS** | `LokkyWork-<version>-mac-<arch>.dmg` | DMG öffnen, App nach „Programme" ziehen. Beim ersten Start Rechtsklick → „Öffnen" (Gatekeeper), da nicht notarisiert. `arch` = `arm64` (Apple Silicon) oder `x64` (Intel). |
+| **Linux** | `LokkyWork-<version>-linux-amd64.deb` | `sudo dpkg -i LokkyWork-*.deb` (oder per Doppelklick über das Software-Center). Danach im App-Menü als **LokkyWork** verfügbar. |
+
+> Das `aioncore`-Backend wird mitgeliefert und startet automatisch — keine separate Installation nötig.
+
+### Aus dem Quellcode bauen (für Entwickler)
 
 ```bash
 bun install
-bun run dev      # Desktop-App im Entwicklungsmodus
+bun run dev            # Desktop-App im Entwicklungsmodus
+
+# Installierbare Pakete erzeugen:
+bun run dist:linux     # .deb (Linux)
+bun run dist:mac       # .dmg (nur auf macOS baubar)
+bun run dist:win       # .exe (nur auf Windows baubar)
 ```
 
-> Hinweis: Für den vollständigen Betrieb wird das `aioncore`-Backend benötigt (siehe AionUi-Dokumentation).
+> Hinweis: Plattformübergreifende Pakete (Windows + macOS + Linux) werden über den GitHub-Actions-Release-Workflow gebaut — ein Tag-Push (`v*`) erzeugt automatisch alle Pakete als Release. Lokal lässt sich pro Betriebssystem nur das jeweils eigene Paket bauen.
 
 ---
 
