@@ -4,19 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CdnGenericProvider } from './cdnGenericProvider';
-import type { CdnGenericProviderConfiguration } from './cdnGenericProvider';
+import type { GithubOptions } from 'builder-util-runtime';
 
-export const CDN_UPDATE_BASE_URL = 'https://static.aionui.com/releases';
+/**
+ * LokkyWork ships its own releases from GitHub (oliverhees/LokkyWork) instead of
+ * the upstream AionUi CDN (static.aionui.com). The packaged app-update.yml is
+ * generated from the same publish config, so the runtime feed stays in sync and
+ * update checks only ever surface LokkyWork releases — never AionUi's.
+ */
+export const UPDATE_REPO = { owner: 'oliverhees', repo: 'LokkyWork' } as const;
 
-export type CdnFeedOptions = CdnGenericProviderConfiguration & {
-  updateProvider: typeof CdnGenericProvider;
-};
-
-export function buildCdnFeedOptions(): CdnFeedOptions {
+export function buildUpdateFeedOptions(): GithubOptions {
   return {
-    provider: 'custom',
-    url: CDN_UPDATE_BASE_URL,
-    updateProvider: CdnGenericProvider,
+    provider: 'github',
+    owner: UPDATE_REPO.owner,
+    repo: UPDATE_REPO.repo,
   };
 }

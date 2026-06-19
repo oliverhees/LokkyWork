@@ -18,7 +18,7 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'semver';
 import { recordAutoUpdateQuitAndInstall, recordAutoUpdateStatus } from './autoUpdateDiagnostics';
-import { buildCdnFeedOptions } from './updateFeed';
+import { buildUpdateFeedOptions, UPDATE_REPO } from './updateFeed';
 
 const FORCE_DEV_AUTO_UPDATE_ENV = 'AIONUI_FORCE_DEV_AUTO_UPDATE';
 const DEBUG_AUTO_UPDATE_CURRENT_VERSION_ENV = 'AIONUI_DEBUG_AUTO_UPDATE_CURRENT_VERSION';
@@ -106,7 +106,7 @@ class AutoUpdaterService extends EventEmitter {
     autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = true;
     this.configureDevAutoUpdateDebug();
-    const cdnFeedOptions = buildCdnFeedOptions();
+    const feedOptions = buildUpdateFeedOptions();
 
     // Set the correct update channel based on platform and architecture before
     // any update checks are performed
@@ -115,11 +115,12 @@ class AutoUpdaterService extends EventEmitter {
       autoUpdater.channel = channel;
       log.info(`Update channel set to: ${channel}`);
     }
-    autoUpdater.setFeedURL(cdnFeedOptions);
-    log.info('Update feed set to CDN provider');
-    log.debug('[auto-update] CDN feed configured', {
-      provider: cdnFeedOptions.provider,
-      url: cdnFeedOptions.url,
+    autoUpdater.setFeedURL(feedOptions);
+    log.info(`Update feed set to GitHub provider (${UPDATE_REPO.owner}/${UPDATE_REPO.repo})`);
+    log.debug('[auto-update] GitHub feed configured', {
+      provider: feedOptions.provider,
+      owner: feedOptions.owner,
+      repo: feedOptions.repo,
       channel: channel ?? 'latest',
       platform: process.platform,
       arch: process.arch,
@@ -169,11 +170,12 @@ class AutoUpdaterService extends EventEmitter {
    */
   private ensureDevUpdateConfig(): void {
     try {
-      const cdnFeedOptions = buildCdnFeedOptions();
+      const feedOptions = buildUpdateFeedOptions();
       const devConfig = [
-        'provider: generic',
-        `url: ${cdnFeedOptions.url}`,
-        'updaterCacheDirName: com.aionui.app',
+        `provider: ${feedOptions.provider}`,
+        `owner: ${feedOptions.owner}`,
+        `repo: ${feedOptions.repo}`,
+        'updaterCacheDirName: lokkywork-updater',
         '',
       ].join('\n');
       const configPath = path.join(app.getPath('userData'), 'dev-app-update.yml');

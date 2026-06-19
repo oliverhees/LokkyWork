@@ -102,7 +102,7 @@ const AboutModalContent: React.FC = () => {
     },
     {
       title: t('settings.updateLog'),
-      url: 'https://github.com/iOfficeAI/AionUi/releases',
+      url: 'https://github.com/oliverhees/LokkyWork/releases',
       icon: <Right theme='outline' size='16' />,
     },
     {
