@@ -10,6 +10,7 @@ Eine deutschsprachige Edition von [AionUi](https://github.com/iOfficeAI/AionUi):
 [![Plattformen](https://img.shields.io/badge/Windows_·_macOS_·_Linux-2563eb?style=for-the-badge)](#-installation)
 [![Sprache](https://img.shields.io/badge/🇩🇪_Deutsch-16a34a?style=for-the-badge)](#)
 [![Release](https://img.shields.io/github/v/release/oliverhees/LokkyWork?style=for-the-badge&label=Version)](https://github.com/oliverhees/LokkyWork/releases/latest)
+[![Bootcamp](https://img.shields.io/badge/🎓_KI--Betriebssystem-Bootcamp-9333ea?style=for-the-badge)](https://kimiboca.de)
 
 ### [⬇️ Windows](https://github.com/oliverhees/LokkyWork/releases/latest/download/LokkyWork-2.1.21-win-x64.exe) · [🐧 Linux (.deb)](https://github.com/oliverhees/LokkyWork/releases/latest/download/LokkyWork-2.1.21-linux-amd64.deb) · [🍎 macOS](https://github.com/oliverhees/LokkyWork/releases/latest) · [📦 Alle Releases](https://github.com/oliverhees/LokkyWork/releases)
 
@@ -21,7 +22,7 @@ Eine deutschsprachige Edition von [AionUi](https://github.com/iOfficeAI/AionUi):
 
 **LokkyWork** ist eine eigenständige, deutschsprachige Edition der Open-Source-App [AionUi](https://github.com/iOfficeAI/AionUi) — einer lokalen Cowork-Oberfläche für Gemini CLI, Claude Code, Codex, Qwen Code und weitere KI-Agenten. Das `aioncore`-Backend ist im Installer enthalten und startet automatisch — **kein separates Setup nötig**.
 
-> 💛 **Auf Schultern von Riesen.** LokkyWork basiert auf AionUi (Apache-2.0) und wird unter eigenem Namen weiterentwickelt. Verbesserungen an der Basis fließen, wo sinnvoll, zurück ans Original.
+> 💛 **Auf Schultern von Riesen.** LokkyWork basiert auf AionUi (Apache-2.0) und wird unter eigenem Namen weiterentwickelt. Ich arbeite **selbst als Contributor an AionUi mit** und bringe Verbesserungen direkt ins Original ein — was dort sinnvoll ist, fließt zurück; was speziell für den deutschsprachigen Raum zählt, lebt hier in LokkyWork.
 
 ---
 
@@ -85,6 +86,16 @@ bun run dist:win       # .exe  (nur auf Windows baubar)
 ```
 
 > 💡 Plattformübergreifende Pakete (Windows + macOS + Linux) entstehen über GitHub Actions — ein Tag-Push (`v*`) baut alle Pakete als Release. Lokal lässt sich pro Betriebssystem nur das eigene Paket bauen.
+
+---
+
+## 🎓 KI als Betriebssystem lernen
+
+LokkyWork ist Teil einer größeren Idee: KI nicht als Spielerei, sondern als **Betriebssystem für deine Arbeit** zu nutzen. Genau das vermittelt das **KI-Betriebssystem-Bootcamp** — Schritt für Schritt, auf Deutsch, praxisnah.
+
+> 🚀 **[KIMIBOCA — das KI-Betriebssystem-Bootcamp →](https://kimiboca.de)**
+>
+> Lerne, KI praktisch in deinen (Arbeits-)Alltag zu bauen und Tools wie LokkyWork wirklich auszureizen.
 
 ---
 
