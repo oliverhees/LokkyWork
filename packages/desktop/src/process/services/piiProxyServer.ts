@@ -5,30 +5,23 @@
  */
 
 /**
- * Local PII anonymization proxy (CODE-26 / CODE-33).
+ * Local PII anonymization proxy (CODE-26 / 33 / 34 / 35).
  *
  * Sits between aioncore and the real LLM providers:
  *
  *   aioncore --(provider.base_url = this proxy)--> piiProxy --(real base_url)--> LLM provider
  *
- * The Spike (CODE-32) confirmed aioncore issues OpenAI-compatible
- * `POST /v1/chat/completions` (streaming) at `provider.base_url`, so redirecting
- * that base_url to this proxy lets us intercept the request body — where the PII
- * lives (`messages[].content`) — anonymize it, forward to the real provider, and
- * de-anonymize the (streamed) response.
- *
+ * Flow: scrub PII from the request body (Seam 1, CODE-34) -> forward to the real
+ * provider -> restore placeholders in the (streamed) response (Seam 2, CODE-35).
  * The real target base_url is base64url-encoded into the request path; see
  * `@/common/pii/piiProxyShared` for the encoding contract shared with the renderer.
- *
- * This file is the MVP skeleton: it forwards faithfully (pass-through). PII
- * scrubbing (CODE-34) and stream de-anonymization (CODE-35) hook into the two
- * clearly marked seams below.
  */
 
 import http from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Buffer } from 'node:buffer';
 import { PII_PROXY_FORWARD_PREFIX, parseForwardPath } from '@/common/pii/piiProxyShared';
+import { createPiiMapping, restoreText, scrubChatRequestBody } from '@/common/pii/piiScrubber';
 
 export type PiiProxyHandle = {
   /** Bound port (127.0.0.1). */
@@ -59,12 +52,15 @@ async function handleForward(req: IncomingMessage, res: ServerResponse): Promise
   const targetUrl = parsed.target.replace(/\/$/, '') + parsed.restPath;
 
   const requestBody = await readBody(req);
+  const mapping = createPiiMapping();
 
-  // ─── SEAM 1 (CODE-34): anonymize PII in `requestBody` here ──────────────────
-  // The body is an OpenAI-compatible JSON payload; scrub messages[].content,
-  // keep a reversible session mapping, then forward the scrubbed buffer.
-  const forwardBody = requestBody;
-  // ────────────────────────────────────────────────────────────────────────────
+  // ─── SEAM 1 (CODE-34): scrub PII from messages[].content. scrubChatRequestBody
+  // returns null when the body isn't a chat request (e.g. /models) — forward as-is.
+  let forwardBody = requestBody;
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    const scrubbed = scrubChatRequestBody(requestBody.toString('utf8'), mapping);
+    if (scrubbed !== null) forwardBody = Buffer.from(scrubbed, 'utf8');
+  }
 
   const headers: Record<string, string> = {};
   for (const [k, v] of Object.entries(req.headers)) {
@@ -92,26 +88,58 @@ async function handleForward(req: IncomingMessage, res: ServerResponse): Promise
   });
   res.writeHead(upstream.status, respHeaders);
 
-  // ─── SEAM 2 (CODE-35): de-anonymize the (streamed) response here ─────────────
-  // Map placeholders back to original values, buffering across chunk boundaries
-  // so a placeholder isn't torn apart. Pass-through for the skeleton.
   if (!upstream.body) {
     res.end();
     return;
   }
+
   const reader = upstream.body.getReader();
+  const nothingScrubbed = mapping.byPlaceholder.size === 0;
+
+  // ─── SEAM 2 (CODE-35): restore placeholders in the response. If nothing was
+  // scrubbed, stream through untouched (no de-anonymization needed).
+  if (nothingScrubbed) {
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) res.write(Buffer.from(value));
+      }
+    } catch {
+      /* upstream aborted */
+    } finally {
+      res.end();
+    }
+    return;
+  }
+
+  // De-anonymize, buffering an open "[…" at the chunk boundary so a placeholder
+  // isn't torn across two chunks.
+  const decoder = new TextDecoder();
+  let carry = '';
   try {
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
-      if (value) res.write(Buffer.from(value));
+      if (!value) continue;
+      let text = carry + decoder.decode(value, { stream: true });
+      const lastOpen = text.lastIndexOf('[');
+      const lastClose = text.lastIndexOf(']');
+      if (lastOpen > lastClose) {
+        carry = text.slice(lastOpen);
+        text = text.slice(0, lastOpen);
+      } else {
+        carry = '';
+      }
+      if (text) res.write(Buffer.from(restoreText(text, mapping), 'utf8'));
     }
+    const tail = carry + decoder.decode();
+    if (tail) res.write(Buffer.from(restoreText(tail, mapping), 'utf8'));
   } catch {
-    // upstream aborted; close the client response
+    /* upstream aborted */
   } finally {
     res.end();
   }
-  // ────────────────────────────────────────────────────────────────────────────
 }
 
 /** Start the local PII proxy on 127.0.0.1:`port`. */
