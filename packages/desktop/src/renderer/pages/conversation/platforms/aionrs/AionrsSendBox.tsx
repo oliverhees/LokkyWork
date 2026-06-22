@@ -50,6 +50,9 @@ import { Message, Tag } from '@arco-design/web-react';
 import { Brain, MagicHat, Shield } from '@icon-park/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { resolveLocaleKey } from '@/common/utils';
+import { useMentionableAssistants, useReinjectGuestBlocks } from '@/renderer/pages/conversation/platforms/useAssistantMentions';
+import { useAssistantMentionResponder } from '@/renderer/pages/conversation/platforms/useAssistantMentionResponder';
 import { useAionrsMessage } from './useAionrsMessage';
 import type { AionrsModelSelection } from './useAionrsModelSelection';
 
@@ -128,9 +131,19 @@ const AionrsSendBox: React.FC<{
       name,
       status: 'loaded',
     }));
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const localeKey = resolveLocaleKey(i18n.language);
   const { checkAndUpdateTitle } = useAutoTitle();
   const { current_model } = modelSelection;
+  const mentionAssistants = useMentionableAssistants(localeKey, assistantId);
+  useReinjectGuestBlocks(conversation_id);
+  const respondToMentions = useAssistantMentionResponder({
+    conversation_id,
+    model: current_model,
+    workspace: workspacePath,
+    localeKey,
+    t,
+  });
   const teamPermission = useTeamPermission();
   const propagateMode = teamPermission?.propagateMode;
 
@@ -354,10 +367,12 @@ const AionrsSendBox: React.FC<{
       })
     ) {
       enqueue({ input: message, files: filesToSend });
-      return;
+    } else {
+      await executeCommand({ input: message, files: filesToSend });
     }
 
-    await executeCommand({ input: message, files: filesToSend });
+    // Fire @-mention sub-answers independently of the main turn (CODE-37).
+    void respondToMentions(message, mentionAssistants);
   };
 
   const handleEditQueuedCommand = useCallback(
@@ -715,6 +730,7 @@ const AionrsSendBox: React.FC<{
         onSend={onSendHandler}
         slash_commands={slash_commands}
         onSlashBuiltinCommand={onSlashBuiltinCommand}
+        assistantMentions={mentionAssistants}
         allowSendWhileLoading
       />
       {isMobile && (

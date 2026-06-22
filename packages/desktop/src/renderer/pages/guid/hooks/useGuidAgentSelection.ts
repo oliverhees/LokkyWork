@@ -316,6 +316,23 @@ export const useGuidAgentSelection = ({
     // Explicit pre-selection (e.g. from Settings → Agent "Go to Chat") wins
     // over reset and saved-selection when the agent is actually present.
     if (preselectAgentKey) {
+      // Preset assistants use the `custom:<id>` selectedAgentKey scheme, which
+      // getAgentKey() never produces — so accept such keys directly when the
+      // matching preset assistant is actually available (e.g. coming from the
+      // /assistants overview page). Without this they fall through to the
+      // default CLI agent.
+      if (preselectAgentKey.startsWith('custom:')) {
+        // Preset assistants use the `custom:<id>` key, which getAgentKey() never
+        // produces, so trust the navigation and select it directly. Downstream
+        // assistant resolution handles `builtin-` id variants. This is what the
+        // /assistants overview relies on to show the personalized start screen.
+        resetHandledRef.current = true;
+        _setSelectedAgentKey(preselectAgentKey);
+        configService.set('guid.lastSelectedAgent', preselectAgentKey).catch((error) => {
+          console.error('Failed to save preselected agent key:', error);
+        });
+        return;
+      }
       const matched = availableAgents.find((a) => getAgentKey(a) === preselectAgentKey);
       if (matched) {
         resetHandledRef.current = true;

@@ -6,6 +6,7 @@
 
 import { ipcBridge } from '@/common';
 import AtFileMenu from '@/renderer/components/chat/AtFileMenu';
+import AssistantMentionMenu from '@/renderer/components/chat/AssistantMentionMenu';
 import BtwOverlay from '@/renderer/components/chat/BtwOverlay';
 import { useInputFocusRing } from '@/renderer/hooks/chat/useInputFocusRing';
 import SlashCommandMenu, { type SlashCommandMenuItem } from '@/renderer/components/chat/SlashCommandMenu';
@@ -17,6 +18,13 @@ import { useTeamPermission } from '@/renderer/pages/team/hooks/TeamPermissionCon
 import { usePreviewContext } from '@/renderer/pages/conversation/Preview';
 import { warmupConversation } from '@/renderer/pages/conversation/utils/warmupConversation';
 import { buildAtFileInsertion, getActiveAtFileQuery, getAllAtFileQueries } from '@/renderer/utils/chat/atFileQuery';
+import {
+  buildAssistantMentionInsertion,
+  filterAssistantMentions,
+  getActiveAssistantMention,
+  getAllAssistantMentions,
+  type AssistantMentionSource,
+} from '@/renderer/utils/chat/assistantMentionQuery';
 import { getLastAssistantText } from '@/renderer/utils/chat/getLastAssistantText';
 import { emitter, type ReplyQuote, useAddEventListener } from '@/renderer/utils/emitter';
 import { mergeFileSelectionItems, type FileSelectionItem } from '@/renderer/utils/file/fileSelection';
@@ -180,6 +188,12 @@ const SendBox: React.FC<{
   onSelectedWorkspaceItemsChange?: (items: FileSelectionItem[]) => void;
   bottomHint?: React.ReactNode;
   /**
+   * Preset assistants offered for `@`-mention in the running chat (CODE-37).
+   * When non-empty, typing `@` shows an assistant dropdown; the chosen `@slug`
+   * is inserted and resolved on send by the parent. Empty/omitted = disabled.
+   */
+  assistantMentions?: AssistantMentionSource[];
+  /**
    * Mobile-only: open a parent-supplied action sheet via the `+` button.
    * When provided, mobile renders a single `+` button (left) and send/stop button (right);
    * `tools` and `rightTools` are not rendered inline on mobile.
@@ -211,6 +225,7 @@ const SendBox: React.FC<{
   selectedWorkspaceItems,
   onSelectedWorkspaceItemsChange,
   bottomHint,
+  assistantMentions = [],
   onMobilePlusClick,
 }) => {
   const layout = useLayoutContext();
@@ -408,6 +423,26 @@ const SendBox: React.FC<{
     return `${conversationContext.workspace}:${activeAtFileQuery.start}`;
   }, [activeAtFileQuery, conversationContext?.workspace]);
   const allAtFileQueries = useMemo(() => getAllAtFileQueries(input), [input]);
+
+  // ── Assistant @-mention (CODE-37) ──────────────────────────────────────────
+  const [assistantMentionActiveIndex, setAssistantMentionActiveIndex] = useState(0);
+  const [dismissedAssistantMentionToken, setDismissedAssistantMentionToken] = useState<string | null>(null);
+  const activeAssistantMention = useMemo(() => {
+    if (assistantMentions.length === 0) return null;
+    return getActiveAssistantMention(input, caretPosition);
+  }, [assistantMentions.length, caretPosition, input]);
+  const activeAssistantMentionTokenKey = useMemo(
+    () => (activeAssistantMention ? `${activeAssistantMention.start}:${activeAssistantMention.query}` : null),
+    [activeAssistantMention]
+  );
+  const matchingAssistantMentions = useMemo(
+    () => (activeAssistantMention ? filterAssistantMentions(assistantMentions, activeAssistantMention.query) : []),
+    [activeAssistantMention, assistantMentions]
+  );
+  const allAssistantMentions = useMemo(
+    () => getAllAssistantMentions(input, assistantMentions),
+    [assistantMentions, input]
+  );
   const deferredAtFileQuery = useDeferredValue(activeAtFileQuery?.query ?? '');
   const inputHistory = useMemo(
     () => getConversationInputHistory(messageList, conversationContext?.conversation_id),
@@ -515,16 +550,22 @@ const SendBox: React.FC<{
   );
 
   const isCommandMenuOpen = conversationExport.isOpen || slashController.isOpen;
+  // Assistant mention takes priority over the file menu for the same `@` token.
+  const isAssistantMentionOpen =
+    matchingAssistantMentions.length > 0 &&
+    activeAssistantMentionTokenKey !== dismissedAssistantMentionToken &&
+    !isCommandMenuOpen;
   const isAtFileMenuOpen =
     Boolean(conversationContext?.workspace) &&
     Boolean(activeAtFileQuery) &&
     activeAtFileTokenKey !== dismissedAtFileToken &&
-    !isCommandMenuOpen;
+    !isCommandMenuOpen &&
+    !isAssistantMentionOpen;
   const visibleAtFileMenuItems = useMemo(
     () => filterWorkspaceMentionItems(workspaceMentionItems, deferredAtFileQuery),
     [deferredAtFileQuery, workspaceMentionItems]
   );
-  const isOverlayOpen = isCommandMenuOpen || btwCommand.isOpen || isAtFileMenuOpen;
+  const isOverlayOpen = isCommandMenuOpen || btwCommand.isOpen || isAtFileMenuOpen || isAssistantMentionOpen;
 
   const getTextareaElement = useCallback((): HTMLTextAreaElement | null => {
     const textarea = containerRef.current?.querySelector('textarea');
@@ -917,6 +958,32 @@ const SendBox: React.FC<{
     ]
   );
 
+  const insertSelectedAssistantMention = useCallback(
+    (assistant: AssistantMentionSource) => {
+      if (!activeAssistantMention) {
+        return;
+      }
+      const insertion = buildAssistantMentionInsertion(assistant);
+      const needsTrailingSpace = input[activeAssistantMention.end] !== ' ';
+      const inserted = needsTrailingSpace ? `${insertion} ` : insertion;
+      const nextValue =
+        input.slice(0, activeAssistantMention.start) + inserted + input.slice(activeAssistantMention.end);
+      const nextCaret = activeAssistantMention.start + inserted.length;
+      setDismissedAssistantMentionToken(`${activeAssistantMention.start}:${assistant.id}`);
+      setInput(nextValue);
+      requestAnimationFrame(() => {
+        const textarea = getTextareaElement();
+        if (!textarea) {
+          return;
+        }
+        textarea.focus();
+        textarea.setSelectionRange(nextCaret, nextCaret);
+        setCaretPosition(nextCaret);
+      });
+    },
+    [activeAssistantMention, getTextareaElement, input, setInput]
+  );
+
   // 使用共享的输入法合成处理
   const { compositionHandlers, isComposingState, createKeyDownHandler } = useCompositionInput();
 
@@ -1129,6 +1196,57 @@ const SendBox: React.FC<{
     [activeAtFileTokenKey, atFileMenuActiveIndex, insertSelectedAtFile, isAtFileMenuOpen, visibleAtFileMenuItems]
   );
 
+  const handleAssistantMentionKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (!isAssistantMentionOpen) {
+        return false;
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        if (activeAssistantMentionTokenKey) {
+          setDismissedAssistantMentionToken(activeAssistantMentionTokenKey);
+        }
+        return true;
+      }
+      if (matchingAssistantMentions.length === 0) {
+        return false;
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setAssistantMentionActiveIndex((previous) => (previous + 1) % matchingAssistantMentions.length);
+        return true;
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setAssistantMentionActiveIndex((previous) =>
+          previous === 0 ? matchingAssistantMentions.length - 1 : previous - 1
+        );
+        return true;
+      }
+      if (event.key === 'Enter') {
+        const selected = matchingAssistantMentions[assistantMentionActiveIndex] ?? matchingAssistantMentions[0];
+        if (!selected) {
+          return false;
+        }
+        event.preventDefault();
+        insertSelectedAssistantMention(selected);
+        return true;
+      }
+      return false;
+    },
+    [
+      activeAssistantMentionTokenKey,
+      assistantMentionActiveIndex,
+      insertSelectedAssistantMention,
+      isAssistantMentionOpen,
+      matchingAssistantMentions,
+    ]
+  );
+
+  useEffect(() => {
+    setAssistantMentionActiveIndex(0);
+  }, [activeAssistantMentionTokenKey]);
+
   const sendMessageHandler = () => {
     if (isUploading) return;
     // Cancel any pending warmup: once the user actually submits, the
@@ -1302,7 +1420,26 @@ const SendBox: React.FC<{
     return sendButton;
   };
 
-  const shouldUseHighlightOverlay = !isComposingState && allAtFileQueries.length > 0;
+  const highlightRanges = useMemo(() => {
+    // A token like `@cowork` matches BOTH the file-mention parser and the
+    // assistant-mention parser, so the same range can appear twice. Sort by
+    // start (longest first on ties) and drop any range that overlaps the
+    // previous one — otherwise the highlight overlay paints it twice.
+    const sorted = [
+      ...allAtFileQueries.map((match) => ({ start: match.start, end: match.end })),
+      ...allAssistantMentions.map((match) => ({ start: match.start, end: match.end })),
+    ].toSorted((a, b) => a.start - b.start || b.end - a.end);
+    const merged: Array<{ start: number; end: number }> = [];
+    let lastEnd = -1;
+    for (const range of sorted) {
+      if (range.start >= lastEnd) {
+        merged.push(range);
+        lastEnd = range.end;
+      }
+    }
+    return merged;
+  }, [allAssistantMentions, allAtFileQueries]);
+  const shouldUseHighlightOverlay = !isComposingState && highlightRanges.length > 0;
 
   const mobilePlusButton = isMobileCompact ? (
     <Button
@@ -1336,7 +1473,7 @@ const SendBox: React.FC<{
     const segments: React.ReactNode[] = [];
     let cursor = 0;
 
-    allAtFileQueries.forEach((match, index) => {
+    highlightRanges.forEach((match, index) => {
       if (cursor < match.start) {
         segments.push(
           <span className='sendbox-highlight-text' key={`text-${cursor}`}>
@@ -1366,7 +1503,7 @@ const SendBox: React.FC<{
     }
 
     return segments;
-  }, [allAtFileQueries, input]);
+  }, [highlightRanges, input]);
 
   return (
     <div className={className}>
@@ -1413,6 +1550,18 @@ const SendBox: React.FC<{
               loadingText={t('messages.atFile.loading', { defaultValue: 'Loading...' })}
               onHoverItem={setAtFileMenuActiveIndex}
               onSelectItem={insertSelectedAtFile}
+            />
+          </div>
+        )}
+        {isAssistantMentionOpen && (
+          <div className='absolute left-12px right-12px bottom-[calc(100%+8px)] z-70'>
+            <AssistantMentionMenu
+              activeIndex={assistantMentionActiveIndex}
+              emptyText={t('conversation.assistantMention.empty', { defaultValue: 'Kein Assistent gefunden' })}
+              items={matchingAssistantMentions}
+              label={t('conversation.assistantMention.label', { defaultValue: 'Assistenten' })}
+              onHoverItem={setAssistantMentionActiveIndex}
+              onSelectItem={insertSelectedAssistantMention}
             />
           </div>
         )}
@@ -1612,7 +1761,12 @@ const SendBox: React.FC<{
               {...compositionHandlers}
               autoSize={isSingleLine ? false : { minRows: 1, maxRows: 10 }}
               onKeyDown={createKeyDownHandler(sendMessageHandler, (event) => {
-                return handleAtFileMenuKeyDown(event) || handleOverlayKeyDown(event) || handleHistoryKeyDown(event);
+                return (
+                  handleAssistantMentionKeyDown(event) ||
+                  handleAtFileMenuKeyDown(event) ||
+                  handleOverlayKeyDown(event) ||
+                  handleHistoryKeyDown(event)
+                );
               })}
             ></Input.TextArea>
           </div>

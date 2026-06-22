@@ -86,7 +86,7 @@ const IdentitySection: React.FC<IdentitySectionProps> = ({
           </div>
         )}
         <div className='min-w-0 flex-1 space-y-10px'>
-          <div className='flex items-center gap-12px'>
+          <div className='flex items-start gap-12px'>
             <FieldLabel required>{t('settings.assistantName', { defaultValue: 'Name' })}</FieldLabel>
             <Input
               value={editName}
@@ -97,7 +97,7 @@ const IdentitySection: React.FC<IdentitySectionProps> = ({
               className='rounded-8px border-border-2 bg-bg-0'
             />
           </div>
-          <div className='flex items-center gap-12px'>
+          <div className='flex items-start gap-12px'>
             <FieldLabel>{t('settings.assistantDescription', { defaultValue: 'Description' })}</FieldLabel>
             <Input
               value={editDescription}
