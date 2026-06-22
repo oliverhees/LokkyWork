@@ -185,7 +185,9 @@ async function main(): Promise<void> {
   const { tag, url } = await fetchLatestUpstream();
   const state = readState();
 
-  log(`Local version: ${localVersion} | Upstream latest: ${tag} | Last notified: ${state.last_notified_version ?? '(none)'}`);
+  log(
+    `Local version: ${localVersion} | Upstream latest: ${tag} | Last notified: ${state.last_notified_version ?? '(none)'}`
+  );
 
   if (!isNewer(tag, localVersion)) {
     log('No update: upstream is not newer than local. Nothing to do.');

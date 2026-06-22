@@ -155,10 +155,7 @@ export function getActiveAssistantMention(value: string, caretPosition: number):
 }
 
 /** Filter assistants whose slug starts with the active query (empty → all). */
-export function filterAssistantMentions(
-  assistants: AssistantMentionSource[],
-  query: string
-): AssistantMentionSource[] {
+export function filterAssistantMentions(assistants: AssistantMentionSource[], query: string): AssistantMentionSource[] {
   const needle = query.trim().toLowerCase();
   if (!needle) return assistants;
   return assistants.filter((assistant) => {

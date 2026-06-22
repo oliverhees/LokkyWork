@@ -51,7 +51,10 @@ import { Brain, MagicHat, Shield } from '@icon-park/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { resolveLocaleKey } from '@/common/utils';
-import { useMentionableAssistants, useReinjectGuestBlocks } from '@/renderer/pages/conversation/platforms/useAssistantMentions';
+import {
+  useMentionableAssistants,
+  useReinjectGuestBlocks,
+} from '@/renderer/pages/conversation/platforms/useAssistantMentions';
 import { useAssistantMentionResponder } from '@/renderer/pages/conversation/platforms/useAssistantMentionResponder';
 import { useAionrsMessage } from './useAionrsMessage';
 import type { AionrsModelSelection } from './useAionrsModelSelection';
