@@ -15,19 +15,29 @@
  * provider -> restore placeholders in the (streamed) response (Seam 2, CODE-35).
  * The real target base_url is base64url-encoded into the request path; see
  * `@/common/pii/piiProxyShared` for the encoding contract shared with the renderer.
+ *
+ * The proxy also exposes `/__pii-proxy/selftest`, which runs the real scrub +
+ * restore pipeline over a sample text — the settings UI calls it (through the
+ * running proxy) so the user can verify the whole chain end-to-end.
  */
 
 import http from 'node:http';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Buffer } from 'node:buffer';
 import { PII_PROXY_FORWARD_PREFIX, parseForwardPath } from '@/common/pii/piiProxyShared';
-import { createPiiMapping, restoreText, scrubChatRequestBody } from '@/common/pii/piiScrubber';
+import { createPiiMapping, restoreText, scrubChatRequestBody, scrubText } from '@/common/pii/piiScrubber';
 
 export type PiiProxyHandle = {
   /** Bound port (127.0.0.1). */
   port: number;
   stop: () => Promise<void>;
 };
+
+// Sample input covering every detector, used by the end-to-end self-test.
+const SELF_TEST_INPUT =
+  'Hallo, ich bin Max Mustermann. Meine IBAN ist DE89 3704 0044 0532 0130 00, ' +
+  'erreichbar unter max@example.de oder +49 170 1234567. ' +
+  'USt-IdNr DE123456789, Kreditkarte 4111 1111 1111 1111.';
 
 function readBody(req: IncomingMessage): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -142,6 +152,30 @@ async function handleForward(req: IncomingMessage, res: ServerResponse): Promise
   }
 }
 
+/**
+ * End-to-end self-test: runs the real Seam 1 (scrub) and Seam 2 (restore) over a
+ * sample text and reports what a provider would see vs. what the user gets back.
+ * Reached via an HTTP call to the running proxy, so success also proves the proxy
+ * is actually up and serving.
+ */
+function handleSelfTest(res: ServerResponse): void {
+  const mapping = createPiiMapping();
+  const sentToProvider = scrubText(SELF_TEST_INPUT, mapping); // Seam 1
+  const placeholders = [...mapping.byPlaceholder.keys()];
+  const modelReply = placeholders.length
+    ? `Verstanden. Ich habe notiert: ${placeholders.join(', ')}.`
+    : 'Keine sensiblen Daten erkannt.';
+  const restoredReply = restoreText(modelReply, mapping); // Seam 2
+  const detected = [...mapping.byPlaceholder.entries()].map(([placeholder, value]) => ({
+    kind: placeholder.match(/\[([A-Z]+)_/)?.[1] ?? '?',
+    value,
+    placeholder,
+  }));
+  res
+    .writeHead(200, { 'content-type': 'application/json' })
+    .end(JSON.stringify({ ok: true, input: SELF_TEST_INPUT, sentToProvider, modelReply, restoredReply, detected }));
+}
+
 /** Start the local PII proxy on 127.0.0.1:`port`. */
 export function startPiiProxyServer(port: number): Promise<PiiProxyHandle> {
   const server = http.createServer((req, res) => {
@@ -151,6 +185,10 @@ export function startPiiProxyServer(port: number): Promise<PiiProxyHandle> {
     }
     if (req.url === '/__pii-proxy/health') {
       res.writeHead(200, { 'content-type': 'application/json' }).end('{"ok":true}');
+      return;
+    }
+    if (req.url === '/__pii-proxy/selftest') {
+      handleSelfTest(res);
       return;
     }
     res.writeHead(404, { 'content-type': 'text/plain' }).end('PII proxy: unknown route');
