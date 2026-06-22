@@ -10,6 +10,7 @@ import IdentitySection from './editor/IdentitySection';
 import PromptsSection from './editor/PromptsSection';
 import DefaultsSection from './editor/DefaultsSection';
 import RulesSection from './editor/RulesSection';
+import { serverIsVaultCapable } from '@/renderer/pages/conversation/Workspace/vault/vaultDetect';
 
 export type AssistantEditorSectionsProps = {
   editor: AssistantEditorViewModel;
@@ -179,6 +180,15 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
         ])
       ),
     [builtinAutoSkills, disabledBuiltinSkills, selectedSkills]
+  );
+
+  // Couple the "Wissensvault-Verhalten" nudge to activation (LOKYY-52): the nudge
+  // button only appears when this assistant has a vault-capable MCP among its
+  // selected default MCP servers. Reuses the shared vault-capability definition.
+  const hasVaultMcp = useMemo(
+    () =>
+      availableMcpServers.some((server) => selectedMcpIds.includes(server.id) && serverIsVaultCapable(server.tools)),
+    [availableMcpServers, selectedMcpIds]
   );
 
   const applyPromptItems = (items: string[]) => {
@@ -390,6 +400,7 @@ const AssistantEditorSections: React.FC<AssistantEditorSectionsProps> = ({ edito
 
       <RulesSection
         isBuiltin={isBuiltin}
+        hasVaultMcp={hasVaultMcp}
         promptViewMode={promptViewMode}
         setPromptViewMode={setPromptViewMode}
         rulesExpanded={rulesExpanded}

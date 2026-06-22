@@ -35,6 +35,7 @@ import { useAionrsModelSelection } from '../platforms/aionrs/useAionrsModelSelec
 import { useConversationRuntimeView } from '../runtime/useConversationRuntimeView';
 import { isLegacyReadOnlyConversationType } from '../utils/conversationRuntime';
 import LegacyReadOnlyConversation from '../platforms/legacy/LegacyReadOnlyConversation';
+import SaveChatToVaultButton from '@/renderer/pages/conversation/Workspace/vault/SaveChatToVaultButton';
 // import SkillRuleGenerator from './components/SkillRuleGenerator'; // Temporarily hidden
 
 /** Check whether a specific skill is mounted on the conversation. */
@@ -208,6 +209,11 @@ const AionrsConversationPanel: React.FC<{ conversation: AionrsConversation; slid
     sider: <ChatSlider conversation={conversation} />,
     headerExtra: (
       <div className='flex items-center gap-8px'>
+        <SaveChatToVaultButton
+          conversation_id={conversation.id}
+          conversationName={conversation.name}
+          assistantName={presetAssistantInfo?.name}
+        />
         <CronJobManager
           conversation_id={conversation.id}
           cron_job_id={conversation.extra?.cron_job_id as string | undefined}
@@ -366,6 +372,15 @@ const ChatConversation: React.FC<{
 
   const headerExtraNode = (
     <div className='flex items-center gap-8px'>
+      {conversation && (
+        <div className='shrink-0'>
+          <SaveChatToVaultButton
+            conversation_id={conversation.id}
+            conversationName={conversation.name}
+            assistantName={assistantDisplayName}
+          />
+        </div>
+      )}
       {conversation && (
         <div className='shrink-0'>
           <CronJobManager

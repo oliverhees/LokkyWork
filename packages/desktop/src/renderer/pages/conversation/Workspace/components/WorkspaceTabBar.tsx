@@ -16,9 +16,18 @@ type WorkspaceTabBarProps = {
   onTabChange: (tab: WorkspaceTab) => void;
   changeCount: number;
   branch: string | null;
+  /** Show the Second-Brain vault tab (a vault MCP server is connected). */
+  hasVault?: boolean;
 };
 
-const WorkspaceTabBar: React.FC<WorkspaceTabBarProps> = ({ t, activeTab, onTabChange, changeCount, branch }) => {
+const WorkspaceTabBar: React.FC<WorkspaceTabBarProps> = ({
+  t,
+  activeTab,
+  onTabChange,
+  changeCount,
+  branch,
+  hasVault,
+}) => {
   const changesTitle = (
     <span className='flex items-center'>
       {t('conversation.workspace.changes.tab')}
@@ -67,6 +76,9 @@ const WorkspaceTabBar: React.FC<WorkspaceTabBarProps> = ({ t, activeTab, onTabCh
     >
       <Tabs.TabPane key='files' title={t('conversation.workspace.changes.filesTab')} />
       <Tabs.TabPane key='changes' title={changesTitle} />
+      {hasVault && (
+        <Tabs.TabPane key='vault' title={t('conversation.workspace.vault.tab', { defaultValue: 'Second Brain' })} />
+      )}
     </Tabs>
   );
 };
