@@ -4,14 +4,12 @@ Die Doku nutzt als **Interim** die Original-Screenshots aus der AionUi-Wiki. Lok
 
 **So tauschst du ein Bild:** Neuen Screenshot unter demselben Dateinamen in `public/screenshots/` ablegen (gleicher Name = keine Codeänderung nötig). Bei neuem Namen zusätzlich die `![…](/screenshots/…)`-Referenz in der genannten MDX-Datei anpassen. Die Seiten liegen unter `src/content/docs/`.
 
-## Verwendete Screenshots (32)
+## Verwendete Screenshots (28)
+
+Diese Bilder sind aktuell eingebunden (Interim aus der AionUi-Wiki) – einfach gegen einen LokkyWork-Screenshot **gleichen Dateinamens** tauschen.
 
 | Bilddatei (`public/screenshots/…`) | Seite | Was es zeigt |
 | --- | --- | --- |
-| `gifs/file-management/batch-rename.gif` | `anwendungsfaelle/dateiverwaltung` | LokkyWork benennt Fotos stapelweise um |
-| `gifs/file-management/duplicate-cleanup.gif` | `anwendungsfaelle/dateiverwaltung` | LokkyWork räumt doppelte Dateien auf |
-| `gifs/file-management/file-organization.gif` | `anwendungsfaelle/dateiverwaltung` | LokkyWork sortiert Dateien nach Typ |
-| `gifs/file-management/smart-search.gif` | `anwendungsfaelle/dateiverwaltung` | LokkyWork durchsucht Dateien intelligent |
 | `image-generation-test.png` | `bildgenerierung` | Beispielergebnis der Bildgenerierung in LokkyWork |
 | `set-tool-llm.png` | `bildgenerierung` | Bildgenerierungs-Werkzeug in LokkyWork einrichten |
 | `tool-check.png` | `bildgenerierung` | Werkzeugliste mit aktivierter Bildgenerierung in LokkyWork |
@@ -41,12 +39,16 @@ Die Doku nutzt als **Interim** die Original-Screenshots aus der AionUi-Wiki. Lok
 | `remote-webuisetting1.png` | `remote` | WebUI-Einstellungen – Aktivieren und Zugangsdaten |
 | `scan-qr-code.png` | `remote` | QR-Code zum Anmelden scannen |
 
-## Noch zu erstellende Screenshots (13)
+## Noch zu erstellende Screenshots (17)
 
-Für diese Stellen gab es **kein** Originalbild in der Wiki – sie sind in der Doku als `> TODO:` markiert. Bitte eigene LokkyWork-Screenshots erstellen.
+Für diese Stellen gibt es **kein** eingebundenes Bild (kein Original in der Wiki bzw. die zu großen Demo-GIFs wurden entfernt). Bitte eigene LokkyWork-Aufnahmen erstellen.
 
 | Seite | Gewünschter Screenshot |
 | --- | --- |
+| `anwendungsfaelle/dateiverwaltung` | Demo-GIF „Dateien nach Typ sortieren" (LokkyWork-Bildschirmaufnahme) |
+| `anwendungsfaelle/dateiverwaltung` | Demo-GIF „Fotos stapelweise umbenennen" (LokkyWork-Bildschirmaufnahme) |
+| `anwendungsfaelle/dateiverwaltung` | Demo-GIF „Duplikate aufräumen" (LokkyWork-Bildschirmaufnahme) |
+| `anwendungsfaelle/dateiverwaltung` | Demo-GIF „Intelligente Dateisuche" (LokkyWork-Bildschirmaufnahme) |
 | `anwendungsfaelle/excel` | Detaillierte Excel-Beispiele (konkrete Prompts und Screenshots) ergänzen – die Originalseite der Wiki war zum Portierungszeitpunkt nur ein „Coming Soon"-Platzhalter ohne belegbare Inhalte. |
 | `anwendungsfaelle/informationsrecherche` | Detaillierte Recherche-Beispiele (konkrete Prompts und Screenshots) ergänzen – die Originalseite der Wiki war zum Portierungszeitpunkt nur ein „Coming Soon"-Platzhalter ohne belegbare Inhalte. |
 | `anwendungsfaelle/lern-assistent` | Detaillierte Beispiele für den Lern-Assistenten (konkrete Prompts und Screenshots) ergänzen – die Originalseite der Wiki war zum Portierungszeitpunkt nur ein „Coming Soon"-Platzhalter ohne belegbare Inhalte. |
