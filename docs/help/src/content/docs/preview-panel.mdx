@@ -1,0 +1,114 @@
+---
+title: Vorschau-Panel
+description: Dateien, Code und KI-Ergebnisse direkt in LokkyWork ansehen und bearbeiten.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Das **Vorschau-Panel** ist das eingebaute Vorschau- und Bearbeitungssystem von LokkyWork. Du kannst damit zahlreiche Dateiformate ansehen und bearbeiten – ganz ohne in ein anderes Programm zu wechseln. Sobald die KI eine Datei erstellt, siehst du das Ergebnis sofort, kannst es direkt anpassen und mehrere Dateien parallel in eigenen Tabs offen halten.
+
+## Was kann das Vorschau-Panel?
+
+- **Ergebnisse sofort sehen** – Nach jeder KI-Erzeugung erscheint die Datei direkt in der Vorschau, ohne Programmwechsel.
+- **Live verfolgen und bearbeiten** – Änderungen an Dateien werden automatisch erkannt; Editor und Vorschau bleiben synchron.
+- **Mehrere Tabs** – Öffne mehrere Dateien gleichzeitig, jede in ihrem eigenen Tab.
+- **Versionsverlauf** – Sieh dir frühere Versionen einer Datei an und stelle sie bei Bedarf wieder her (auf Git-Basis).
+
+## Unterstützte Formate
+
+Das Vorschau-Panel kommt mit einer großen Bandbreite an Dateitypen zurecht:
+
+- **Dokumente** – PDF (`.pdf`), Word (`.doc`, `.docx`, `.odt`), Excel (`.xls`, `.xlsx`, `.ods`, `.csv`) und PowerPoint (`.ppt`, `.pptx`, `.odp`).
+- **Code** – über 30 Programmiersprachen mit Syntaxhervorhebung, darunter JavaScript, TypeScript, Python, Java, Go, Rust, C/C++, CSS, JSON, XML, YAML und Shell-Skripte. Inklusive Zeilennummern und Code-Faltung.
+- **Markup** – Markdown (`.md`, `.markdown`) und HTML (`.html`, `.htm`) mit Live-Vorschau.
+- **Bilder** – PNG, JPG/JPEG, GIF, SVG, WebP, BMP, ICO, TIFF und AVIF, mit Zoom und Vollbildansicht.
+- **Diff-Dateien** – `.diff` und `.patch` mit farblich markierten Änderungen Zeile für Zeile.
+
+## Das Vorschau-Panel nutzen
+
+### Dateien öffnen
+
+Dateien öffnen sich automatisch im Vorschau-Panel, wenn:
+
+<Steps>
+
+1. **Die KI eine Datei erstellt**
+
+   Das Ergebnis wird direkt nach der Erzeugung angezeigt.
+
+2. **Du auf eine Datei klickst**
+
+   Klicke eine beliebige Datei im Arbeitsbereich oder im Chat an.
+
+3. **Eine Datei im Gespräch erwähnt wird**
+
+   Im Chat genannte Dateien lassen sich von dort aus öffnen.
+
+</Steps>
+
+### Mehrere Tabs verwalten
+
+- **Mehrere Dateien öffnen** – Jede Datei öffnet sich in einem eigenen Tab.
+- **Tabs werden wiederverwendet** – Dieselbe Datei wird nicht doppelt geöffnet.
+- **Kontextmenü** – Per Rechtsklick auf einen Tab kannst du Tabs links, rechts, alle anderen oder alle Tabs schließen.
+
+### Tastenkürzel
+
+- **`Cmd/Strg + S`** – Aktuelle Datei speichern.
+
+<Aside type="note">
+  Tastenkürzel zum Schließen oder Wechseln von Tabs gibt es noch nicht – nutze stattdessen das
+  Kontextmenü per Rechtsklick.
+</Aside>
+
+## Bearbeiten in der Vorschau
+
+Viele Formate lassen sich direkt im Vorschau-Panel bearbeiten:
+
+- **Markdown** – Live-Vorschau und geteilte Ansicht (Editor und Vorschau nebeneinander). Du tippst links, die Vorschau aktualisiert sich rechts in Echtzeit.
+- **Code** – Editor mit Syntaxhervorhebung, Mehrfach-Cursor, Zeilennummern und Code-Faltung. Speichern mit `Cmd/Strg + S`; Änderungen werden automatisch verfolgt.
+- **HTML** – Quelltext bearbeiten und die visuelle Vorschau in Echtzeit mitlaufen lassen.
+
+## Echtzeit-Funktionen
+
+### Automatische Dateiverfolgung
+
+Das Vorschau-Panel verfolgt Änderungen automatisch: Es aktualisiert sich, sobald eine Datei geändert wird, hebt ungespeicherte Änderungen hervor und bleibt mit deinem Dateisystem synchron.
+
+### Versionsverlauf
+
+Über die Git-Integration kannst du frühere Versionen einer Datei einsehen, vergleichen und wiederherstellen.
+
+<Steps>
+
+1. **Verlauf öffnen**
+
+   Klicke in der Vorschau-Werkzeugleiste auf **Verlauf**.
+
+2. **Versionen durchsehen**
+
+   Blättere durch die gespeicherten Stände.
+
+3. **Version wiederherstellen**
+
+   Stelle bei Bedarf einen früheren Stand wieder her.
+
+</Steps>
+
+## Tipps für die Praxis
+
+- **Erst ansehen, dann bearbeiten** – Wirf vor dem Bearbeiten einen Blick in die Vorschau.
+- **Regelmäßig speichern** – Nutze `Cmd/Strg + S` häufig.
+- **Nicht zu viele Tabs** – Schließe Dateien, die du nicht mehr brauchst, und halte die Zahl offener Dateien überschaubar.
+- **Geteilte Ansicht gezielt einsetzen** – Die Editor-plus-Vorschau-Ansicht ist bei Markdown und HTML besonders praktisch.
+
+<Aside type="caution">
+  Sehr große Dateien können beim Laden etwas Zeit brauchen, und manche Binärformate lassen sich nur
+  eingeschränkt anzeigen. Speichere wichtige Änderungen, bevor du eine Datei schließt.
+</Aside>
+
+## Verwandte Themen
+
+- [Faehigkeiten & MCP](/faehigkeiten-mcp/) – Werkzeuge und Erweiterungen rund um deine Arbeit.
+- [Assistenten](/assistenten/) – Assistenten zusammen mit der Vorschau nutzen.
+- [FAQ & Support](/faq/) – Häufige Fragen und Hilfe bei Problemen.

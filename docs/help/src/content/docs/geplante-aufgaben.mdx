@@ -1,0 +1,82 @@
+---
+title: Geplante Aufgaben
+description: Wiederkehrende Aufgaben automatisch nach Zeitplan ausführen lassen.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Mit **Geplanten Aufgaben** lässt du LokkyWork wiederkehrende Arbeiten automatisch erledigen – etwa täglich die neuesten KI-Nachrichten zusammenfassen oder regelmäßig einen Bericht erstellen.
+
+## Eine geplante Aufgabe erstellen
+
+Du hast zwei Wege:
+
+1. **Im Bereich „Geplante Aufgaben":** Klicke auf **Neue Aufgabe** und lege Zeitplan, Agent und Anweisungen fest.
+2. **Direkt im Chat:** Bitte LokkyWork einfach in einem Gespräch, eine geplante Aufgabe für dich anzulegen – zum Beispiel: *„Erstelle eine geplante Aufgabe, die täglich um 10 Uhr die neuesten KI-Nachrichten sucht, zusammenfasst und einen Erkenntnisbericht ausgibt."*
+
+<Steps>
+
+1. **Zeitplan festlegen**
+
+   Bestimme, wann und wie oft die Aufgabe laufen soll (z. B. täglich, wöchentlich).
+
+2. **Agent und Anweisungen wählen**
+
+   Lege fest, welcher Agent die Aufgabe ausführt und welche **Anweisungen** er bekommt.
+
+3. **Ausführungsmodus wählen**
+
+   - **Neues Gespräch je Ausführung:** Jede Ausführung startet frisch, der vorherige Kontext wird nicht übernommen. Ideal für unabhängige Berichte oder Prüfungen.
+   - **Gleiches Gespräch fortsetzen:** Jede Ausführung baut auf den früheren Ergebnissen auf. Ideal für Folgeaufgaben.
+
+</Steps>
+
+## Aufgaben verwalten
+
+In der Übersicht siehst du pro Aufgabe den **Zeitplan**, die **nächste** und **letzte Ausführung** sowie eventuelle **Fehler**. Über die Aktionen kannst du:
+
+- **Pausieren** und später wieder **Fortsetzen**
+- **Jetzt ausführen** (sofort auslösen)
+- **Chat anzeigen** (zum zugehörigen Gespräch springen)
+- **Löschen**
+
+<Aside type="caution">
+  **Dein Computer muss aktiv sein.** Geplante Aufgaben werden nur ausgeführt, wenn dein
+  Computer läuft und nicht im Ruhezustand ist. Aktiviere die Option **Aktiv halten**, damit
+  LokkyWork verhindert, dass dein Computer währenddessen einschläft.
+</Aside>
+
+<Aside type="note">
+  Wird eine geplante Aufgabe gelöscht, werden auch alle zu dieser Aufgabe gehörenden
+  Gespräche entfernt. LokkyWork fragt vorher zur Sicherheit nach.
+</Aside>
+
+## Zeitpläne mit Cron
+
+Für die meisten Fälle reichen die Voreinstellungen (stündlich, täglich, werktags, wöchentlich) – LokkyWork erzeugt den Zeitplan dann für dich. Wer es genauer braucht, kann einen **Cron-Ausdruck** angeben (5 Felder: Minute, Stunde, Tag, Monat, Wochentag).
+
+| Ausdruck | Bedeutung |
+| --- | --- |
+| `0 9 * * *` | täglich um 09:00 |
+| `0 9 * * MON-FRI` | werktags um 09:00 |
+| `0 * * * *` | zu jeder vollen Stunde |
+| `*/30 * * * *` | alle 30 Minuten |
+| `0 */2 * * *` | alle 2 Stunden |
+| `0 0 1 * *` | am 1. jedes Monats um Mitternacht |
+| `0 18 * * FRI` | jeden Freitag um 18:00 |
+
+## Beispiele
+
+- **Tägliche Zusammenfassung** (täglich 18:00, neues Gespräch): *„Fasse die wichtigsten Ergebnisse von heute zu einer kurzen Übersicht zusammen."*
+- **Wochenbericht** (wöchentlich Montag 08:00, gleiches Gespräch fortsetzen): *„Erstelle den Fortschrittsbericht dieser Woche nach der Struktur der letzten Woche."*
+- **Tägliche Erinnerung** (werktags 09:00, neues Gespräch): *„Nenn mir die 3 wichtigsten Aufgaben für heute und stell mir eine Frage zum Priorisieren."*
+
+<Aside type="caution">
+  Geplante Prompts laufen **unbeaufsichtigt** mit vollem Zugriff auf Assistent und Tools.
+  Riskante Anweisungen (z. B. Löschen) werden ohne Rückfrage ausgeführt – teste eine neue
+  Aufgabe daher einmal manuell, bevor du sie einplanst.
+</Aside>
+
+## Benachrichtigungen
+
+Sobald eine geplante Aufgabe abgeschlossen ist, informiert dich LokkyWork mit einer Benachrichtigung („Geplante Aufgabe abgeschlossen").

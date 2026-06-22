@@ -1,0 +1,197 @@
+---
+title: DingTalk-Bot
+description: Einen DingTalk-Bot einrichten und mit LokkyWork verbinden, um per DingTalk mit deinem KI-Assistenten zu chatten.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+<Aside type="note">
+  DingTalk (钉钉) ist ein Team- und Kommunikations-Dienst, vergleichbar mit
+  Microsoft Teams oder Slack, und vor allem für Nutzer im chinesischen Raum
+  relevant. Wenn du DingTalk nicht einsetzt, kannst du diese Seite überspringen.
+</Aside>
+
+LokkyWork unterstützt die Anbindung eines **DingTalk-Bots**: So chattest du direkt aus DingTalk heraus mit deinem KI-Assistenten. Diese Anleitung führt dich durch alle Schritte:
+
+1. Eine Bot-Anwendung auf der DingTalk Open Platform anlegen
+2. Die Zugangsdaten in LokkyWork eintragen
+3. Nutzer freigeben und das Gespräch starten
+
+## Voraussetzungen
+
+- Ein DingTalk-Konto mit Entwicklerzugang
+- LokkyWork ist installiert
+- Grundverständnis von Bot-Anwendungen
+
+## Schritt 1: Bot-Anwendung auf der DingTalk Open Platform anlegen
+
+<Steps>
+
+1. **DingTalk Open Platform öffnen**
+
+   Gehe zur [DingTalk Open Platform](https://open.dingtalk.com/) und melde dich mit deinem DingTalk-Konto an.
+
+2. **Anwendung erstellen**
+
+   Navigiere zu **Anwendungsentwicklung** (应用开发) → **Unternehmensinterne Entwicklung** (企业内部开发). Klicke auf **Anwendung erstellen** (创建应用) und wähle als Anwendungstyp **Roboter** (机器人).
+
+   ![LokkyWork: Anwendung erstellen und Roboter-Typ auswählen](/screenshots/dingtalk-create-app.png)
+
+3. **Zugangsdaten kopieren**
+
+   Öffne in den Anwendungsdetails den Bereich **Entwicklungsinformationen** (开发信息) bzw. **Zugangsdaten** (凭证). Kopiere deinen **AppKey** (das ist deine Client ID) und deinen **AppSecret** (das ist dein Client Secret).
+
+   <Aside type="caution">
+     Behandle diese Zugangsdaten vertraulich und gib sie niemals öffentlich weiter.
+   </Aside>
+
+4. **Empfangsmodus auf Stream Mode stellen**
+
+   Suche in der Anwendungskonfiguration den **Nachrichten-Empfangsmodus** (消息接收模式) bzw. die **Verbindungsart** (连接方式) und wähle **Stream Mode** (流式连接). Das aktiviert die Echtzeit-Übertragung und unterstützt die Streaming-Antworten der AI Card.
+
+   ![LokkyWork: Stream Mode konfigurieren](/screenshots/dingtalk-stream-mode.png)
+
+5. **Bot veröffentlichen**
+
+   Klicke nach Abschluss der Konfiguration auf **Veröffentlichen** (发布), um den Bot zu veröffentlichen.
+
+   ![LokkyWork: DingTalk-Bot veröffentlichen](/screenshots/dingtalk-publish-bot.png)
+
+</Steps>
+
+## Schritt 2: Berechtigungen der Unternehmensanwendung aktivieren
+
+<Aside type="note">
+  Nutzer ohne Admin-Rechte brauchen für das Aktivieren der Berechtigungen die
+  Freigabe eines Administrators.
+</Aside>
+
+Öffne in den Anwendungsdetails den Bereich **Berechtigungsverwaltung** (权限管理) bzw. **API-Berechtigungen** (接口权限) und aktiviere nacheinander die folgenden Berechtigungen:
+
+- **Card.Streaming.Write** – Streaming-Schreibrecht für AI Cards
+- **Card.Instance.Write** – Schreibrecht für AI-Card-Instanzen
+- **qyapi_robot_sendmsg** – Recht, Nachrichten als Roboter zu senden
+
+Diese Berechtigungen sind nötig, damit der Bot ordnungsgemäß funktioniert.
+
+![LokkyWork: Berechtigungen konfigurieren](/screenshots/dingtalk-permissions.png)
+
+## Schritt 3: Unternehmensanwendung veröffentlichen
+
+<Steps>
+
+1. **Sichtbarkeitsbereich festlegen**
+
+   Suche in den Anwendungsdetails die Einstellung **Sichtbarkeitsbereich** (可见范围) bzw. **Nutzungsbereich** (使用范围). Setze die Sichtbarkeit zum Testen auf **Nur ich** (仅自己) oder wähle die Nutzer bzw. Abteilungen aus, die Zugriff brauchen.
+
+2. **Roboter aktivieren**
+
+   Stelle sicher, dass die Roboter-Funktion aktiviert ist, und prüfe Grunddaten wie Name und Avatar des Roboters.
+
+3. **Anwendung veröffentlichen**
+
+   Klicke auf **Veröffentlichen** (发布), bestätige die Veröffentlichungsangaben und warte, bis der Vorgang abgeschlossen ist.
+
+   ![LokkyWork: Unternehmensanwendung veröffentlichen – Schritt 1](/screenshots/dingtalk-publish-1.png)
+   ![LokkyWork: Unternehmensanwendung veröffentlichen – Schritt 2](/screenshots/dingtalk-publish-2.png)
+   ![LokkyWork: Unternehmensanwendung veröffentlichen – Schritt 3](/screenshots/dingtalk-publish-3.png)
+   ![LokkyWork: Unternehmensanwendung veröffentlichen – Schritt 4](/screenshots/dingtalk-publish-4.png)
+
+</Steps>
+
+<Aside type="tip">
+  Nach dem Veröffentlichen kann der Bot von den freigegebenen Nutzern gesucht und
+  genutzt werden. Zum Testen kannst du ihn zunächst auf **Nur ich** stellen.
+</Aside>
+
+## Schritt 4: LokkyWork konfigurieren
+
+<Steps>
+
+1. **LokkyWork-Einstellungen öffnen**
+
+   Starte LokkyWork, öffne die **Einstellungen** und gehe in den Bereich **WebUI** (Kanäle). Suche die Karte für den Kanal **DingTalk** und klappe die DingTalk-Konfiguration auf.
+
+   ![LokkyWork: DingTalk-Konfigurationsoberfläche](/screenshots/dingtalk_1.png)
+
+2. **Zugangsdaten eintragen**
+
+   Trage im DingTalk-Formular ein:
+
+   - **Client ID**: den AppKey aus Schritt 1
+   - **Client Secret**: den AppSecret aus Schritt 1
+
+   Klicke anschließend auf **Testen & Verbinden**, um die Verbindung zu prüfen.
+
+   ![LokkyWork: DingTalk-Zugangsdaten eintragen](/screenshots/dingtalk_2.png)
+
+3. **Agent und Modell wählen**
+
+   Wähle den **Agenten** aus, der für DingTalk-Gespräche zuständig sein soll, und das passende **Modell**. Diese Auswahl bestimmt, welcher KI-Assistent auf DingTalk-Nachrichten antwortet.
+
+   ![LokkyWork: Agent und Modell konfigurieren](/screenshots/dingtalk_3.png)
+
+</Steps>
+
+## Schritt 5: Nutzer freigeben
+
+Nach erfolgreicher Verbindung gibst du die Nutzer frei, die mit dem Bot sprechen dürfen.
+
+<Steps>
+
+1. **Bot in DingTalk finden**
+
+   Öffne DingTalk, suche deinen Bot über seinen Namen und starte ein Gespräch mit ihm.
+
+2. **Testnachricht senden**
+
+   Sende eine beliebige Nachricht an den Bot (z. B. „Hallo"). Damit wird eine Kopplungsanfrage ausgelöst.
+
+   ![LokkyWork: Nachricht in DingTalk senden](/screenshots/dingtalk_4.png)
+
+3. **Kopplungsanfrage genehmigen**
+
+   Gehe in LokkyWork zurück zu **Einstellungen → Kanäle → DingTalk**. Dort siehst du den Bereich **Ausstehende Kopplungen**. Klicke auf **Genehmigen**, um den Nutzer freizugeben. Er kann nun über DingTalk mit dem KI-Assistenten chatten.
+
+   ![LokkyWork: Kopplungsanfrage genehmigen](/screenshots/dingtalk_5.png)
+
+4. **Loslegen**
+
+   Sobald die Freigabe erfolgt ist, antwortet der KI-Assistent in Echtzeit über die AI-Card-Streaming-Funktion von DingTalk.
+
+   ![LokkyWork: Mit dem KI-Assistenten chatten](/screenshots/dingtalk_6.png)
+
+</Steps>
+
+## Fehlerbehebung
+
+**Verbindung zur DingTalk-API schlägt fehl**
+
+- Prüfe, ob Client ID und Client Secret korrekt sind
+- Prüfe deine Internetverbindung
+- Stelle sicher, dass die Bot-Anwendung auf der DingTalk Open Platform korrekt konfiguriert ist
+
+**Nutzer können keine Nachrichten an den Bot senden**
+
+- Stelle sicher, dass der Nutzer in den LokkyWork-Einstellungen genehmigt wurde
+- Prüfe, ob der Bot in LokkyWork aktiviert ist
+- Prüfe, ob die Bot-Anwendung auf der DingTalk Open Platform veröffentlicht/aktiviert ist
+
+**Bot antwortet nicht auf Nachrichten**
+
+- Prüfe den Verbindungsstatus in den LokkyWork-Einstellungen
+- Prüfe, ob Agent und Modell korrekt konfiguriert sind
+- Stelle sicher, dass der Bot die nötigen Berechtigungen hat (insbesondere die drei Berechtigungen aus Schritt 2)
+- Bestätige, dass die Bot-Anwendung erfolgreich veröffentlicht wurde (Schritt 3)
+
+## Weiterführende Links
+
+- [DingTalk Open Platform – Dokumentation](https://open.dingtalk.com/document/)
+- [Modelle & Anbieter](/modelle-anbieter/)
+- [Assistenten](/assistenten/)
+- [Häufige Fragen](/faq/)
+
+<Aside type="note">
+  Brauchst du Hilfe? Schreib uns an [support@lokyy.de](mailto:support@lokyy.de)
+  oder öffne ein Issue auf [GitHub](https://github.com/oliverhees/LokkyWork).
+</Aside>

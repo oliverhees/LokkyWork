@@ -1,0 +1,113 @@
+---
+title: Fähigkeiten & MCP
+description: LokkyWork mit MCP-Servern um zusätzliche Tools erweitern.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+LokkyWork lässt sich über **MCP** (Model Context Protocol) um zusätzliche Fähigkeiten erweitern. MCP ist ein offener Standard, über den die KI sicher mit externen Tools und Diensten spricht. Ein **MCP-Server** stellt der KI neue **Tools** bereit – etwa Zugriff auf einen Wissensvault, eine Datenbank, den Browser oder externe Dienste.
+
+Im Bereich **Einstellungen → Tools → MCP-Verwaltung** verwaltest du deine Server und siehst alle verfügbaren Tools sowie deren Ausführungsverlauf.
+
+![Einstieg in die MCP-Verwaltung](/screenshots/mcp-setting-entrance.png)
+
+## Transport-Typen
+
+LokkyWork unterstützt mehrere Verbindungsarten:
+
+- **`stdio`** – Standard-Ein-/Ausgabe (am häufigsten, für lokal installierte CLI-MCP-Server). Nutzt `command` + `args` + `env`.
+- **`sse`**, **`http`**, **`streamable_http`** – für entfernte Server. Nutzen `url` + optional `headers`.
+
+## Einen MCP-Server hinzufügen
+
+Es gibt zwei Wege: per **JSON** oder per **Ein-Klick-Import aus einem CLI-Agenten**.
+
+### Weg 1: Per JSON
+
+<Steps>
+
+1. **Hinzufügen öffnen**
+
+   Klicke in der MCP-Verwaltung auf **MCP-Dienst hinzufügen** und wähle **Per JSON hinzufügen**.
+
+2. **Konfiguration einfügen**
+
+   Füge die Konfiguration im `mcpServers`-Format ein. Beispiel für einen lokalen Server (`stdio`):
+
+   ```json
+   {
+     "mcpServers": {
+       "filesystem": {
+         "description": "Zugriff auf lokale Dateien",
+         "command": "npx",
+         "args": ["-y", "@modelcontextprotocol/server-filesystem", "/pfad/zum/ordner"]
+       }
+     }
+   }
+   ```
+
+   Beispiel für einen entfernten Server (`streamable_http`):
+
+   ```json
+   {
+     "mcpServers": {
+       "mein-server": {
+         "type": "streamable_http",
+         "url": "https://example.com/mcp",
+         "headers": { "Authorization": "Bearer DEIN_TOKEN" }
+       }
+     }
+   }
+   ```
+
+3. **Bestätigen & automatischer Test**
+
+   Klicke auf **Bestätigen**. LokkyWork testet die Verbindung automatisch – erfolgreich verbundene Dienste zeigen ein grünes Häkchen.
+
+</Steps>
+
+![MCP per JSON hinzufügen](/screenshots/mcp-import-from-JSON.png)
+
+### Weg 2: Aus einem CLI-Agenten importieren
+
+Hast du MCP bereits in einem CLI-Agenten konfiguriert, kannst du die Konfiguration mit einem Klick übernehmen: **MCP-Dienst hinzufügen → Aus CLI importieren**, den gewünschten Agenten wählen und **Importieren**.
+
+![MCP aus einem CLI-Agenten importieren](/screenshots/MCP-import-form-CLI.png)
+
+## Tools nutzen und freigeben
+
+Sobald ein Server verbunden ist, stehen seine **Tools** im Chat zur Verfügung. Bevor ein Tool etwas ausführt, kannst du es **Genehmigen** oder **Ablehnen** – so behältst du die Kontrolle darüber, was im Hintergrund passiert.
+
+Im **Ausführungsverlauf** siehst du, welche Tools wann ausgeführt wurden und ob sie **abgeschlossen**, **fehlgeschlagen** oder **abgebrochen** wurden.
+
+## Server verwalten
+
+Pro Server kannst du:
+
+- **Aktualisieren** (Tool-Liste neu laden)
+- **Einstellungen** anpassen
+- **Trennen**
+- **Löschen** (mit Sicherheitsabfrage)
+
+<Aside type="note">
+  Über die Suchfelder findest du schnell einen bestimmten **Server** oder ein bestimmtes
+  **Tool**, und du kannst die Server **nach Status filtern**.
+</Aside>
+
+## Was kann man mit MCP machen?
+
+Ein paar typische Beispiele, wenn der passende MCP-Server verbunden ist:
+
+- **Dateiverwaltung:** „Räum die Dateien auf meinem Schreibtisch auf" – die KI scannt den Ordner, sortiert nach Typ und legt Unterordner an.
+- **Browser-Automatisierung:** „Öffne GitHub und suche nach LokkyWork" – die KI steuert den Browser.
+- **Git:** „Zeig mir die letzten Commits dieses Projekts."
+- **Notizen/Gedächtnis:** „Merk dir: Projekt-Deadline ist nächsten Freitag."
+
+<Aside type="caution" title="Verbindung schlägt fehl?">
+  Zeigt ein Server ein rotes X, prüfe `command`/`args`, ob nötige Pakete installiert sind
+  (z. B. `npm install -g <paket>`), die Netzwerkverbindung und die Berechtigungen.
+</Aside>
+
+## Second Brain verbinden
+
+Ein häufiger Anwendungsfall ist die Anbindung deines [Second Brain](/second-brain/) – deines persönlichen Wissensvaults – über MCP. Dafür gibt es den eigenen Dialog **Second Brain verbinden**, in dem du **URL** und **Token** des Vaults einträgst. Details dazu auf der Seite [Second Brain](/second-brain/).

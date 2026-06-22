@@ -1,0 +1,142 @@
+---
+title: Dateiverwaltung
+description: Ordner aufräumen, Dateien stapelweise umbenennen und Duplikate finden – einfach per Gespräch mit LokkyWork.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Die Dateiverwaltung von LokkyWork hilft dir, deine Dateien auf dem Computer mühelos zu ordnen – und unaufgeräumte Ordner gehören der Vergangenheit an. Über ein einfaches Gespräch erledigt dein KI-Modell verschiedenste Datei-Operationen für dich.
+
+## Ablauf
+
+So sieht der Standardablauf aus:
+
+<Steps>
+
+1. **LokkyWork öffnen und neuen Chat starten**
+
+   Beginne ein neues Gespräch im Arbeitsbereich.
+
+2. **Ordner auswählen**
+
+   Klicke auf das **„+"** und wähle den Ordner aus, mit dem du arbeiten möchtest.
+
+3. **Anliegen senden**
+
+   Beschreibe in eigenen Worten, was geschehen soll – zum Beispiel „Räume meinen Download-Ordner auf".
+
+4. **Auf die Fertigstellung warten**
+
+   LokkyWork zeigt dir zuerst einen Plan an und führt ihn nach deiner Bestätigung aus.
+
+</Steps>
+
+## Konkrete Anwendungsfälle
+
+### Ordner nach Typ sortieren
+
+**Szenario:** Der Download-Ordner ist zu unübersichtlich, alles Mögliche liegt durcheinander und soll nach Typ geordnet werden.
+
+**Frag LokkyWork zum Beispiel:**
+
+```text
+Räume meinen Download-Ordner auf und lege Bilder, Dokumente und Archive in passende Unterordner
+Ordne die Dokumente nach Monat und lege für jeden Monat einen eigenen Ordner an
+Sortiere nach Thema: Entwürfe in den Ordner „Entwürfe", finale Versionen in den Ordner „Final"
+Sortiere nach Dateigröße: über 100 MB in „Große Dateien", 10–100 MB in „Mittlere Dateien", unter 10 MB in „Kleine Dateien"
+```
+
+> TODO: LokkyWork-Demo-GIF „Dateien nach Typ sortieren" ergänzen (AionUi-Demo entfernt – zu groß fürs Repo).
+
+---
+
+### Dateien stapelweise verarbeiten
+
+**Szenario:** Du hast 100 Fotos, die nach Aufnahmedatum umbenannt werden sollen – von Hand dauert das viel zu lange.
+
+**Frag LokkyWork zum Beispiel:**
+
+```text
+Benenne diese 100 Fotos nach Datum um
+Benenne diese Fotos stapelweise um, Format: Jahr-Monat-Tag_Ort_Nummer
+Benenne die Fotos nach Zeit um und nutze das Aufnahmedatum
+Benenne alle Fotos in diesem Ordner um und nummeriere sie fortlaufend
+Benenne die Fotos im Format „2024-08-21_Tokio_Tower_001.jpg" um
+```
+
+> TODO: LokkyWork-Demo-GIF „Fotos stapelweise umbenennen" ergänzen (AionUi-Demo entfernt – zu groß fürs Repo).
+
+---
+
+### Duplikate aufräumen
+
+**Szenario:** Auf dem Computer liegen viele doppelte Dateien, die unnötig Speicherplatz belegen und aufgeräumt werden sollen.
+
+**Frag LokkyWork zum Beispiel:**
+
+```text
+Suche nach Duplikaten – also Dateien mit gleichem Inhalt, aber unterschiedlichen Namen
+Finde doppelte Dateien, sortiert nach Dateigröße
+Räume doppelte Dateien auf und behalte jeweils die neueste Version
+Prüfe, ob es in diesem Ordner Duplikate gibt, und entferne die Doppelten
+```
+
+> TODO: LokkyWork-Demo-GIF „Duplikate aufräumen" ergänzen (AionUi-Demo entfernt – zu groß fürs Repo).
+
+---
+
+### Intelligente Dateisuche
+
+**Szenario:** Du findest ein Projektabschluss-Dokument nicht und möchtest es schnell aufspüren.
+
+**Frag LokkyWork zum Beispiel:**
+
+```text
+Finde Projektabschluss-Dokumente, die in den letzten drei Monaten geändert wurden
+Suche Projektabschluss-Dokumente, sortiert nach Zeit
+Finde kürzlich geänderte Dokumente, die das Stichwort „Zusammenfassung" enthalten
+Suche in diesem Ordner nach Dateien, die „Projektabschluss" enthalten
+Finde meine Arbeitsdokumente dieses Monats, geordnet nach Typ
+```
+
+> TODO: LokkyWork-Demo-GIF „Intelligente Dateisuche" ergänzen (AionUi-Demo entfernt – zu groß fürs Repo).
+
+---
+
+## Wichtige Hinweise
+
+<Aside type="caution" title="Sicher arbeiten">
+- **Wichtige Dateien sichern:** Lege vor Stapel-Operationen eine Sicherungskopie wichtiger Dateien an.
+- **Plan bestätigen:** LokkyWork zeigt den geplanten Ablauf zuerst an und führt ihn erst nach deiner Bestätigung aus.
+- **Berechtigungen prüfen:** Stelle sicher, dass du ausreichende Rechte für die Datei-Operationen hast.
+- **Ergebnis kontrollieren:** Prüfe nach Abschluss, ob das Resultat deinen Erwartungen entspricht.
+</Aside>
+
+<Aside type="tip" title="Praxis-Tipps">
+- **In Etappen arbeiten:** Verarbeite sehr große Datei-Mengen lieber in Teilschritten, damit das System flüssig bleibt.
+- **Pfade prüfen:** Vergewissere dich, dass die Dateipfade stimmen, um Fehlbedienungen zu vermeiden.
+</Aside>
+
+## Weitere Einsatzfelder
+
+**Im Job**
+
+- **Projektdateien ordnen:** nach Projekt, Version und Funktionsbereich gliedern
+- **Meeting-Unterlagen archivieren:** nach Datum, Thema und Teilnehmenden
+- **Code-Dateien verwalten:** Repository nach Sprache, Funktion und Versionsnummer ordnen
+
+**Im Alltag**
+
+- **Fotos und Videos verwalten:** nach Zeit, Ort, Personen und Ereignissen sortieren
+- **Downloads aufräumen:** nach Typ, Quelle und Wichtigkeit ordnen
+- **Familiendokumente verwalten:** nach Kategorie, Zeit und Bedeutung archivieren
+
+**Beim Lernen**
+
+- **Lernmaterial gliedern:** nach Fach, Schwierigkeitsgrad und Lernfortschritt ordnen
+- **Notizen verwalten:** nach Thema, Zeit und Wichtigkeit sortieren
+- **Quellen archivieren:** nach Herkunft, Typ und Nutzungshäufigkeit
+
+<Aside type="note">
+  Die Dateiverwaltung ist eine der Grundfunktionen von LokkyWork. Wenn du diese Handgriffe beherrschst, bleiben deine Dateien dauerhaft aufgeräumt.
+</Aside>

@@ -1,0 +1,88 @@
+---
+title: Bildgenerierung
+description: Das Bildgenerierungs-Werkzeug in LokkyWork aktivieren und ein Modell auswählen.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+LokkyWork kann direkt aus dem Chat heraus Bilder erzeugen. Dafür aktivierst du das **Bildgenerierungs-Werkzeug** und wählst aus, welches KI-Modell die Bilder erstellt. Wie bei allen Funktionen bleibt LokkyWork dabei **anbieter-unabhängig**: Du kannst einen Anbieter wie OpenAI, Anthropic (Claude) oder Google Gemini nutzen – je nachdem, was du bereits eingerichtet hast.
+
+## So funktioniert es
+
+LokkyWork unterstützt verschiedene Plattformen für die Bildgenerierung und leitet jeden Anbieter automatisch an die passende Schnittstelle weiter. Du musst dich um diese Technik nicht kümmern – wichtig ist nur: In der Modellauswahl erscheinen ausschließlich Modelle, die tatsächlich Bilder erzeugen können. So wählst du nicht versehentlich ein reines Text-Modell aus.
+
+<Aside type="note">
+  Wenn dein Anbieter noch kein passendes Bildmodell hinterlegt hat, ergänzt LokkyWork
+  automatisch eine sinnvolle Standardauswahl – damit die Funktion auch sofort einsatzbereit ist.
+</Aside>
+
+## Einrichten in drei Schritten
+
+Voraussetzung ist, dass du mindestens einen **Anbieter** mit gültigem API-Schlüssel eingerichtet hast. Wie das geht, liest du unter [Modelle & Anbieter](/modelle-anbieter/).
+
+<Steps>
+
+1. **Anbieter verbinden**
+
+   Öffne die Einstellungen und füge unter **Modelle** deinen gewünschten Anbieter hinzu (z. B. OpenAI, Anthropic/Claude oder Google Gemini). Trage den API-Schlüssel ein und speichere.
+
+2. **Bildgenerierung aktivieren**
+
+   Wechsle zu **Einstellungen → Werkzeuge → Bildgenerierung** und schalte das Werkzeug ein.
+
+3. **Bildmodell auswählen**
+
+   Wähle im Auswahlmenü ein Bildmodell deines Anbieters aus und speichere. Wenn dein Anbieter kein eigenes Bildmodell anbietet, ergänzt LokkyWork automatisch eine passende Standardauswahl.
+
+   ![Bildgenerierungs-Werkzeug in LokkyWork einrichten](/screenshots/set-tool-llm.png)
+
+</Steps>
+
+<Aside type="tip">
+  Manche Bildmodelle sind kostenpflichtig. Prüfe die Preise in der Konsole deines Anbieters,
+  bevor du dich festlegst – gerade bei Aggregatoren, die viele verschiedene Modelle bündeln.
+</Aside>
+
+## Einrichtung überprüfen
+
+So stellst du sicher, dass alles funktioniert:
+
+<Steps>
+
+1. **Werkzeug prüfen**
+
+   Öffne einen Chat mit einem Modell, das Werkzeuge nutzen kann, und frage „Welche Werkzeuge hast du?". In der Liste sollte nun `image-generation` (Bildgenerierung) erscheinen.
+
+   ![Werkzeugliste mit aktivierter Bildgenerierung in LokkyWork](/screenshots/tool-check.png)
+
+2. **Bild erzeugen**
+
+   Gib einen Bild-Auftrag ein, zum Beispiel:
+
+   > Erzeuge eine 1024×1024 große Cyberpunk-Stadtlandschaft bei Nacht in blauem Neonlicht
+
+   ![Beispielergebnis der Bildgenerierung in LokkyWork](/screenshots/image-generation-test.png)
+
+</Steps>
+
+## Häufige Fragen
+
+**Ich habe ein Modell hinzugefügt, aber es taucht in der Auswahl nicht auf.**
+LokkyWork zeigt nur Modelle an, die Bilder erzeugen können. Entweder passt der Modellname nicht zum erwarteten Muster oder die Plattform wird nicht als bildfähig erkannt. Verwende am besten einen der unterstützten Anbieter und ein dort als bildfähig gelistetes Modell.
+
+**Die Werkzeugliste zeigt `image-generation` nicht an.**
+Stelle sicher, dass (1) die Bildgenerierung unter **Einstellungen → Werkzeuge** eingeschaltet ist, (2) ein Modell ausgewählt und gespeichert wurde und (3) du nach dem Speichern einen **neuen** Chat startest.
+
+**Mein API-Schlüssel wird abgelehnt.**
+Prüfe, ob der Schlüssel ohne zusätzliche Leerzeichen eingefügt wurde und ob das Konto beim Anbieter aktiv ist und – wo nötig – über ein hinterlegtes Guthaben bzw. Kontingent verfügt.
+
+**Die Erzeugung bricht mitten im Vorgang ab.**
+Meist liegt das an einer Zeitüberschreitung im Netzwerk, einem abgelaufenen Zugang oder einem aufgebrauchten Kontingent beim Anbieter. Ein Blick in das Dashboard deines Anbieters hilft weiter.
+
+**Wie wechsle ich das Modell für die Bildgenerierung?**
+Über **Einstellungen → Werkzeuge → Bildgenerierung → Modell**. Im Auswahlmenü stehen alle bildfähigen Modelle deiner eingerichteten Anbieter.
+
+<Aside type="caution">
+  Bei Problemen mit Anbietern, API-Schlüsseln, Anmeldung, Ratengrenzen oder der Modellauswahl
+  hilft der eingebaute **Fehlerbericht** – siehe [FAQ & Support](/faq/).
+</Aside>

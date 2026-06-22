@@ -1,0 +1,56 @@
+---
+title: Second Brain
+description: Wichtige Nachrichten und ganze Chats dauerhaft in einem Wissensvault merken.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Das **Second Brain** ist dein persönlicher Wissensvault: ein wachsender Speicher, in dem du wichtige Erkenntnisse dauerhaft festhältst. Du „merkst" dir einzelne Nachrichten oder ganze Gespräche, und LokkyWork kann später darauf zugreifen. Technisch wird das Second Brain über [MCP](/faehigkeiten-mcp/) angebunden.
+
+## Das Second Brain verbinden
+
+Im Bereich [Fähigkeiten & MCP](/faehigkeiten-mcp/) gibt es den Dialog **Second Brain verbinden**. Dort trägst du **URL** und **Token** deines Vaults ein.
+
+<Steps>
+
+1. **Dialog öffnen**
+
+   Öffne **Second Brain verbinden** (im Bereich Fähigkeiten / MCP).
+
+2. **URL und Token eintragen**
+
+   Gib die **URL** deines Second-Brain-Dienstes und den zugehörigen **Token** ein und bestätige die Verbindung.
+
+</Steps>
+
+## Im Arbeitsbereich nutzen
+
+Ist das Second Brain verbunden, erscheint im Arbeitsbereich ein eigener **Reiter**, über den du den Vault **durchsuchst und liest** (browse/read).
+
+## Dinge „merken"
+
+Du fügst dem Second Brain auf zwei Wegen Inhalte hinzu:
+
+- **Nachricht merken:** Über den **„Merken"-Button** an einer einzelnen Nachricht speicherst du genau diese Nachricht im Vault.
+- **Ganzen Chat merken:** Über das **Gehirn-Symbol (🧠)** speicherst du das komplette Gespräch.
+
+## Notiz-Typen
+
+Gemerkte Inhalte werden als unterschiedliche Notiz-Typen abgelegt, zum Beispiel:
+
+- **Rohquelle** (raw-source) – der ursprüngliche Inhalt
+- **Wiki-Artikel** (wiki-article) – aufbereitetes Wissen
+- **Frage-Report** (frage-report) – eine beantwortete Frage
+
+> TODO: Exakte deutsche UI-Bezeichnungen der Notiz-Typen, des „Merken"-Buttons und des 🧠-Buttons bestätigen sowie die genaue Lage des Second-Brain-Reiters im Arbeitsbereich (die Strings waren zum Erstellungszeitpunkt noch nicht in den de-DE-Locales).
+
+## Lesen und Schreiben
+
+Das Second Brain arbeitet **read-first**: LokkyWork schaut zuerst im Vault nach vorhandenem Wissen, bevor neue Inhalte geschrieben werden.
+
+> TODO: Genaues read-first-/write-Verhalten (wann automatisch gelesen, wann geschrieben wird) anhand der Second-Brain-Implementierung präzisieren.
+
+<Aside type="note">
+  Das Second Brain wird extern bereitgestellt und nur über MCP eingebunden. Du brauchst also
+  einen laufenden Second-Brain-Dienst mit URL und Token.
+</Aside>

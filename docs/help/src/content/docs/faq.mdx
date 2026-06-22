@@ -1,0 +1,74 @@
+---
+title: FAQ & Support
+description: Häufige Fragen, Kontakt und Fehlerberichte für LokkyWork.
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+## Häufige Fragen
+
+### Wo werden meine Daten gespeichert?
+
+Deine Gespräche, Assistenten und Einstellungen liegen **lokal auf deinem Gerät**. LokkyWork sendet nur das an einen KI-Anbieter, was für die jeweilige Anfrage nötig ist. Mit dem [PII-Schutz](/pii-schutz/) kannst du sensible Inhalte zusätzlich maskieren, bevor sie das Gerät verlassen.
+
+### Kostet LokkyWork etwas?
+
+Die App selbst ist quelloffen. Kosten entstehen nur bei den KI-Anbietern, die du verbindest – je nach deren Preismodell und Nutzung. Wenn du lokale Modelle nutzt, fallen keine Anbieterkosten an.
+
+### Welche KI-Modelle kann ich nutzen?
+
+LokkyWork ist anbieter-unabhängig. Du kannst gängige Anbieter wie OpenAI, Anthropic (Claude), Google Gemini und weitere verbinden sowie lokale Modelle einbinden. Details unter [Modelle & Anbieter](/modelle-anbieter/).
+
+### Brauche ich eine Internetverbindung?
+
+Für Cloud-Anbieter ja. Wenn du ausschließlich lokale Modelle nutzt, funktioniert LokkyWork auch offline.
+
+### Kann ich LokkyWork von unterwegs nutzen?
+
+Ja – über den [Remote-Zugriff](/remote/) erreichst du deine LokkyWork-Instanz im Browser, etwa vom Handy aus.
+
+### Wie aktualisiere ich LokkyWork?
+
+Lade die neueste Version aus dem [Release-Bereich auf GitHub](https://github.com/oliverhees/LokkyWork/releases) herunter und installiere sie über die vorhandene Version. Deine Einstellungen und Gespräche bleiben dabei erhalten.
+
+### Muss ich für jeden Anbieter einen API-Schlüssel anlegen?
+
+Nein. Du kannst mit einem einzigen Anbieter starten und später weitere hinzufügen. Mehr unter [Modelle & Anbieter](/modelle-anbieter/).
+
+### Was ist der Unterschied zwischen eingebauter Engine und Multi-Agent-Modus?
+
+Die **eingebaute Engine** ist sofort einsatzbereit (keine Installation) und unterstützt alle Funktionen – Bildgenerierung, MCP-Tools, geplante Aufgaben, Assistenten und Skills. Im **[Multi-Agent-Modus](/multi-agent/)** erkennt LokkyWork zusätzlich installierte CLI-Agenten (z. B. Claude Code, Codex, Qwen Code) und lässt dich sie als Backend wählen.
+
+### Wie wechsle ich zwischen KI-Modellen?
+
+An drei Stellen: **im Gespräch** über die Modellauswahl, **pro Assistent** in den Einstellungen, und **pro geplanter Aufgabe** beim Anlegen.
+
+### Warum sehe ich keine Bildgenerierung?
+
+Prüfe, ob die Bildgenerierung unter **Einstellungen → Tools** aktiviert ist und ob ein Modell ausgewählt ist, das Bilder erzeugen kann. Siehe [Bildgenerierung](/bildgenerierung/).
+
+### Wie sichere ich meine Konfiguration?
+
+Kopiere den Konfigurationsordner (siehe Speicherorte unter [Erste Schritte](/erste-schritte/)). Zum Zurücksetzen schließt du LokkyWork, löschst den Ordner und startest neu.
+
+### LokkyWork startet nicht – was tun?
+
+Prüfe, ob bereits eine Instanz läuft, starte den Rechner neu, und installiere die App im Zweifel neu. Bekannte Probleme findest du in den [GitHub-Issues](https://github.com/oliverhees/LokkyWork/issues).
+
+## Einen Fehler melden
+
+Wenn etwas nicht funktioniert, hilf uns mit ein paar Angaben:
+
+1. Was hast du gemacht, als der Fehler auftrat?
+2. Was hast du erwartet, was ist stattdessen passiert?
+3. Welche LokkyWork-Version und welches Betriebssystem nutzt du?
+
+Schick uns das per E-Mail oder öffne ein [Issue auf GitHub](https://github.com/oliverhees/LokkyWork/issues).
+
+## Kontakt
+
+<Aside type="note" title="So erreichst du uns">
+- **Support-E-Mail:** [support@lokyy.de](mailto:support@lokyy.de)
+- **Website:** [kibesy.de](https://kibesy.de)
+- **GitHub:** [github.com/oliverhees/LokkyWork](https://github.com/oliverhees/LokkyWork)
+</Aside>

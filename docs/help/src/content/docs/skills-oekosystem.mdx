@@ -1,0 +1,102 @@
+---
+title: Skills-Ökosystem
+description: Was Skills sind, wie du sie installierst, verwaltest und teilst – und wie sie mit Assistenten zusammenspielen.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+In LokkyWork erweiterst du deine KI über **Skills** – kleine Erweiterungspakete im Markdown-Format, die einem Assistenten zusätzliche Fähigkeiten geben. Ein Skill kann zum Beispiel Dateiformate verarbeiten (PowerPoint, Word, Excel, PDF), Diagramme erzeugen oder eine ganze Sammlung an Tools für ein bestimmtes Fachgebiet mitbringen.
+
+Skills arbeiten Hand in Hand mit deinen [Assistenten](/assistenten/): Der Assistent liefert die Persona (Tonfall, Aufgaben, Vorgehen über die **Regeln**), die Skills liefern die konkreten Werkzeuge dazu.
+
+## Was ist ein Skill?
+
+Ein **Skill** ist ein Ordner mit einer Datei namens `SKILL.md`. Diese Datei beschreibt in einfacher Sprache, was der Skill kann und wann er eingesetzt werden soll. So sieht ein minimaler Skill aus:
+
+```markdown
+---
+name: mein-skill
+description: Ein-Satz-Beschreibung, was dieser Skill macht
+---
+
+# Mein Skill
+
+Hier stehen ausführliche Anweisungen zur Nutzung. Reines Markdown –
+es wird kein Code ausgeführt, außer der Skill ruft ausdrücklich ein Tool auf.
+```
+
+Skills stammen aus drei Quellen:
+
+1. **Eingebaut** – sie werden mit LokkyWork ausgeliefert
+2. **Benutzerdefiniert** – deine eigenen Skill-Ordner, eingelesen aus einem Pfad, den du festlegst
+3. **Erweiterung** – bereitgestellt durch externe Agenten-Erweiterungen
+
+## Eingebaute Skills (Auswahl)
+
+LokkyWork bringt bereits eine Reihe nützlicher Skills mit. Einige Beispiele:
+
+| Skill | Was er macht |
+|-------|--------------|
+| `pptx` | PowerPoint-Präsentationen bearbeiten |
+| `docx` | Word-Dokumente bearbeiten |
+| `xlsx` | Excel-Tabellen und Formeln bearbeiten |
+| `pdf` | PDFs bearbeiten, aufteilen, Formulare ausfüllen, in Bilder umwandeln |
+| `mermaid` | Mermaid-Diagramme rendern |
+
+Welche Skills in deiner Installation genau verfügbar sind, siehst du in den Einstellungen unter **Assistenten → Skills**.
+
+> TODO: Screenshot assistant-skills-config.png ergänzen (zeigt die Skills-Übersicht eines Assistenten in den Einstellungen).
+
+## Skills an- und ausschalten
+
+Skills werden pro Assistent aktiviert. Öffne dazu einen Assistenten in den Einstellungen und schalte die einzelnen Skills nach Bedarf **an oder aus**. Aktiviere nur, was die jeweilige Aufgabe wirklich braucht – das hält den Assistenten fokussiert.
+
+> TODO: Screenshot assistant-skills-manage.png ergänzen (zeigt das An-/Ausschalten einzelner Skills pro Assistent).
+
+## Eigene Skills hinzufügen
+
+Du kannst LokkyWork auf einen Ordner mit deinen eigenen Skills verweisen lassen. Jeder Unterordner mit einer `SKILL.md`-Datei wird automatisch als eigener Skill erkannt.
+
+<Steps>
+
+1. **Assistent öffnen**
+
+   Gehe in die **Einstellungen → Assistenten** und öffne den Assistenten, dem du Skills geben möchtest.
+
+2. **Skills hinzufügen**
+
+   Klicke im Bereich **Skills** auf **Skills hinzufügen**.
+
+3. **Pfad wählen**
+
+   Wähle einen erkannten Standardpfad (z. B. `~/.claude/skills` oder `~/skills`) oder gib einen absoluten Pfad ein.
+
+4. **Skills übernehmen**
+
+   LokkyWork durchsucht den Ordner nach `SKILL.md`-Dateien und listet die gefundenen Skills als ein-/ausschaltbare Einträge auf.
+
+</Steps>
+
+> TODO: Screenshot assistant-add-skills.png ergänzen (zeigt den Dialog zum Hinzufügen eines Skill-Ordners).
+
+<Aside type="tip">
+  Halte eigene Skills fokussiert: ein Ordner, ein Zweck. Das macht sie leichter
+  wartbar und sorgt dafür, dass der Assistent sie zuverlässig einsetzt.
+</Aside>
+
+## Skills teilen
+
+Da ein Skill nur ein Ordner mit einer `SKILL.md`-Datei (und optional weiteren Dateien) ist, kannst du ihn unkompliziert weitergeben: als ZIP verschicken, in ein gemeinsames Verzeichnis legen oder in einem Git-Repository versionieren. Wer den Ordner erhält, fügt ihn über **Skills hinzufügen** zu seinem Assistenten hinzu – fertig.
+
+## Zusammenspiel mit Assistenten
+
+Skills entfalten ihre Wirkung immer **im Kontext eines Assistenten**. Du baust dir zum Beispiel einen [Assistenten](/assistenten/) als „Büro-Profi" und aktivierst dafür die Skills `pptx`, `docx` und `xlsx`. Die Regeln des Assistenten legen fest, *wie* er arbeitet; die Skills bestimmen, *womit* er arbeiten kann.
+
+Auch mehrere Assistenten lassen sich kombinieren, indem du Ergebnisse zwischen Gesprächen weitergibst – etwa ein Recherche-Assistent, der Material sammelt, und ein Schreib-Assistent, der daraus ein fertiges Dokument macht.
+
+<Aside type="note">
+  Welcher KI-Anbieter im Hintergrund läuft, wählst du frei – etwa ein Modell von
+  OpenAI, Anthropic (Claude) oder Google Gemini. Dieselben Regeln und Skills
+  funktionieren über verschiedene Anbieter hinweg. Mehr dazu unter
+  [Modelle & Anbieter](/modelle-anbieter/).
+</Aside>

@@ -1,0 +1,190 @@
+---
+title: Multi-Agent-Modus (ACP)
+description: So bindest du externe KI-CLI-Agenten über das Agent Client Protocol (ACP) in LokkyWork ein und steuerst sie aus einer Oberfläche.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Der Multi-Agent-Modus bringt externe KI-CLI-Agenten (zum Beispiel Claude Code, Codex, Qwen Code, Cursor, Goose oder Gemini CLI) in eine einzige, einheitliche Cowork-Oberfläche von LokkyWork. Möglich macht das ACP — das **Agent Client Protocol**, eine standardisierte Sprache, über die LokkyWork mit jedem unterstützten Agenten spricht.
+
+## Was ist der Multi-Agent-Modus?
+
+Der Multi-Agent-Modus ist **optional**. LokkyWork bringt bereits einen vollständigen integrierten Agenten mit (angetrieben von der Aion CLI / `aionrs`) — du kannst LokkyWork nutzen, ohne irgendetwas zusätzlich zu installieren. Der Multi-Agent-Modus richtet sich an alle, die ohnehin schon mit externen KI-CLI-Agenten arbeiten und diese aus der Oberfläche von LokkyWork heraus steuern möchten — parallel zum integrierten Agenten.
+
+Die wichtigsten Eigenschaften:
+
+- **Automatische Erkennung** — LokkyWork durchsucht beim Start deinen `PATH` und aktiviert Agenten, die bereits installiert sind.
+- **Einheitliche Oberfläche** — ein Cowork-Fenster für alle Agenten, statt zwischen mehreren Terminals zu springen.
+- **ACP-Standard** — jeder externe Agent kommuniziert mit LokkyWork über das [Agent Client Protocol](https://github.com/modelcontextprotocol/agent-client-protocol).
+- **Eigenständige Fähigkeiten** — jeder externe Agent behält sein eigenes Modell, seine Anmeldung, seine Werkzeuge und sein Verhalten.
+- **Eigene Agenten** — jede ACP-kompatible CLI lässt sich über **Einstellungen → Agenten-Verwaltung → Eigene Agenten** hinzufügen.
+
+<Aside type="tip">
+Der integrierte Agent reicht für die allermeisten Aufgaben völlig aus und bietet die beste Integration. Der Multi-Agent-Modus ist eine reine Ergänzung — du brauchst ihn nur, wenn du ohnehin schon ein bestimmtes CLI-Werkzeug nutzt.
+</Aside>
+
+### Unterstützte Agenten
+
+Der integrierte Agent (Aion CLI / `aionrs`) ist immer ohne Einrichtung verfügbar. Die folgenden Agenten werden automatisch erkannt, sofern ihre CLI auf deinem `PATH` liegt:
+
+| Agent | CLI-Befehl | Anbieter |
+|-------|------------|----------|
+| **Integrierter Agent (Aion CLI)** | mitgeliefert | Standard, keine Installation nötig |
+| **Claude Code** | `claude` | Anthropic |
+| **Codex** | `codex` | OpenAI |
+| **Qwen Code** | `qwen` | Alibaba Qwen |
+| **Gemini CLI** | `gemini` | Google |
+| **Cursor Agent** | `cursor-agent` | Cursor |
+| **Snow CLI** | `snow` | Snow |
+| **Kiro** | `kiro` | Kiro |
+| **Hermes Agent** | `hermes` | Nous Research |
+| **Goose** | `goose` | Block |
+| **OpenCode** | `opencode` | OpenCode |
+| **OpenClaw** | `openclaw` | OpenClaw (Gateway-Modus) |
+| **Augment Code** | `auggie` | Augment |
+| **CodeBuddy** | `codebuddy` | Tencent |
+| **Kimi CLI** | `kimi` | Moonshot |
+| **Factory Droid** | `droid` | Factory |
+| **GitHub Copilot CLI** | `copilot` | GitHub |
+| **Qoder CLI** | `qoder` | Qoder |
+| **Mistral Vibe** | `vibe-acp` | Mistral |
+| **Nanobot** | `nanobot` | Nanobot |
+
+<Aside type="note">
+Es kommen regelmäßig neue ACP-kompatible CLIs hinzu. Welche Agenten genau verfügbar sind, kann mit jeder LokkyWork-Version wachsen — schau auf den Willkommensbildschirm für die aktuelle Liste, oder lege deinen eigenen Agenten unter **Einstellungen → Agenten-Verwaltung → Eigene Agenten** an.
+</Aside>
+
+### Multi-Agent-Modus vs. integrierter Agent
+
+| Aspekt | Integrierter Agent | Multi-Agent-Modus |
+|--------|--------------------|-------------------|
+| **Installation** | Keine — in LokkyWork enthalten | Du installierst die externe CLI selbst; LokkyWork erkennt sie automatisch |
+| **Architektur** | Aion-CLI-Engine von LokkyWork + ACP | Externe CLI-Prozesse, angesprochen über ACP |
+| **Funktionsumfang** | Volle Integration: Bilderzeugung, MCP-Werkzeuge, Mehrfach-Key-Rotation, geplante Aufgaben usw. | Nur die nativen Funktionen des jeweiligen Agenten — LokkyWork liefert die Chat- und Datei-Oberfläche |
+| **Konfiguration** | Eine LokkyWork-Konfiguration deckt alles ab | Jede externe CLI verwaltet Anmeldung und Konfiguration selbst |
+| **Am besten geeignet für** | Tägliche Nutzung, voller LokkyWork-Funktionsumfang | Power-User, die ohnehin in einer bestimmten CLI arbeiten |
+
+## Schritt 1: Installiere die gewünschte CLI
+
+LokkyWork liefert externe CLIs nicht mit — installiere die, die du nutzen möchtest, jeweils nach der **offiziellen Dokumentation des Anbieters**. Paketnamen und Installationsbefehle ändern sich häufig, deshalb verweist diese Anleitung bewusst auf die jeweilige Originalquelle, statt veraltete Befehle zu kopieren.
+
+| Agent | Installationsquelle |
+|-------|---------------------|
+| **Claude Code** | https://docs.anthropic.com/claude/claude-code |
+| **Codex** | https://developers.openai.com/codex/cli/ |
+| **Qwen Code** | https://github.com/QwenLM/qwen-code |
+| **Gemini CLI** | https://github.com/google-gemini/gemini-cli |
+| **Cursor Agent** | https://docs.cursor.com/ |
+| **Snow CLI** | https://snowcli.dev/ |
+| **Kiro** | https://kiro.dev/ |
+| **Hermes Agent** | https://github.com/NousResearch/hermes-agent |
+| **Goose** | https://github.com/block/goose |
+| **OpenCode** | https://github.com/opencode-ai/opencode |
+| **OpenClaw** | https://github.com/openclaw/openclaw |
+| **Augment Code** | https://www.augmentcode.com/ |
+| **CodeBuddy** | https://github.com/Tencent/CodeBuddy |
+| **Kimi CLI** | https://platform.moonshot.cn/ |
+| **Factory Droid** | https://www.factory.ai/ |
+| **GitHub Copilot CLI** | https://docs.github.com/en/copilot/github-copilot-in-the-cli |
+| **Qoder CLI** | https://qoder.com/ |
+| **Mistral Vibe** | https://github.com/mistralai/vibe-acp |
+| **Nanobot** | https://github.com/nanobot-ai/nanobot |
+
+<Aside type="note">
+Stelle nach der Installation sicher, dass der CLI-Befehl aus einem frisch geöffneten Terminal aufrufbar ist (also auf deinem `PATH` liegt). Unter macOS/Linux prüfst du das mit `which <befehl>`, unter Windows mit `where <befehl>`.
+</Aside>
+
+<Aside type="caution">
+Jede CLI regelt ihre Anmeldung selbst — meist über einen Login-Befehl wie `claude login`, eine API-Key-Umgebungsvariable oder einen OAuth-Ablauf. Folge dazu der Dokumentation des jeweiligen Anbieters.
+</Aside>
+
+## Schritt 2: Den Multi-Agent-Modus in LokkyWork nutzen
+
+<Steps>
+1. **LokkyWork öffnen**
+
+   Installierte Agenten erscheinen automatisch auf dem Willkommensbildschirm.
+
+2. **Agenten auswählen**
+
+   Wähle eine automatisch erkannte CLI oder den integrierten Agenten.
+
+3. **Unterhaltung starten**
+
+   Wähle ein Projekt (Arbeitsverzeichnis), schreibe eine Nachricht und sende sie ab.
+
+4. **Berechtigungen bestätigen**
+
+   Wenn ein Agent Datei- oder Werkzeugzugriff anfragt, zeigt LokkyWork eine Bestätigungsabfrage (einmalig oder dauerhaft).
+
+5. **Jederzeit wechseln**
+
+   Jede Unterhaltung ist an ihren eigenen Agenten gebunden; du kannst mehrere parallel betreiben.
+</Steps>
+
+![LokkyWork: Auswahl eines Agenten und Erstellen einer neuen Unterhaltung im Multi-Agent-Modus](/screenshots/acp.jpg)
+
+### Einen eigenen Agenten hinzufügen
+
+Wenn deine CLI zwar ACP unterstützt, aber nicht automatisch erkannt wird:
+
+<Steps>
+1. **Einstellungen öffnen**
+
+   Gehe zu **Einstellungen → Agenten-Verwaltung → Eigene Agenten**.
+
+2. **Agenten anlegen**
+
+   Klicke auf **Eigenen Agenten hinzufügen** und trage Anzeigename, Befehl und Argumente ein.
+
+3. **Speichern**
+
+   Nach dem Speichern erscheint der Agent neben den automatisch erkannten Agenten.
+</Steps>
+
+![LokkyWork: Übersicht der erkannten und eigenen Agenten in der Agenten-Verwaltung](/screenshots/ACP.png)
+
+## Häufige Fragen
+
+**Brauche ich eine externe CLI, um LokkyWork zu nutzen?**
+
+Nein. Der integrierte Agent (Aion CLI / `aionrs`) steckt direkt in LokkyWork und funktioniert sofort. Externe CLIs sind rein zusätzlich.
+
+**Wann sollte ich den Multi-Agent-Modus wählen?**
+
+Dann, wenn du für einen bestimmten CLI-Agenten ohnehin bezahlst oder dich dort anmeldest (zum Beispiel Claude Code oder Cursor) und ihn aus der Oberfläche von LokkyWork heraus steuern möchtest — neben anderen Agenten. Für alles andere bietet dir der integrierte Agent die am besten integrierte Erfahrung.
+
+**Woran erkenne ich, dass die Erkennung funktioniert hat?**
+
+Öffne LokkyWork — der Willkommensbildschirm listet jeden erkannten Agenten auf. Fehlt einer, prüfe mit `which <befehl>` (bzw. `where` unter Windows) in einem aus derselben Login-Shell gestarteten Terminal, ob er auf dem `PATH` liegt, und starte LokkyWork anschließend neu.
+
+**Ein Agent ist installiert, taucht aber nicht auf.**
+
+Häufige Ursachen:
+
+- Die CLI liegt in einem Pfad, den nur deine Shell kennt (`~/.local/bin`, nvm, asdf), den LokkyWork aber nicht geerbt hat — starte LokkyWork aus einem frischen Terminal neu oder verschiebe die Binärdatei an einen systemweiten Ort.
+- Die CLI verlangt eine einmalige Anmeldung, bevor sie ACP spricht — führe sie einmal manuell aus und schließe die Anmeldung ab.
+- Ältere CLI-Versionen unterstützen ACP möglicherweise noch nicht — aktualisiere auf die neueste Version.
+
+**Mein Agent verbindet sich, trennt die Verbindung aber sofort wieder.**
+
+Prüfe die Logs der CLI selbst und stelle sicher, dass die Anmeldung außerhalb von LokkyWork funktioniert (starte den Agenten zuerst in einem Terminal). Netzwerkbeschränkungen, abgelaufene Tokens und veraltete Versionen sind die üblichen Verdächtigen.
+
+**Welche Funktionen gelten im Multi-Agent-Modus weiterhin?**
+
+LokkyWork stellt bereit: Verlauf der Unterhaltungen, Projekt- bzw. Arbeitsverzeichnis-Verwaltung, Berechtigungsabfragen, Dateivorschau und Cowork-Orchestrierung. LokkyWork-eigene Funktionen wie die Bilderzeugung und die integrierten MCP-Werkzeuge gehören zum integrierten Agenten, nicht zu externen CLIs.
+
+<Aside type="tip">
+Über den integrierten MCP-Mechanismus lassen sich zusätzliche Werkzeuge wie der [PII-Schutz](/pii-schutz/) oder dein [Second Brain](/second-brain/) anbinden — diese Erweiterungen gehören zum integrierten Agenten von LokkyWork.
+</Aside>
+
+## Weiterführende Dokumentation
+
+- [Erste Schritte](/erste-schritte/)
+- [Modelle & Anbieter einrichten](/modelle-anbieter/)
+- [Bildgenerierung einrichten](/bildgenerierung/)
+- [Assistenten konfigurieren](/assistenten/)
+
+<Aside type="note">
+**Hilfe gebraucht?** Schreib uns an [support@lokyy.de](mailto:support@lokyy.de), besuche [kibesy.de](https://kibesy.de) oder melde ein Problem auf [GitHub](https://github.com/oliverhees/LokkyWork/issues).
+</Aside>

@@ -1,0 +1,79 @@
+---
+title: Modelle & Anbieter
+description: KI-Anbieter verbinden und Modelle in LokkyWork einrichten.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+LokkyWork ist **anbieter-unabhängig**: Du entscheidest selbst, welche KI du nutzt. Dazu verbindest du einen oder mehrere **Anbieter** (z. B. OpenAI, Anthropic/Claude, Google Gemini) und wählst die gewünschten **Modelle** aus. Insgesamt werden **über 28 Plattformen** unterstützt – alle über denselben Ablauf: **Einstellungen → Modelle → Modell hinzufügen**.
+
+![Modell-Einstellungen – Modell-Konfiguration und Anbieterauswahl](/screenshots/model-setting.png)
+
+## Welche Anbieter werden unterstützt?
+
+Eine Auswahl der unterstützten Plattformen:
+
+- **International & bekannt:** OpenAI, Anthropic (Claude), Google Gemini, DeepSeek, xAI (Grok), Moonshot, MiniMax, OpenRouter, Poe
+- **Cloud-Dienste:** AWS Bedrock, Google Vertex AI, „Neue API" (vereinheitlichtes Gateway)
+- **Aggregatoren/Gateways:** OpenRouter, Novita, PPIO, SiliconFlow
+- **Weitere regionale Anbieter:** Dashscope (Qwen), Zhipu, Qianfan, Hunyuan, ModelScope, Ark u. a.
+- **Lokal & benutzerdefiniert:** alles mit OpenAI-kompatibler Schnittstelle (z. B. Ollama, LM Studio)
+
+<Aside type="tip">
+  Steht dein Anbieter in der Vorauswahl, wird die **Basis-URL automatisch** ausgefüllt – du
+  musst nur noch den API-Schlüssel einfügen.
+</Aside>
+
+## Einen Anbieter einrichten
+
+Die meisten Anbieter werden über einen **API-Schlüssel** verbunden, den du in der Konsole des jeweiligen Anbieters erzeugst.
+
+<Steps>
+
+1. **Anbieter auswählen**
+
+   Öffne die Einstellungen und wähle bei **Modellanbieter** den gewünschten Anbieter aus. Neben den bekannten Anbietern gibt es auch die Optionen **Benutzerdefiniert**, **Neue API** und **AWS Bedrock**.
+
+2. **Zugangsdaten eintragen**
+
+   Trage die nötigen Angaben ein:
+
+   - **API-Schlüssel** des Anbieters
+   - bei manchen Anbietern zusätzlich eine **Basis-URL** (das System ergänzt den Anfragepfad automatisch)
+
+   <Aside type="note">
+     Du kannst **mehrere API-Schlüssel** pro Anbieter hinterlegen (einer pro Zeile). LokkyWork
+     rotiert sie dann automatisch und überspringt ungültige Schlüssel – praktisch, wenn du an
+     Ratengrenzen stößt.
+   </Aside>
+
+   ![Mehrere API-Schlüssel für automatische Rotation](/screenshots/multi-key.png)
+
+3. **Modelle hinzufügen**
+
+   Klicke auf **Modell hinzufügen** und wähle eine **Modell-ID** aus oder gib sie direkt ein. Du kannst jeden Modellnamen einfügen – halte ihn am besten identisch zur Anbieterkonsole, damit alles kompatibel bleibt.
+
+</Steps>
+
+## Modell im Chat auswählen
+
+Sobald ein Anbieter eingerichtet ist, wählst du im Chat das Modell aus, mit dem du arbeiten möchtest. Du kannst jederzeit zwischen den eingerichteten Modellen wechseln.
+
+## Lokale und benutzerdefinierte Modelle
+
+Über **Benutzerdefiniert** bindest du jedes Modell mit OpenAI-kompatibler Schnittstelle ein – etwa lokal laufende Modelle, wenn du komplett ohne Cloud-Anbieter arbeiten möchtest. Wähle **Benutzerdefiniert**, trage die **Basis-URL** ein, einen beliebigen Platzhalter als API-Schlüssel (für lokale Modelle ohne Authentifizierung) und die gewünschten Modellnamen.
+
+Beispiele für lokale Modelle:
+
+- **Ollama:** `http://localhost:11434/v1`
+- **LM Studio:** `http://localhost:1234/v1`
+
+### Unternehmens-Dienste (Vertex AI, AWS Bedrock)
+
+- **Google Vertex AI:** zusätzlich zur **Projekt-ID** deines Google-Cloud-Projekts wird ein API-Schlüssel benötigt.
+- **AWS Bedrock:** Anmeldung per **Zugriffsschlüssel** (Access Key ID + Secret) oder per lokal konfiguriertem **Profil**, jeweils mit AWS-Region (z. B. `eu-central-1` für Frankfurt).
+
+<Aside type="caution">
+  Bei Problemen mit Anbietern, API-Schlüsseln, Anmeldung, Ratengrenzen oder der Modellauswahl
+  hilft der eingebaute **Fehlerbericht** – siehe [FAQ & Support](/faq/).
+</Aside>

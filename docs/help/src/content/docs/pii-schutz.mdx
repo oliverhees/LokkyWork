@@ -1,0 +1,46 @@
+---
+title: PII-Schutz
+description: Sensible Daten lokal maskieren, bevor sie an ein KI-Modell gesendet werden.
+---
+
+import { Aside } from '@astrojs/starlight/components'
+
+Der **PII-Schutz (Anonymisierung)** ist ein lokaler Anonymisierungs-Proxy (PII = personenbezogene Daten). Ist er aktiv, erkennt LokkyWork sensible Daten in deinen Nachrichten und **ersetzt sie lokal durch Platzhalter, bevor deine Nachricht an ein KI-Modell geht**. Die Antwort des Modells wird anschließend automatisch zurückübersetzt – du bekommst also die echten Werte zurück, ohne dass sie das Gerät verlassen mussten.
+
+<Aside type="note">
+  Der PII-Schutz läuft **lokal** auf deinem Rechner. Die Zuordnung von Platzhalter zu echtem
+  Wert existiert nur für die Dauer einer einzelnen Anfrage im Arbeitsspeicher und wird **nie
+  gespeichert**.
+</Aside>
+
+## Ein- und ausschalten
+
+Du findest den PII-Schutz in den **Einstellungen** im Bereich **System**. Dort schaltest du ihn über einen **Schalter** ein oder aus. Beim Aktivieren bestätigt LokkyWork: *„PII-Schutz aktiviert — sensible Daten werden vor dem Versand anonymisiert."*
+
+Während der Schutz aktiv ist, zeigt LokkyWork das auch in der Oberfläche an, damit du jederzeit siehst, dass deine Daten anonymisiert werden.
+
+## Was wird erkannt?
+
+Aktuell erkennt der PII-Schutz strukturierte, besonders schützenswerte Daten (mit Fokus auf den deutschsprachigen Raum):
+
+- **IBAN** (Kontonummern)
+- **E-Mail-Adressen**
+- **USt-IdNr.** (deutsche Umsatzsteuer-Identifikationsnummer)
+- **Kreditkartennummern**
+- **Telefonnummern**
+
+Jeder erkannte Wert wird durch einen eindeutigen Platzhalter ersetzt – zum Beispiel wird eine IBAN zu `[IBAN_1]`, eine E-Mail zu `[EMAIL_1]`. Das KI-Modell arbeitet nur mit diesen Platzhaltern; in der Antwort setzt LokkyWork wieder die echten Werte ein.
+
+<Aside type="note">
+  **Selbsttest:** In den Einstellungen kannst du den PII-Schutz testen. LokkyWork zeigt dir
+  dann an einem Beispiel, welche Daten erkannt und durch welche Platzhalter ersetzt wurden.
+</Aside>
+
+## Grenzen
+
+Der PII-Schutz deckt derzeit **strukturierte** Daten ab (IBAN, E-Mail, Telefon usw.). Freie Angaben wie **Namen** oder **Firmennamen** werden in dieser Ausbaustufe noch nicht automatisch erkannt – eine Erweiterung dafür ist geplant.
+
+<Aside type="caution">
+  Der PII-Schutz reduziert das Risiko, sensible Daten weiterzugeben, ersetzt aber keinen
+  sorgsamen Umgang. Prüfe bei sehr sensiblen Inhalten zusätzlich selbst, was du sendest.
+</Aside>

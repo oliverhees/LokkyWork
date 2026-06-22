@@ -1,0 +1,107 @@
+---
+title: Assistenten
+description: Spezialisierte KI-Assistenten mit eigener Persona, Modellen und Skills anlegen.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Ein **Assistent** ist ein auf eine Aufgabe zugeschnittener KI-Helfer: Du kombinierst einen KI-Agenten mit **benutzerdefinierten Regeln** (der Persona) und **Skills**. So baust du dir z. B. einen „Lektor", einen „Recherche-Profi" oder einen „E-Mail-Texter", die jeweils genau so arbeiten, wie du es brauchst.
+
+Im Bereich **Assistenten** siehst du alle **verfügbaren Assistenten**. Du kannst nach **System** (offiziell, eingebaut) und **Benutzerdefiniert** filtern.
+
+Ein Assistent bündelt vier Dinge:
+
+- ein **Backend** (der KI-Agent, der die Arbeit ausführt – die eingebaute Engine oder ein erkannter CLI-Agent),
+- die **Regeln** (ein Prompt in Markdown, der das Verhalten festlegt),
+- eine Auswahl an **Skills** (Zusatzfähigkeiten wie PowerPoint, Word, Excel, Diagramme oder MCP-Tools),
+- Anzeige-Infos: Name, Avatar, Beschreibung.
+
+<Aside type="tip" title="Schon viele Assistenten eingebaut">
+  LokkyWork bringt über 20 fertige Assistenten mit – etwa zum Erstellen von Präsentationen,
+  Word- und Excel-Dokumenten, Dashboards, wissenschaftlichen Texten oder Diagrammen. Du kannst
+  sie direkt nutzen und nach deinen Wünschen anpassen.
+</Aside>
+
+## Einen Assistenten anlegen
+
+<Steps>
+
+1. **Neuen Assistenten erstellen**
+
+   Öffne **Einstellungen → Assistenten** und klicke auf **Erstellen**. Im Abschnitt **Identität** vergibst du **Name & Avatar** (Bild, Emoji oder eingebautes Symbol) und optional eine **Assistentenbeschreibung** („Wobei kann dieser Assistent helfen?"). Außerdem wählst du das **Backend** – also welcher KI-Agent die Arbeit ausführt (die eingebaute Engine ist immer verfügbar, ohne Installation).
+
+   > TODO: Screenshot „Assistenten-Verwaltung (Einstellungen + Erstellen-Schaltfläche)" ergänzen.
+
+   > TODO: Screenshot „Assistent: Name, Avatar, Beschreibung, Backend-Auswahl" ergänzen.
+
+   <Aside type="note">
+     Die **Beschreibung** ist nur eine Notiz für dich. Wie sich der Assistent tatsächlich
+     verhält, bestimmst du über die **Regeln** (siehe nächster Schritt).
+   </Aside>
+
+2. **Regeln festlegen (die Persona)**
+
+   Im Feld **Regeln** legst du das Verhalten und die Persönlichkeit des Assistenten fest – im **Markdown-Format**. Das ist das Herzstück: Hier beschreibst du Tonfall, Aufgaben, Vorgehensweise und alles, woran sich der Assistent halten soll. Über die Reiter **Bearbeiten** und **Vorschau** siehst du den gerenderten Text.
+
+   > TODO: Screenshot „Regeln bearbeiten (Bearbeiten-/Vorschau-Reiter)" ergänzen.
+
+   <Aside type="caution">
+     Die Identität des Assistenten kommt aus dem **Regeln**-Feld, nicht aus der Beschreibung.
+     Schreib also alles Verhaltensrelevante in die Regeln.
+   </Aside>
+
+3. **Modelle und Skills wählen**
+
+   - **Verfügbare Modelle:** Wähle, welche Modelle dieser Assistent nutzen darf.
+   - **Skills:** Aktiviere die gewünschten Fähigkeiten. Skills stammen aus drei Quellen: **eingebaut** (mitgeliefert, z. B. PowerPoint, Word, Excel, Diagramme), **eigene** (aus einem Ordner importiert) und **aus Erweiterungen**. Mehr dazu unter [Skills-Ökosystem](/skills-oekosystem/).
+
+   > TODO: Screenshot „Skills konfigurieren (eingebaute + eigene Skills)" ergänzen.
+
+4. **Standardkonfiguration**
+
+   Im Abschnitt **Standardkonfiguration** legst du ein **Standardmodell** und eine **Standardberechtigung** fest. Mit **Zuletzt genutztes merken** übernimmt der Assistent automatisch deine letzte Auswahl.
+
+</Steps>
+
+LokkyWork bestätigt mit „Assistent erstellt". **Name** und **Regeln** (Prompt) sind Pflichtfelder. Danach erscheint der Assistent in der Liste auf dem Startbildschirm.
+
+> TODO: Screenshot „Assistenten-Liste (Aktiv-/Inaktiv-Schalter)" ergänzen.
+
+## Gute Regeln schreiben
+
+Die **Regeln** sind der Systemprompt des Assistenten. Ein paar bewährte Tipps:
+
+- Sei **konkret** – kurze, klare Anweisungssätze wirken am besten.
+- Nutze **Überschriften und Listen**; daran orientiert sich der Assistent gut.
+- Gib **Beispiele** für die Fälle, die dir am wichtigsten sind.
+- Lade **keine** langen Nachschlagewerke in die Regeln – dafür sind Skills da.
+
+Beispiel für die Regeln eines „Dateiverwaltung"-Assistenten:
+
+```markdown
+# Dateiverwaltungs-Assistent
+
+## Vorgehen
+- Aufgaben in Schritte zerlegen und Fortschritt melden
+- Vor riskanten Aktionen (Löschen, Überschreiben) nachfragen
+- Lösungen schlank und fokussiert halten
+```
+
+## Assistenten bearbeiten und löschen
+
+Wähle einen Assistenten aus der Liste, um ihn zu **bearbeiten**.
+
+Bei **eingebauten** Assistenten kannst du anpassen: das **Backend**, die **Regeln**, die **Skills** und die **Beschreibung**. **Name** und **Avatar** sind gesperrt (damit sie wiedererkennbar bleiben), und eingebaute Assistenten lassen sich nicht löschen – nur deaktivieren.
+
+**Eigene** Assistenten sind vollständig bearbeitbar (inklusive Name und Avatar) und können über **Löschen** entfernt werden (nicht umkehrbar).
+
+<Aside type="note">
+  Manche Änderungen gelten **sofort**, andere erst in **neuen Gesprächen** – LokkyWork weist
+  pro Einstellung darauf hin.
+</Aside>
+
+## Einen Assistenten im Chat nutzen
+
+Du startest ein Gespräch mit einem Assistenten, indem du ihn auswählst. Im Chat kannst du Assistenten zusätzlich per **`@`-Erwähnung** ansprechen, um gezielt einen bestimmten Assistenten in die Unterhaltung zu holen.
+
+> TODO: Den genauen Ablauf der `@`-Erwähnung (Auslöser, Auswahlmenü, Mehrfachnutzung im selben Chat) bitte gegenprüfen und hier präzisieren.

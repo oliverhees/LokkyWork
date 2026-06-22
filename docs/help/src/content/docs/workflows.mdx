@@ -1,0 +1,56 @@
+---
+title: Workflows
+description: Mehrere KI-Schritte visuell verketten und automatisch nacheinander ausführen.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Ein **Workflow** verkettet mehrere Arbeitsschritte. Jeder Schritt läuft als eigene Unterhaltung, und die Ausgabe des vorherigen Schritts fließt automatisch in den nächsten. So zerlegst du größere Aufgaben in saubere Teilschritte – zum Beispiel erst recherchieren, dann zusammenfassen, dann einen Beitrag formulieren.
+
+Workflows werden auf einer **visuellen Canvas** zusammengestellt: Du siehst die Schritte als verbundene Knoten und kannst sie bearbeiten und neu anordnen.
+
+## Einen Workflow anlegen
+
+<Steps>
+
+1. **Neuen Workflow erstellen**
+
+   Öffne den Bereich **Workflows** und klicke auf **Neuer Workflow**. Gib ihm einen **Namen** (z. B. „Recherchieren und zusammenfassen") und optional eine **Beschreibung**.
+
+2. **Schritte hinzufügen**
+
+   Füge über **Schritt hinzufügen** so viele Schritte hinzu, wie du brauchst. Pro Schritt legst du fest:
+
+   - **Schrittname** (z. B. „Entwurf")
+   - **Backend** und optional ein **Modell** – also welche KI diesen Schritt bearbeitet
+   - **Eingabemodus** – ob der Schritt die Ausgabe des vorherigen Schritts übernimmt
+   - **Prompt** – die Anweisung für diesen Schritt
+
+   Mit **Nach oben** / **Nach unten** ordnest du die Reihenfolge, mit **Schritt entfernen** löschst du einen Schritt.
+
+3. **Speichern**
+
+   Klicke auf **Speichern**. LokkyWork bestätigt mit „Workflow gespeichert".
+
+</Steps>
+
+## Einen Workflow ausführen
+
+Klicke beim Workflow auf **Starten**. Die **Ausführung** zeigt dir live den Status jedes Schritts:
+
+- **Ausstehend** – wartet auf den Start
+- **Läuft** – wird gerade bearbeitet
+- **Abgeschlossen** – fertig
+- **Übersprungen** – wurde ausgelassen
+- **Fehler** – etwas ist schiefgegangen
+
+Über **Chat ansehen** springst du in das Gespräch eines einzelnen Schritts und siehst, was die KI dort produziert hat. Eine laufende Ausführung kannst du **Abbrechen**.
+
+<Aside type="caution">
+  Wenn für einen Schritt kein Modell aufgelöst werden kann, weist dich LokkyWork darauf hin.
+  Lege dann pro Schritt ein Modell fest, damit der Workflow vollständig durchläuft.
+</Aside>
+
+## Verwalten
+
+Workflows lassen sich jederzeit **Bearbeiten** oder **Löschen** (mit Sicherheitsabfrage).

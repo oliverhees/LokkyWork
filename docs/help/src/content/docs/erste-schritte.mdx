@@ -1,0 +1,112 @@
+---
+title: Erste Schritte
+description: LokkyWork installieren und das erste KI-Modell einrichten.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+In wenigen Minuten bist du startklar: App installieren, einen KI-Anbieter verbinden und loschatten. LokkyWork bringt eine vollständige KI-Engine schon mit – es funktioniert direkt nach der Installation, ohne dass du erst Kommandozeilen-Tools einrichten musst.
+
+## Installation
+
+LokkyWork ist eine Desktop-App für **Linux**, **Windows** und **macOS**.
+
+### Systemanforderungen
+
+- **macOS**: 10.14 oder neuer
+- **Windows**: 10 oder neuer
+- **Linux**: Ubuntu 18.04+ oder andere gängige Distributionen
+- **Arbeitsspeicher**: mindestens 4 GB RAM
+- **Speicherplatz**: mindestens 500 MB frei
+
+### Linux
+
+Lade die `.deb`-Datei aus dem [Release-Bereich auf GitHub](https://github.com/oliverhees/LokkyWork/releases) herunter und installiere sie:
+
+```bash
+sudo apt install ./LokkyWork-<version>.deb
+```
+
+Danach findest du LokkyWork im Anwendungsmenü.
+
+<Aside type="note">
+  Für andere Linux-Distributionen ohne `apt` steht – je nach Release – auch ein `AppImage`
+  bereit. Lade es herunter, mach es ausführbar (`chmod +x`) und starte es per Doppelklick.
+</Aside>
+
+### Windows
+
+Lade den Windows-Installer (`.exe`) aus dem [Release-Bereich](https://github.com/oliverhees/LokkyWork/releases) herunter und führe ihn aus. Folge dem Installationsassistenten. Nach der Installation startest du LokkyWork über das Startmenü.
+
+### macOS
+
+Lade die passende `.dmg`-Datei (Apple Silicon oder Intel) aus dem [Release-Bereich](https://github.com/oliverhees/LokkyWork/releases) herunter, öffne sie und zieh LokkyWork in den Programme-Ordner.
+
+<Aside type="caution">
+  Falls macOS beim ersten Start meldet, die App stamme von einem nicht verifizierten
+  Entwickler, öffne sie über **Rechtsklick → Öffnen** und bestätige den Hinweis einmalig.
+</Aside>
+
+## Der erste Start
+
+<Steps>
+
+1. **LokkyWork öffnen**
+
+   Beim ersten Start begrüßt dich der Startbildschirm. Von hier aus erreichst du alle Bereiche: Chat, Assistenten, Workflows, Fähigkeiten und Einstellungen.
+
+   ![LokkyWork-Startbildschirm – Hauptoberfläche und Agenten-Auswahl](/screenshots/hello-screen.png)
+
+2. **Einen KI-Anbieter verbinden**
+
+   Bevor du chatten kannst, brauchst du Zugang zu einem KI-Modell. Öffne die **Einstellungen → Modelle**, klicke auf **Modell hinzufügen** und wähle einen Anbieter – z. B. OpenAI, Anthropic (Claude), Google Gemini, DeepSeek, OpenRouter und viele mehr. Füge deinen API-Schlüssel ein und speichere.
+
+   ![Modell-Konfiguration – Anbieterauswahl und Eingabe des API-Schlüssels](/screenshots/llm-setting.png)
+
+   Eine ausführliche Anleitung mit allen Anbietern findest du unter [Modelle & Anbieter](/modelle-anbieter/).
+
+3. **Das erste Gespräch starten**
+
+   Klicke links auf das **Chat**-Symbol, wähle unten links im Eingabefeld ein **Modell** aus und schreib deine erste Nachricht. Fertig – du nutzt jetzt LokkyWork.
+
+</Steps>
+
+<Aside type="tip" title="Schon ein CLI-Agent installiert?">
+  Wenn auf deinem Rechner bereits ein KI-Kommandozeilen-Agent installiert ist (z. B. Claude
+  Code, Codex oder Qwen Code), erkennt LokkyWork ihn automatisch und du kannst ihn direkt
+  mitnutzen. Mehr dazu unter [Multi-Agent-Modus](/multi-agent/).
+</Aside>
+
+## Wichtige Grundfunktionen
+
+### Dateien hochladen
+
+- **Ziehen & Ablegen:** Zieh Dateien direkt ins Eingabefeld.
+- **Auswählen:** Klick auf das **+** im Eingabefeld und wähle Dateien oder Ordner.
+- **Unterstützt:** Textdateien, Bilder, Code, PDFs, Office-Dokumente und mehr.
+
+### Mehrere Gespräche
+
+- **Neues Gespräch:** Klick auf **Neuer Chat**.
+- **Wechseln:** Wähle ein Gespräch in der Verlaufsliste links – jedes Gespräch hat ein eigenes Gedächtnis.
+
+### Projekt (Arbeitsordner)
+
+- **Ordner öffnen:** Klick im Eingabefeld auf **+** und wähle **Ordner öffnen**.
+- **Projekt-Panel:** Danach erscheint rechts das **Projekt**-Panel mit dem Ordnerbaum, aus dem du Dateien direkt anhängen kannst.
+- **Pro Gespräch fest:** Der Projektordner lässt sich während eines Gesprächs nicht wechseln – starte für einen anderen Ordner einen neuen Chat.
+
+<Aside type="note" title="Wo werden meine Gespräche gespeichert?">
+  Alles liegt lokal auf deinem Gerät:
+  - **macOS:** `~/Library/Application Support/LokkyWork/`
+  - **Windows:** `%APPDATA%/LokkyWork/`
+  - **Linux:** `~/.config/LokkyWork/`
+</Aside>
+
+## Wie geht's weiter?
+
+- [Modelle & Anbieter](/modelle-anbieter/) – mehr KI-Anbieter verbinden
+- [Assistenten](/assistenten/) – spezialisierte Helfer mit eigener Persona anlegen
+- [Multi-Agent-Modus](/multi-agent/) – eigene CLI-Agenten einbinden
+- [Anwendungsfälle](/anwendungsfaelle/) – echte Beispiele aus dem Alltag
+- [PII-Schutz](/pii-schutz/) – sensible Daten automatisch maskieren

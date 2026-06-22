@@ -1,0 +1,90 @@
+---
+title: Remote-Zugriff
+description: LokkyWork von unterwegs im Browser nutzen – dein 24/7-Remote-Assistent.
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components'
+
+Mit dem **Remote-Zugriff** (WebUI) nutzt du LokkyWork als deinen *„24/7-Remote-Assistenten"*: Du erreichst deine laufende LokkyWork-Instanz von jedem anderen Gerät aus über den Browser und kannst Aufgaben jederzeit und überall anstoßen – zum Beispiel vom Handy.
+
+## Drei Wege, von außen zuzugreifen
+
+Je nachdem, von wo du zugreifen willst, gibt es drei Möglichkeiten:
+
+| Methode | Wann sinnvoll | Aufwand |
+| --- | --- | --- |
+| **Lokales Netzwerk (LAN)** | Handy und Rechner im selben WLAN | sehr gering |
+| **Remote-Software (z. B. Tailscale)** | Netzübergreifend, z. B. vom Büro nach Hause | gering |
+| **Server-Bereitstellung** | Dauerbetrieb 24/7, öffentlich erreichbar | mittel |
+
+<Aside type="tip" title="Frag einfach deinen Assistenten">
+  Tailscale ist für viele der einfachste Weg, aber nicht der einzige (es gibt z. B. auch
+  ZeroTier, Cloudflare Tunnel, FRP, ngrok, einen Reverse-Proxy auf einem VPS oder WireGuard).
+  Beschreib deinem LokkyWork-Assistenten deine Situation – er hilft dir, die passende Lösung
+  einzurichten.
+</Aside>
+
+<Aside type="note">
+  Der Remote-Zugriff unterstützt derzeit **einen Benutzer** (Admin). Mehrere Personen können
+  sich denselben Admin-Zugang teilen; getrennte Benutzerkonten gibt es noch nicht.
+</Aside>
+
+## So aktivierst du den Remote-Zugriff
+
+Öffne die Einstellungen im Bereich **Remote** (WebUI-Konfiguration). In drei Schritten bist du startklar:
+
+<Steps>
+
+1. **WebUI aktivieren**
+
+   Schalte **WebUI aktivieren** ein. Damit startet ein Webdienst, der den Browser-Zugriff ermöglicht. Bei Bedarf kannst du den **Port** anpassen (Standard ist `25808`).
+
+2. **Zugangs-URL kopieren**
+
+   Unter **Zugangs-URLs** findest du die **lokale URL** (für den eigenen Rechner) und die **Netzwerk-URL** (für andere Geräte im selben Netzwerk). Kopiere die passende URL.
+
+3. **Im Remote-Browser öffnen**
+
+   Öffne die URL im Browser des anderen Geräts und melde dich an.
+
+</Steps>
+
+![WebUI-Einstellungen – Aktivieren und Zugangsdaten](/screenshots/remote-webuisetting1.png)
+
+## Anmeldung
+
+Für die Anmeldung brauchst du **Benutzername** und **Passwort**:
+
+- Beim ersten Start erzeugt LokkyWork ein **Anfangspasswort**. Ändere es anschließend über **Passwort ändern**.
+- Alternativ kannst du dich per **QR-Code-Login** anmelden: Scanne den QR-Code mit dem Handy, um dich automatisch im mobilen Browser anzumelden. Der Code läuft nach einer Weile ab und lässt sich neu erzeugen.
+
+![QR-Code zum Anmelden scannen](/screenshots/scan-qr-code.png)
+
+<Aside type="caution">
+  **Ändere das Anfangspasswort.** Das beim ersten Start generierte Passwort solltest du aus
+  Sicherheitsgründen direkt durch ein eigenes ersetzen.
+</Aside>
+
+## Zugriff von außerhalb deines Netzwerks
+
+Mit der Option **Remote-Zugriff erlauben** kannst du den Zugriff auch über das lokale Netzwerk hinaus einrichten. Nutze dafür eine sichere Remote-Lösung. Über **Anleitung anzeigen** findest du weiterführende Hinweise direkt in der App.
+
+### Netzübergreifend per Tailscale
+
+Für den Zugriff von unterwegs (z. B. vom Büro nach Hause oder per Mobilfunk) ist ein VPN-Dienst wie **Tailscale** der einfachste Weg – ohne öffentliche IP oder eigenen Server. Du installierst Tailscale auf dem LokkyWork-Rechner und auf dem Zugriffsgerät, meldest dich mit demselben Konto an und erreichst LokkyWork dann über die Tailscale-Adresse des Rechners zusammen mit dem WebUI-Port.
+
+<Aside type="tip">
+  Den genauen Ablauf kannst du dir von deinem LokkyWork-Assistenten Schritt für Schritt
+  einrichten lassen – beschreib ihm einfach dein Setup.
+</Aside>
+
+### Dauerbetrieb auf einem Server
+
+Soll LokkyWork rund um die Uhr und öffentlich erreichbar sein, kannst du es auf einem Server (z. B. einem kleinen Cloud-Server) bereitstellen und über dessen öffentliche Adresse zugreifen. Sichere den Zugang dabei unbedingt ab (starkes Passwort, idealerweise HTTPS über einen Reverse-Proxy).
+
+> TODO: Falls LokkyWork ein eigenes, abweichendes Server-/Deployment-Verfahren hat, hier die konkreten Schritte ergänzen.
+
+<Aside type="note">
+  Auch die Spracheingabe (**Sprache zu Text**) steht im Remote-Browser zur Verfügung – siehe
+  [Einstellungen](/einstellungen/).
+</Aside>
