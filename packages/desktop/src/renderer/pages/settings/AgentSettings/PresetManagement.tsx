@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { mutate } from 'swr';
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
+import { applyAssistantDeOverrides } from '@renderer/utils/assistant/assistantDeOverrides';
 import { acpConversation } from '@/common/adapter/ipcBridge';
 import { DETECTED_AGENTS_SWR_KEY } from '@/renderer/utils/model/agentTypes';
 import CodeMirror from '@uiw/react-codemirror';
@@ -31,7 +32,7 @@ const PresetManagement: React.FC<PresetManagementProps> = ({ message }) => {
 
   const loadPresets = useCallback(async () => {
     try {
-      const agents = await ipcBridge.assistants.list.invoke();
+      const agents = applyAssistantDeOverrides(await ipcBridge.assistants.list.invoke());
       // Only user-authored presets are editable here; builtin/extension are read-only.
       setPresets(agents.filter((a) => a.source === 'user'));
     } catch (error) {

@@ -1,7 +1,7 @@
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
   <style>
-    .d{transform-origin:50% 90%;animation:a 3.6s ease-in-out infinite}
-    @keyframes a{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+    .d{transform-box:fill-box;transform-origin:50% 88%;animation:a 3.4s ease-in-out infinite}
+    @keyframes a{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
   </style>
   <image class="d" href="dozing.png" x="0" y="0" width="100" height="100"/>
 </svg>

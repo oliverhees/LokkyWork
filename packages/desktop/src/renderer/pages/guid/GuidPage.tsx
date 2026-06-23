@@ -14,6 +14,7 @@ import { openExternalUrl, resolveExtensionAssetUrl } from '@/renderer/utils/plat
 import { CUSTOM_AVATAR_IMAGE_MAP } from './constants';
 import AgentPillBar from './components/AgentPillBar';
 import AssistantSelectionArea from './components/AssistantSelectionArea';
+import HomeFeed from './home/HomeFeed';
 import { AgentPillBarSkeleton } from './components/GuidSkeleton';
 import GuidActionRow from './components/GuidActionRow';
 import GuidInputCard from './components/GuidInputCard';
@@ -33,7 +34,7 @@ import { resolveGuidAssistantDefaults } from './utils/assistantDefaults';
 import SpeechInputButton from '@/renderer/components/chat/SpeechInputButton';
 import { appendSpeechTranscript } from '@/renderer/hooks/system/useSpeechInput';
 import { useLiveTranscriptInsertion } from '@/renderer/hooks/system/useLiveTranscriptInsertion';
-import { Button, ConfigProvider, Dropdown, Menu, Message } from '@arco-design/web-react';
+import { Button, ConfigProvider, Message } from '@arco-design/web-react';
 import { Down, Left, Robot, Write } from '@icon-park/react';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -306,23 +307,6 @@ const GuidPage: React.FC = () => {
   const handleSelectAgentFromPillBar = useCallback(
     (key: string) => {
       agentSelection.setSelectedAgentKey(key);
-      mention.setMentionOpen(false);
-      mention.setMentionQuery(null);
-      mention.setMentionSelectorOpen(false);
-      mention.setMentionActiveIndex(0);
-    },
-    [
-      agentSelection.setSelectedAgentKey,
-      mention.setMentionOpen,
-      mention.setMentionQuery,
-      mention.setMentionSelectorOpen,
-      mention.setMentionActiveIndex,
-    ]
-  );
-
-  const handleSelectAssistant = useCallback(
-    (assistantId: string) => {
-      agentSelection.setSelectedAgentKey(assistantId);
       mention.setMentionOpen(false);
       mention.setMentionQuery(null);
       mention.setMentionSelectorOpen(false);
@@ -866,6 +850,8 @@ const GuidPage: React.FC = () => {
             onClearWorkspace={() => guidInput.setDir('')}
           />
 
+          {!agentSelection.is_presetAgent ? <HomeFeed /> : null}
+
           <AssistantSelectionArea
             is_presetAgent={agentSelection.is_presetAgent}
             selectedAgentInfo={agentSelection.selectedAgentInfo}
@@ -873,7 +859,6 @@ const GuidPage: React.FC = () => {
             selectedAssistantDetail={selectedAssistantDetail}
             localeKey={localeKey}
             currentEffectiveAgentInfo={agentSelection.currentEffectiveAgentInfo}
-            onSelectAssistant={handleSelectAssistant}
             onSetInput={guidInput.setInput}
             onFocusInput={guidInput.handleTextareaFocus}
             onRegisterOpenDetails={(openDetails) => {

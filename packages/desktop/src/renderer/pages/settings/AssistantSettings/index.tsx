@@ -33,6 +33,8 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 type AssistantNavigationState = {
   openAssistantId?: string;
   openAssistantEditor?: boolean;
+  /** Open the editor directly for a brand-new assistant (from the overview page). */
+  createAssistant?: boolean;
 };
 const OPEN_ASSISTANT_EDITOR_INTENT_KEY = 'guid.openAssistantEditorIntent';
 
@@ -170,6 +172,12 @@ const AssistantSettings: React.FC = () => {
 
   useEffect(() => {
     if (hasConsumedNavigationIntentRef.current) return;
+    // Create intent from the assistants overview page — open a fresh editor.
+    if (navigationState?.createAssistant) {
+      hasConsumedNavigationIntentRef.current = true;
+      void editor.handleCreate();
+      return;
+    }
     const openAssistantFromRoute =
       navigationState?.openAssistantEditor && navigationState.openAssistantId ? navigationState.openAssistantId : null;
 

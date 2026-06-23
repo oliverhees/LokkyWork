@@ -1,0 +1,93 @@
+{
+  "title": "Workflows",
+  "description": "Verkette mehrere Agent-Schritte. Jeder Schritt läuft als eigene Unterhaltung; die Ausgabe des vorherigen Schritts fließt in den nächsten.",
+  "newWorkflow": "Neuer Workflow",
+  "empty": "Noch keine Workflows",
+  "stepCount": "{{count}} Schritt(e)",
+  "actions": {
+    "run": "Starten",
+    "running": "Läuft",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "viewChat": "Chat ansehen"
+  },
+  "editor": {
+    "title": "Workflow-Editor",
+    "back": "Zurück",
+    "notFound": "Workflow nicht gefunden",
+    "noSteps": "Dieser Workflow hat noch keine Schritte.",
+    "addStep": "Schritt hinzufügen",
+    "save": "Speichern",
+    "saved": "Workflow gespeichert",
+    "saveError": "Workflow konnte nicht gespeichert werden",
+    "run": "Starten",
+    "cancel": "Abbrechen",
+    "inspector": {
+      "title": "Schritt bearbeiten"
+    },
+    "node": {
+      "backend": "Backend",
+      "noConversation": "Noch kein Chat"
+    }
+  },
+  "deleteSuccess": "Workflow gelöscht",
+  "deleteConfirm": "Diesen Workflow löschen?",
+  "runError": "Workflow konnte nicht gestartet werden",
+  "execution": {
+    "title": "Ausführung",
+    "noModelHint": "Für einen oder mehrere Schritte konnte kein Modell aufgelöst werden. Lege pro Schritt ein Modell fest.",
+    "stepStatus": {
+      "pending": "Ausstehend",
+      "running": "Läuft",
+      "completed": "Abgeschlossen",
+      "error": "Fehler",
+      "skipped": "Übersprungen"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "running": "Läuft",
+      "completed": "Abgeschlossen",
+      "error": "Fehler",
+      "cancelled": "Abgebrochen"
+    },
+    "cancel": "Abbrechen"
+  },
+  "form": {
+    "create": "Workflow erstellen",
+    "edit": "Workflow bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "name": "Name",
+    "nameRequired": "Name ist erforderlich",
+    "namePlaceholder": "z. B. Recherchieren und zusammenfassen",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Optionale Beschreibung",
+    "steps": "Schritte",
+    "addStep": "Schritt hinzufügen",
+    "noSteps": "Füge mindestens einen Schritt hinzu.",
+    "stepRequired": "Füge mindestens einen Schritt hinzu",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "removeStep": "Schritt entfernen",
+    "step": {
+      "title": "Schritt {{index}}",
+      "name": "Schrittname",
+      "namePlaceholder": "z. B. Entwurf",
+      "backend": "Backend",
+      "model": "Modell (optional)",
+      "modelPlaceholder": "Modellname",
+      "inputMode": "Eingabemodus",
+      "prompt": "Prompt",
+      "promptPlaceholder": "Prompt für diesen Schritt. Nutze {{input}} für die Ausgabe des vorherigen Schritts im Template-Modus.",
+      "noModels": "Keine Modelle konfiguriert",
+      "skills": "Skills",
+      "skillsPlaceholder": "Skills auswählen",
+      "noSkills": "Keine Skills verfügbar"
+    },
+    "inputMode": {
+      "none": "Keine (nur eigener Prompt)",
+      "append": "Vorherige Ausgabe anhängen",
+      "template": "Template ({{input}})"
+    }
+  }
+}

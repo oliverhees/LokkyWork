@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import type { TChatConversation } from '@/common/config/storage';
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
+import { applyAssistantDeOverrides } from '@renderer/utils/assistant/assistantDeOverrides';
 import CoworkLogo from '@/renderer/assets/icons/cowork.svg';
 import { resolveExtensionAssetUrl } from '@/renderer/utils/platform';
 import { DETECTED_AGENTS_SWR_KEY, fetchDetectedAgents, type AgentMetadata } from '@/renderer/utils/model/agentTypes';
@@ -219,7 +220,10 @@ export function usePresetAssistantInfo(conversation: TChatConversation | undefin
 
   // Merged assistant catalog (builtin + user) from backend
   const { data: assistantsList, isLoading: isLoadingAssistants } = useSWR('assistants', () =>
-    ipcBridge.assistants.list.invoke().catch(() => [] as Assistant[])
+    ipcBridge.assistants.list
+      .invoke()
+      .then(applyAssistantDeOverrides)
+      .catch(() => [] as Assistant[])
   );
 
   // Extension-contributed ACP adapters (for ext:{extensionName}:{adapterId} conversations)

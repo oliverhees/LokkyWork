@@ -11,6 +11,7 @@
  */
 
 import { resolveBackendAssetUrl } from '@/renderer/utils/platform';
+import lokkyAgentLogo from '@/renderer/assets/logos/brand/lokky-agent.png';
 
 /**
  * Agent Logo 映射表
@@ -43,6 +44,16 @@ const AGENT_LOGO_PATH_MAP = {
   qoder: 'tools/coding/qoder.png',
   cursor: 'tools/coding/cursor.png',
 } as const satisfies Record<string, string>;
+
+/**
+ * Local brand overrides: these agents render a renderer-bundled asset instead of
+ * the backend-served logo (`/api/assets/logos/...`). The aionrs ("Lokky CLI")
+ * built-in logo is embedded in the aioncore binary, so we override it here to show
+ * the LokkyWork dragon everywhere without rebuilding aioncore.
+ */
+const LOCAL_AGENT_LOGO_OVERRIDES: Partial<Record<string, string>> = {
+  aionrs: lokkyAgentLogo,
+};
 
 const OPEN_CODE_LIGHT_FILE_NAME = 'opencode-light.svg';
 const OPEN_CODE_DARK_FILE_NAME = 'opencode-dark.svg';
@@ -81,8 +92,10 @@ function isDarkTheme(): boolean {
  */
 export function getAgentLogo(agent: string | undefined | null): string | null {
   if (!agent || typeof agent !== 'string') return null;
-  const key = agent.toLowerCase() as keyof typeof AGENT_LOGO_PATH_MAP;
-  const path = AGENT_LOGO_PATH_MAP[key];
+  const key = agent.toLowerCase();
+  const override = LOCAL_AGENT_LOGO_OVERRIDES[key];
+  if (override) return override;
+  const path = AGENT_LOGO_PATH_MAP[key as keyof typeof AGENT_LOGO_PATH_MAP];
   return path ? normalizeLogoUrl(buildAssetUrl(path)) : null;
 }
 
@@ -101,6 +114,15 @@ export function resolveAgentLogo(opts: {
   custom_agent_id?: string | null;
   isExtension?: boolean;
 }): string | null {
+  // Local brand overrides win even over a backend-provided icon URL: the aionrs
+  // ("Lokky CLI") built-in ships an aioncore-served logo (`brand/aion.svg`) as
+  // `icon`, which would otherwise mask the LokkyWork dragon in the agent pill bar.
+  // Scoped to the few overridden backends, so user/custom icons are untouched.
+  const backendKey = opts.backend?.toLowerCase();
+  if (backendKey && LOCAL_AGENT_LOGO_OVERRIDES[backendKey]) {
+    return LOCAL_AGENT_LOGO_OVERRIDES[backendKey];
+  }
+
   if (opts.icon) return normalizeLogoUrl(opts.icon);
 
   // For extension agents, extract adapter ID from custom_agent_id

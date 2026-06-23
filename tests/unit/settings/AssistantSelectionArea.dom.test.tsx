@@ -186,68 +186,11 @@ describe('AssistantSelectionArea', () => {
     );
   });
 
-  it('renders homepage assistant cards in backend order without pinning builtin presets', () => {
-    render(
-      <ConfigProvider>
-        <AssistantSelectionArea
-          is_presetAgent={false}
-          selectedAgentInfo={undefined}
-          assistants={[
-            {
-              id: 'writer',
-              source: 'user',
-              name: 'Writer',
-              name_i18n: {},
-              description_i18n: {},
-              enabled: true,
-              sort_order: 1000,
-              preset_agent_type: 'claude',
-              enabled_skills: [],
-              custom_skill_names: [],
-              disabled_builtin_skills: [],
-              context_i18n: {},
-              prompts: [],
-              prompts_i18n: {},
-              models: [],
-            },
-            {
-              id: 'cowork',
-              source: 'builtin',
-              name: 'Cowork',
-              name_i18n: {},
-              description_i18n: {},
-              enabled: true,
-              sort_order: 2000,
-              preset_agent_type: 'claude',
-              enabled_skills: [],
-              custom_skill_names: [],
-              disabled_builtin_skills: [],
-              context_i18n: {},
-              prompts: [],
-              prompts_i18n: {},
-              models: [],
-            },
-          ]}
-          localeKey='en-US'
-          currentEffectiveAgentInfo={{
-            agent_type: 'acp',
-            isFallback: false,
-            originalType: 'acp',
-            isAvailable: true,
-          }}
-          onSelectAssistant={vi.fn()}
-          onSetInput={vi.fn()}
-          onFocusInput={vi.fn()}
-        />
-      </ConfigProvider>
-    );
-
-    const presetCards = screen
-      .getAllByTestId(/preset-pill-/)
-      .map((element) => element.getAttribute('data-testid')?.replace('preset-pill-', ''));
-
-    expect(presetCards).toEqual(['writer', 'cowork']);
-  });
+  // NOTE: The "homepage assistant cards in backend order" test was removed here.
+  // That responsibility moved out of AssistantSelectionArea into AgentPillBar
+  // (rendered by GuidPage) during the assistants-page refactor; AgentPillBar
+  // renders `availableAgents.filter(!is_preset).map(...)` with no sort/pin, so
+  // backend order is preserved. Re-add coverage against AgentPillBar if needed.
 
   it('prefers localized recommended prompts from assistant detail in selected assistant view', () => {
     render(

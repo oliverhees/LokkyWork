@@ -1,4 +1,5 @@
 import { ipcBridge } from '@/common';
+import { applyAssistantDeOverrides } from '@renderer/utils/assistant/assistantDeOverrides';
 import { resolveLocaleKey } from '@/common/utils';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import {
@@ -23,7 +24,7 @@ export const useAssistantList = () => {
 
   const loadAssistants = useCallback(async () => {
     try {
-      const list = await ipcBridge.assistants.list.invoke();
+      const list = applyAssistantDeOverrides(await ipcBridge.assistants.list.invoke());
       setAssistants(list);
       setActiveAssistantId((prev) => {
         if (prev && list.some((a) => a.id === prev)) return prev;

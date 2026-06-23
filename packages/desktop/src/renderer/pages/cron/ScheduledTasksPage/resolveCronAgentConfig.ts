@@ -66,7 +66,7 @@ export function resolveCronAgentConfig(input: ResolveCronAgentConfigInput): Reso
       resolvedAgentType = 'aionrs';
       agent_config = {
         backend: selectedAionrsProvider.id,
-        name: selectedAionrsProvider.name || agent?.name || 'Aion CLI',
+        name: selectedAionrsProvider.name || agent?.name || 'Lokky CLI',
         mode: getMode('aionrs'),
         model_id,
         workspace,

@@ -21,6 +21,7 @@ import DevSettings from './DevSettings';
 import DirInputItem from './DirInputItem';
 import PreferenceRow from './PreferenceRow';
 import VoiceInputSection from './VoiceInputSection';
+import PiiProxySettings from './PiiProxySettings';
 
 /**
  * System settings content component
@@ -376,6 +377,9 @@ const SystemModalContent: React.FC = () => {
 
       <AionScrollArea className='flex-1 min-h-0 pb-16px' disableOverflow={isPageMode}>
         <div className='space-y-16px'>
+          <div className='px-[12px] md:px-[32px] py-16px bg-2 rd-16px'>
+            <PiiProxySettings />
+          </div>
           <div className='px-[12px] md:px-[32px] py-16px bg-2 rd-16px space-y-12px'>
             <div className='w-full flex flex-col divide-y divide-border-2'>
               {preferenceItems.map((item) => (

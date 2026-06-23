@@ -9,6 +9,7 @@ import { ipcBridge } from '@/common';
 import type { ICreateConversationParams } from '@/common/adapter/ipcBridge';
 import type { IProvider, TProviderWithModel } from '@/common/config/storage';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
+import { getAssistantDeRule } from '@renderer/utils/assistant/assistantRulesDe';
 import { DEFAULT_CODEX_MODELS } from '@/common/types/codex/codexModels';
 import { CODEX_MODE_NATIVE_FULL_ACCESS, normalizeCodexMode } from '@/common/types/codex/codexModes';
 import { resolveLocaleKey } from '@/common/utils';
@@ -121,7 +122,7 @@ export async function getDefaultAionrsModel(): Promise<TProviderWithModel> {
 
   const compatibleProviders = providers.filter(isAionrsCompatibleProvider);
   if (compatibleProviders.length === 0) {
-    throw new Error('No enabled model provider for Aion CLI');
+    throw new Error('No enabled model provider for Lokky CLI');
   }
 
   const savedDefault = configService.get('aionrs.defaultModel');
@@ -208,6 +209,11 @@ export async function buildPresetAssistantParams(
   const preferredThoughtLevel = type === 'acp' ? getPreferredThoughtLevel(preset_agent_type) : undefined;
   const model = {} as TProviderWithModel;
 
+  // de-DE: builtin assistants ship no German rule from aioncore. Inject the
+  // translated rule as preset_context — the conversation service uses it as the
+  // rule fallback when the locale rule is empty (aioncore service.rs).
+  const germanRule = localeKey.toLowerCase().startsWith('de') ? getAssistantDeRule(custom_agent_id) : undefined;
+
   return buildAgentConversationParams({
     backend: preset_agent_type,
     name: assistant.name,
@@ -227,5 +233,6 @@ export async function buildPresetAssistantParams(
     session_mode: preferredMode,
     current_model_id: preferredAcpModelId,
     thought_level: preferredThoughtLevel,
+    extra: germanRule ? { preset_context: germanRule } : undefined,
   });
 }

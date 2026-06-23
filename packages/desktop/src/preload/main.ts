@@ -48,6 +48,29 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Feedback: forward diagnostics logs to the main process console
   logFeedbackEvent: (payload: { details?: unknown; level: 'info' | 'warn' | 'error'; message: string }) =>
     ipcRenderer.send('feedback:renderer-log', payload),
+  // PII proxy: start/stop the local anonymization proxy at runtime (CODE-33)
+  syncPiiProxy: (enabled: boolean): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('pii-proxy:sync', enabled),
+  // PII proxy: run the end-to-end self-test through the running proxy (CODE-34)
+  runPiiSelfTest: (): Promise<{ ok: boolean; error?: string; result?: unknown }> =>
+    ipcRenderer.invoke('pii-proxy:selftest'),
+  // Second-Brain vault browser (CODE-49): call a tool on a remote MCP server
+  // directly from the Main process (renderer can't — CORS). Bearer token in
+  // `headers` is forwarded but never logged.
+  callMcpTool: (params: {
+    url: string;
+    headers?: Record<string, string>;
+    name: string;
+    args?: Record<string, unknown>;
+  }): Promise<{ ok: true; result: unknown } | { ok: false; error: string }> =>
+    ipcRenderer.invoke('mcp:call-tool', params),
+  // Second-Brain connect form (LOKYY-51): connect + list tools without calling
+  // any — used to test a connection before saving. Bearer token never logged.
+  listMcpTools: (params: {
+    url: string;
+    headers?: Record<string, string>;
+  }): Promise<{ ok: true; tools: Array<{ name: string; description?: string }> } | { ok: false; error: string }> =>
+    ipcRenderer.invoke('mcp:list-tools', params),
 });
 
 // Synchronously fetch the aioncore port and expose it to the renderer

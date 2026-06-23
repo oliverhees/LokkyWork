@@ -6,6 +6,7 @@
 
 import type { SpeechToTextConfig } from '@/common/types/provider/speech';
 import type { Theme } from '@/common/theme/types';
+import type { IWorkflow } from '@/common/types/workflow/workflowTypes';
 import { storage } from '@office-ai/platform';
 
 // 系统配置存储
@@ -102,6 +103,8 @@ export interface IConfigStorageRefer {
   'system.keepAwake'?: boolean;
   // Automatically preview newly created Office files in the current workspace
   'system.autoPreviewOfficeFiles'?: boolean;
+  // PII anonymization proxy (CODE-26): user-facing on/off toggle
+  'pii.proxyEnabled'?: boolean;
   // Telegram assistant default model / Telegram 助手默认模型
   'assistant.telegram.defaultModel'?: {
     id: string;
@@ -187,6 +190,9 @@ export interface IConfigStorageRefer {
   'pet.confirmEnabled'?: boolean;
   // Desktop Pet: active skin id ('default' or a community-skins/<id> folder name)
   'pet.skin'?: string;
+  // Workflow definitions (Skill-Chaining / Workflow-Automation). Authoritative
+  // client-side store; executions are runtime state and not persisted here.
+  workflows?: IWorkflow[];
 }
 
 export interface IEnvStorageRefer {

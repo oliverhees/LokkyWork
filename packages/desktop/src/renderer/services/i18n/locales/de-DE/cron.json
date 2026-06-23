@@ -52,10 +52,10 @@
   },
   "page": {
     "newTask": "Neue Aufgabe",
-    "description": "Aufgaben nach Zeitplan ausführen. Du kannst AionUi auch in jedem Gespräch bitten, eine zu erstellen.",
+    "description": "Aufgaben nach Zeitplan ausführen. Du kannst LokkyWork auch in jedem Gespräch bitten, eine zu erstellen.",
     "awakeBanner": "Geplante Aufgaben werden nur ausgeführt, wenn dein Computer aktiv ist.",
     "keepAwake": "Aktiv halten",
-    "keepAwakeTooltip": "Wenn aktiviert, verhindert AionUi, dass dein Computer in den Ruhezustand geht",
+    "keepAwakeTooltip": "Wenn aktiviert, verhindert LokkyWork, dass dein Computer in den Ruhezustand geht",
     "createTask": "Geplante Aufgabe erstellen",
     "editTask": "Geplante Aufgabe bearbeiten",
     "createSuccess": "Aufgabe erfolgreich erstellt",
@@ -104,7 +104,7 @@
       "selectFolder": "Ordner auswählen",
       "clearFolder": "Leeren",
       "model": "Modell",
-      "aionrsModelRequired": "Bitte wähle ein Modell für Aion CLI",
+      "aionrsModelRequired": "Bitte wähle ein Modell für Lokky CLI",
       "aionrsNoProvider": "Keine verfügbaren Modelle"
     },
     "freq": {

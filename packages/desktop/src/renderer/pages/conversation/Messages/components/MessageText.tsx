@@ -10,11 +10,13 @@ import { useConversationContextSafe } from '@/renderer/hooks/context/Conversatio
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { iconColors } from '@/renderer/styles/colors';
 import { Alert, Message, Tooltip } from '@arco-design/web-react';
-import { Copy } from '@icon-park/react';
+import { Brain, Copy } from '@icon-park/react';
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { copyText } from '@/renderer/utils/ui/clipboard';
+import { useVaultServer } from '@/renderer/pages/conversation/Workspace/vault/useVaultServer';
+import SaveToVaultModal from '@/renderer/pages/conversation/Workspace/vault/SaveToVaultModal';
 import CollapsibleContent from '@renderer/components/chat/CollapsibleContent';
 import FilePreview from '@renderer/components/media/FilePreview';
 import HorizontalFileList from '@renderer/components/media/HorizontalFileList';
@@ -116,6 +118,10 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
   const { data, json } = useFormatContent(text);
   const { t } = useTranslation();
   const [showCopyAlert, setShowCopyAlert] = useState(false);
+  // Second-Brain "Merken" action (CODE-53): detect a write-capable vault server
+  // (cached/shared across messages) and offer to save this message as a note.
+  const vaultServer = useVaultServer();
+  const [vaultModalVisible, setVaultModalVisible] = useState(false);
   const isUserMessage = message.position === 'right';
   const isTeammateMessage = message.position === 'left' && message.content.teammateMessage === true;
   const shouldRenderPlainText = isUserMessage;
@@ -127,8 +133,14 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
     [conversationContext?.workspace, files]
   );
 
+  // A pending teammate guest block (@-mention sub-answer) shows a typing
+  // indicator even before the first streamed token, so don't drop it as "empty".
+  const isContentEmpty =
+    !message.content.content || (typeof message.content.content === 'string' && !message.content.content.trim());
+  const isPendingGuestBlock = isTeammateMessage && message.status === 'pending' && isContentEmpty;
+
   // 过滤空内容，避免渲染空DOM
-  if (!message.content.content || (typeof message.content.content === 'string' && !message.content.content.trim())) {
+  if (isContentEmpty && !isPendingGuestBlock) {
     return null;
   }
 
@@ -157,6 +169,22 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
       </div>
     </Tooltip>
   );
+
+  // The text we'd save to the vault — same content as Copy, without the file list.
+  const messageBody = shouldRenderPlainText ? text : json ? JSON.stringify(data, null, 2) : text;
+
+  // Only when a write-capable vault is connected (createTool present).
+  const mementoButton = vaultServer?.createTool ? (
+    <Tooltip content={t('conversation.vault.save.action', { defaultValue: 'Im Second Brain merken' })}>
+      <div
+        className='p-4px rd-4px cursor-pointer hover:bg-3 transition-colors opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto focus-within:opacity-100 focus-within:pointer-events-auto'
+        onClick={() => setVaultModalVisible(true)}
+        style={{ lineHeight: 0 }}
+      >
+        <Brain theme='outline' size='16' fill={iconColors.secondary} />
+      </div>
+    </Tooltip>
+  ) : null;
 
   const cronMeta = message.content.cronMeta;
   const senderName = message.content.senderName;
@@ -208,7 +236,25 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
           }}
         >
           {/* JSON 内容使用折叠组件 Use CollapsibleContent for JSON content */}
-          {shouldRenderPlainText ? (
+          {isPendingGuestBlock ? (
+            <span
+              className='inline-flex items-center gap-4px py-2px'
+              aria-label={t('conversation.assistantMention.thinking', { defaultValue: 'denkt nach …' })}
+            >
+              <span
+                className='size-6px rounded-full bg-[var(--color-text-3)] animate-pulse'
+                style={{ animationDelay: '0ms' }}
+              />
+              <span
+                className='size-6px rounded-full bg-[var(--color-text-3)] animate-pulse'
+                style={{ animationDelay: '160ms' }}
+              />
+              <span
+                className='size-6px rounded-full bg-[var(--color-text-3)] animate-pulse'
+                style={{ animationDelay: '320ms' }}
+              />
+            </span>
+          ) : shouldRenderPlainText ? (
             <div className='whitespace-pre-wrap break-words' data-testid='message-text-content'>
               {text}
             </div>
@@ -237,6 +283,7 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
             })}
           >
             {copyButton}
+            {mementoButton}
             {message.created_at && (
               <span className='text-12px text-t-secondary opacity-0 group-hover:opacity-100 transition-opacity select-none'>
                 {formatMessageTime(message.created_at)}
@@ -245,6 +292,14 @@ const MessageText: React.FC<{ message: IMessageText; showCopyRow?: boolean }> = 
           </div>
         )}
       </div>
+      {vaultServer?.createTool && (
+        <SaveToVaultModal
+          visible={vaultModalVisible}
+          server={vaultServer}
+          content={messageBody}
+          onClose={() => setVaultModalVisible(false)}
+        />
+      )}
       {showCopyAlert && (
         <Alert
           type='success'

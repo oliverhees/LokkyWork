@@ -110,11 +110,20 @@ export type AgentMetadata = {
 };
 
 /** Shared fetcher for DETECTED_AGENTS_SWR_KEY — single source of truth. */
+/**
+ * Rebrand the built-in aionrs engine's display name to the LokkyWork brand.
+ * The backend still reports the legacy "Aion CLI" label; replace only that
+ * exact default so user-customized agent names stay untouched.
+ */
+function rebrandBuiltinAgentName(agents: AgentMetadata[]): AgentMetadata[] {
+  return agents.map((agent) => (agent.name === 'Aion CLI' ? { ...agent, name: 'Lokky CLI' } : agent));
+}
+
 export async function fetchDetectedAgents(): Promise<AgentMetadata[]> {
   try {
     const agents = await ipcBridge.acpConversation.getAvailableAgents.invoke();
     if (Array.isArray(agents)) {
-      return agents as AgentMetadata[];
+      return rebrandBuiltinAgentName(agents as AgentMetadata[]);
     }
   } catch {
     // fallback to empty
@@ -132,7 +141,7 @@ export async function fetchManagedAgents(): Promise<AgentMetadata[]> {
   try {
     const agents = await ipcBridge.acpConversation.getManagedAgents.invoke();
     if (Array.isArray(agents)) {
-      return agents as AgentMetadata[];
+      return rebrandBuiltinAgentName(agents as AgentMetadata[]);
     }
   } catch {
     // fallback to empty

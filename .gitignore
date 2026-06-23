@@ -215,3 +215,6 @@ graphify-out/
 .graphify_python
 
 .snow/
+
+# Lokale MCP-Server-Config (private Infrastruktur, Secrets via env)
+.mcp.json

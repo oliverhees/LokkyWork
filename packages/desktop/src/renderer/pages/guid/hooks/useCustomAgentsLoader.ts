@@ -6,6 +6,7 @@
 
 import { ipcBridge } from '@/common';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
+import { applyAssistantDeOverrides } from '@renderer/utils/assistant/assistantDeOverrides';
 import type { AgentMetadata } from '@/renderer/utils/model/agentTypes';
 import { useAgents } from '@/renderer/hooks/agent/useAgents';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -68,7 +69,7 @@ export const useCustomAgentsLoader = ({
   // all see the same list without duplicate HTTP calls.
   const { data: assistantList } = useSWR('assistants.list', async () => {
     try {
-      return await ipcBridge.assistants.list.invoke();
+      return applyAssistantDeOverrides(await ipcBridge.assistants.list.invoke());
     } catch (error) {
       console.error('Failed to load assistants:', error);
       return [] as Assistant[];

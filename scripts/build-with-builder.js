@@ -15,6 +15,26 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+// Load gitignored build-time env (e.g. SENTRY_DSN → self-hosted GlitchTip) from
+// the repo-root .env so packaged builds report errors/feedback without baking
+// the DSN into the repo. Existing process.env wins (CI provides these directly).
+(function loadRepoEnv() {
+  const envPath = path.resolve(__dirname, '..', '.env');
+  if (!fs.existsSync(envPath)) return;
+  for (const rawLine of fs.readFileSync(envPath, 'utf-8').split('\n')) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith('#')) continue;
+    const eq = line.indexOf('=');
+    if (eq === -1) continue;
+    const key = line.slice(0, eq).trim();
+    let val = line.slice(eq + 1).trim();
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    if (!(key in process.env)) process.env[key] = val;
+  }
+})();
+
 // DMG retry logic for macOS: detects DMG creation failures by checking artifacts
 // (.app exists but .dmg missing) and retries only the DMG step using
 // electron-builder --prepackaged with the .app path (not the parent directory).

@@ -1,0 +1,93 @@
+{
+  "title": "Workflows",
+  "description": "Chain multiple agent steps together. Each step runs as its own conversation; the previous step's output feeds the next.",
+  "newWorkflow": "New Workflow",
+  "empty": "No workflows yet",
+  "stepCount": "{{count}} step(s)",
+  "actions": {
+    "run": "Run",
+    "running": "Running",
+    "delete": "Delete",
+    "edit": "Edit",
+    "viewChat": "View Chat"
+  },
+  "editor": {
+    "title": "Workflow Editor",
+    "back": "Back",
+    "notFound": "Workflow not found",
+    "noSteps": "This workflow has no steps yet.",
+    "addStep": "Add Step",
+    "save": "Save",
+    "saved": "Workflow saved",
+    "saveError": "Failed to save workflow",
+    "run": "Run",
+    "cancel": "Cancel",
+    "inspector": {
+      "title": "Edit Step"
+    },
+    "node": {
+      "backend": "Backend",
+      "noConversation": "No conversation yet"
+    }
+  },
+  "deleteSuccess": "Workflow deleted",
+  "deleteConfirm": "Delete this workflow?",
+  "runError": "Failed to run workflow",
+  "execution": {
+    "title": "Execution",
+    "noModelHint": "No model could be resolved for one or more steps. Set a model on each step.",
+    "stepStatus": {
+      "pending": "Pending",
+      "running": "Running",
+      "completed": "Completed",
+      "error": "Error",
+      "skipped": "Skipped"
+    },
+    "status": {
+      "pending": "Pending",
+      "running": "Running",
+      "completed": "Completed",
+      "error": "Error",
+      "cancelled": "Cancelled"
+    },
+    "cancel": "Cancel"
+  },
+  "form": {
+    "create": "Create Workflow",
+    "edit": "Edit Workflow",
+    "save": "Save",
+    "cancel": "Cancel",
+    "name": "Name",
+    "nameRequired": "Name is required",
+    "namePlaceholder": "e.g. Research and summarize",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description",
+    "steps": "Steps",
+    "addStep": "Add Step",
+    "noSteps": "Add at least one step.",
+    "stepRequired": "Add at least one step",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "removeStep": "Remove step",
+    "step": {
+      "title": "Step {{index}}",
+      "name": "Step name",
+      "namePlaceholder": "e.g. Draft",
+      "backend": "Backend",
+      "model": "Model (optional)",
+      "modelPlaceholder": "Model name",
+      "inputMode": "Input mode",
+      "prompt": "Prompt",
+      "promptPlaceholder": "Prompt for this step. Use {{input}} for the previous step's output in template mode.",
+      "noModels": "No models configured",
+      "skills": "Skills",
+      "skillsPlaceholder": "Select skills",
+      "noSkills": "No skills available"
+    },
+    "inputMode": {
+      "none": "None (own prompt only)",
+      "append": "Append previous output",
+      "template": "Template ({{input}})"
+    }
+  }
+}

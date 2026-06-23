@@ -4,15 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CUSTOM_AVATAR_IMAGE_MAP } from '../constants';
 import styles from '../index.module.css';
 import type { AvailableAgent, EffectiveAgentInfo } from '../types';
 import type { Assistant } from '@/common/types/agent/assistantTypes';
 import type { AssistantDetail } from '@/common/types/agent/assistantTypes';
 import { Message } from '@arco-design/web-react';
-import { Plus, Robot } from '@icon-park/react';
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { resolveExtensionAssetUrl } from '@/renderer/utils/platform';
+import React, { useCallback, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,15 +18,15 @@ type AssistantSelectionAreaProps = {
   selectedAgentKey?: string;
   selectedAgentInfo: AvailableAgent | undefined;
   /**
-   * Backend-merged preset catalog. Renders as the pill bar and drives the
-   * selected-preset prompt examples. Does NOT include ACP engine configs —
-   * those are a separate concept sourced from the AgentRegistry.
+   * Backend-merged preset catalog. Drives the selected-preset prompt examples.
+   * The full assistant grid now lives on the dedicated /assistants overview
+   * page (CODE-36); this component only renders the prompt hints for the
+   * currently selected preset assistant.
    */
   assistants: Assistant[];
   selectedAssistantDetail?: AssistantDetail | null;
   localeKey: string;
   currentEffectiveAgentInfo: EffectiveAgentInfo;
-  onSelectAssistant: (assistantId: string) => void;
   onSetInput: (text: string) => void;
   onFocusInput: () => void;
   onRegisterOpenDetails?: (openDetails: (() => void) | null) => void;
@@ -50,7 +47,6 @@ const AssistantSelectionArea: React.FC<AssistantSelectionAreaProps> = ({
   selectedAssistantDetail,
   localeKey,
   currentEffectiveAgentInfo,
-  onSelectAssistant,
   onSetInput,
   onFocusInput,
   onRegisterOpenDetails,
@@ -111,148 +107,73 @@ const AssistantSelectionArea: React.FC<AssistantSelectionAreaProps> = ({
     onRegisterOpenDetails(openAssistantDetails);
   }, [onRegisterOpenDetails, openAssistantDetails]);
 
-  const scrollWrapRef = useRef<HTMLDivElement>(null);
-  const [isScrollable, setIsScrollable] = useState(false);
-
-  useEffect(() => {
-    const el = scrollWrapRef.current;
-    if (!el) return;
-    const measure = () => setIsScrollable(el.scrollHeight > el.clientHeight + 1);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [assistants]);
-
-  // Render only if the backend catalog has at least one assistant.
+  // Render only the prompt hints, and only when a preset assistant is selected.
+  // The assistant grid moved to the dedicated /assistants overview page (CODE-36).
   if (!assistants || assistants.length === 0) return null;
+  if (!is_presetAgent || !selectedAgentInfo) return null;
 
-  if (is_presetAgent && selectedAgentInfo) {
-    // Selected Assistant View
-    return (
-      <div className='mt-20px w-full'>
-        <div className='flex flex-col w-full animate-fade-in'>
-          {/* Main Agent Fallback Notice */}
-          {currentEffectiveAgentInfo.isFallback && (
-            <div
-              className='mb-12px px-12px py-8px rd-8px text-12px flex items-center gap-8px'
-              style={{
-                background: 'rgb(var(--warning-1))',
-                border: '1px solid rgb(var(--warning-3))',
-                color: 'rgb(var(--warning-6))',
-              }}
-            >
-              <span>
-                {t('guid.agentFallbackNotice', {
-                  original:
-                    currentEffectiveAgentInfo.originalType.charAt(0).toUpperCase() +
-                    currentEffectiveAgentInfo.originalType.slice(1),
-                  fallback:
-                    currentEffectiveAgentInfo.agent_type.charAt(0).toUpperCase() +
-                    currentEffectiveAgentInfo.agent_type.slice(1),
-                  defaultValue: `${currentEffectiveAgentInfo.originalType.charAt(0).toUpperCase() + currentEffectiveAgentInfo.originalType.slice(1)} is unavailable, using ${currentEffectiveAgentInfo.agent_type.charAt(0).toUpperCase() + currentEffectiveAgentInfo.agent_type.slice(1)} instead.`,
-                })}
-              </span>
-            </div>
-          )}
-          {/* Prompts Section */}
-          {(() => {
-            const agent = assistants.find((a) => a.id === selectedAgentInfo.custom_agent_id);
-            const prompts =
-              selectedAssistantDetail?.prompts.recommended_i18n?.[localeKey] ||
-              selectedAssistantDetail?.prompts.recommended_i18n?.['en-US'] ||
-              selectedAssistantDetail?.prompts.recommended ||
-              agent?.prompts_i18n?.[localeKey] ||
-              agent?.prompts_i18n?.['en-US'] ||
-              agent?.prompts;
-            if (prompts && prompts.length > 0) {
-              return (
-                <div className='mt-16px'>
-                  <div className={styles.assistantPromptHint}>
-                    {t('guid.promptExamplesHint', { defaultValue: 'Try these example prompts:' })}
-                  </div>
-                  <div className='flex flex-wrap gap-8px mt-12px'>
-                    {prompts.map((prompt: string, index: number) => (
-                      <div
-                        key={index}
-                        className={`${styles.assistantPromptChip} px-12px py-6px text-2 text-13px rd-16px cursor-pointer transition-colors shadow-sm`}
-                        onClick={() => {
-                          onSetInput(prompt);
-                          onFocusInput();
-                        }}
-                      >
-                        {prompt}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            }
-            return null;
-          })()}
-        </div>
-      </div>
-    );
-  }
-
-  // Assistant List View
   return (
-    <div className='mt-32px w-full'>
-      <div className={`${styles.assistantPromptHint} text-center mb-12px`}>
-        {t('guid.selectAssistantHint', { defaultValue: 'Select an assistant to start a task' })}
-      </div>
-      <div
-        ref={scrollWrapRef}
-        className={`${styles.assistantCardScrollWrap} ${isScrollable ? styles.assistantCardScrollWrapScrollable : ''}`}
-      >
-        <div className={styles.assistantCardGrid}>
-          {assistants
-            .filter((a) => a.enabled !== false)
-            .map((assistant) => {
-              const avatarValue = assistant.avatar?.trim();
-              const mappedAvatar = avatarValue ? CUSTOM_AVATAR_IMAGE_MAP[avatarValue] : undefined;
-              const resolvedAvatar = avatarValue ? resolveExtensionAssetUrl(avatarValue) : undefined;
-              const avatarImage = mappedAvatar || resolvedAvatar;
-              const isImageAvatar = Boolean(
-                avatarImage &&
-                (/\.(svg|png|jpe?g|webp|gif)$/i.test(avatarImage) || /^(https?:|file:\/\/|data:|\/)/i.test(avatarImage))
-              );
-              const description =
-                assistant.description_i18n?.[localeKey] ||
-                assistant.description_i18n?.['en-US'] ||
-                assistant.description ||
-                '';
-              return (
-                <div
-                  key={assistant.id}
-                  data-testid={`preset-pill-${assistant.id}`}
-                  className={styles.assistantCard}
-                  onClick={() => onSelectAssistant(`custom:${assistant.id}`)}
-                >
-                  <div className={styles.assistantCardAvatar}>
-                    {isImageAvatar ? (
-                      <img src={avatarImage} alt='' />
-                    ) : avatarValue ? (
-                      <span className={styles.assistantCardEmoji}>{avatarValue}</span>
-                    ) : (
-                      <Robot theme='outline' size={18} />
-                    )}
-                  </div>
-                  <div className={styles.assistantCardMeta}>
-                    <div className={styles.assistantCardName}>{assistant.name_i18n?.[localeKey] || assistant.name}</div>
-                    {description && <div className={styles.assistantCardDesc}>{description}</div>}
-                  </div>
-                </div>
-              );
-            })}
+    <div className='mt-20px w-full'>
+      {agentMessageContext}
+      <div className='flex flex-col w-full animate-fade-in'>
+        {/* Main Agent Fallback Notice */}
+        {currentEffectiveAgentInfo.isFallback && (
           <div
-            data-testid='btn-add-preset'
-            className={styles.assistantCardAdd}
-            onClick={() => navigate('/settings/assistants')}
+            className='mb-12px px-12px py-8px rd-8px text-12px flex items-center gap-8px'
+            style={{
+              background: 'rgb(var(--warning-1))',
+              border: '1px solid rgb(var(--warning-3))',
+              color: 'rgb(var(--warning-6))',
+            }}
           >
-            <Plus theme='outline' size={20} />
+            <span>
+              {t('guid.agentFallbackNotice', {
+                original:
+                  currentEffectiveAgentInfo.originalType.charAt(0).toUpperCase() +
+                  currentEffectiveAgentInfo.originalType.slice(1),
+                fallback:
+                  currentEffectiveAgentInfo.agent_type.charAt(0).toUpperCase() +
+                  currentEffectiveAgentInfo.agent_type.slice(1),
+                defaultValue: `${currentEffectiveAgentInfo.originalType.charAt(0).toUpperCase() + currentEffectiveAgentInfo.originalType.slice(1)} is unavailable, using ${currentEffectiveAgentInfo.agent_type.charAt(0).toUpperCase() + currentEffectiveAgentInfo.agent_type.slice(1)} instead.`,
+              })}
+            </span>
           </div>
-        </div>
+        )}
+        {/* Prompts Section */}
+        {(() => {
+          const agent = assistants.find((a) => a.id === selectedAgentInfo.custom_agent_id);
+          const prompts =
+            selectedAssistantDetail?.prompts.recommended_i18n?.[localeKey] ||
+            selectedAssistantDetail?.prompts.recommended_i18n?.['en-US'] ||
+            selectedAssistantDetail?.prompts.recommended ||
+            agent?.prompts_i18n?.[localeKey] ||
+            agent?.prompts_i18n?.['en-US'] ||
+            agent?.prompts;
+          if (prompts && prompts.length > 0) {
+            return (
+              <div className='mt-16px'>
+                <div className={styles.assistantPromptHint}>
+                  {t('guid.promptExamplesHint', { defaultValue: 'Try these example prompts:' })}
+                </div>
+                <div className='flex flex-wrap gap-8px mt-12px'>
+                  {prompts.map((prompt: string, index: number) => (
+                    <div
+                      key={index}
+                      className={`${styles.assistantPromptChip} px-12px py-6px text-2 text-13px rd-16px cursor-pointer transition-colors shadow-sm`}
+                      onClick={() => {
+                        onSetInput(prompt);
+                        onFocusInput();
+                      }}
+                    >
+                      {prompt}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
       </div>
     </div>
   );

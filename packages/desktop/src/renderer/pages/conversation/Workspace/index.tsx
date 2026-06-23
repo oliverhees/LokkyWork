@@ -31,6 +31,8 @@ import { useWorkspacePaste } from './hooks/useWorkspacePaste';
 import { useAbortUploadsOnConversationChange } from '@/renderer/hooks/file/useAbortUploadsOnConversationChange';
 import { useWorkspaceSearch } from './hooks/useWorkspaceSearch';
 import { useWorkspaceTree } from './hooks/useWorkspaceTree';
+import VaultBrowser from './vault/VaultBrowser';
+import { useVaultServer } from './vault/useVaultServer';
 import type { WorkspaceProps, WorkspaceTab } from './types';
 import {
   computeContextMenuPosition,
@@ -61,6 +63,11 @@ const ChatWorkspace: React.FC<WorkspaceProps> = ({
   // Tab state and file changes
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('files');
   const fileChangesHook = useFileChanges({ workspace });
+
+  // Second-Brain vault (CODE-49): detect a connected vault MCP server. When one
+  // exists, an extra "Second Brain" tab browses it; otherwise it stays hidden.
+  const vaultServer = useVaultServer();
+  const hasVault = Boolean(vaultServer);
 
   // Bind workspace uploads to the conversation lifecycle: switching the
   // workspace conversation or unmounting the panel cancels in-flight uploads.
@@ -193,6 +200,14 @@ const ChatWorkspace: React.FC<WorkspaceProps> = ({
     }
   }, [activeTab, fileChangesHook.refreshChanges]);
 
+  // If the vault tab is active but the vault server disappears (e.g. MCP
+  // disabled), fall back to the files tab so the panel never goes blank.
+  useEffect(() => {
+    if (activeTab === 'vault' && !hasVault) {
+      setActiveTab('files');
+    }
+  }, [activeTab, hasVault]);
+
   // Get target folder path for paste confirm modal
   const targetFolderPathForModal = getTargetFolderPath(
     treeHook.selectedNodeRef.current,
@@ -280,6 +295,7 @@ const ChatWorkspace: React.FC<WorkspaceProps> = ({
           onTabChange={setActiveTab}
           changeCount={fileChangesHook.changeCount}
           branch={fileChangesHook.snapshotInfo?.branch ?? null}
+          hasVault={hasVault}
         />
 
         {/* Toolbar: search input + directory name + action buttons */}
@@ -493,6 +509,13 @@ const ChatWorkspace: React.FC<WorkspaceProps> = ({
                 }}
               ></Tree>
             )}
+          </FlexFullContainer>
+        )}
+
+        {/* Second-Brain vault tab content */}
+        {!isWorkspaceCollapsed && activeTab === 'vault' && vaultServer && (
+          <FlexFullContainer containerClassName='overflow-hidden'>
+            <VaultBrowser server={vaultServer} />
           </FlexFullContainer>
         )}
 

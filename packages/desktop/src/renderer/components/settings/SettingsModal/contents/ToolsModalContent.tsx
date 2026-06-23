@@ -19,6 +19,7 @@ import useConfigModelListWithImage from '@/renderer/hooks/agent/useConfigModelLi
 import AionScrollArea from '@/renderer/components/base/AionScrollArea';
 import AionSelect from '@/renderer/components/base/AionSelect';
 import AddMcpServerModal from '@/renderer/pages/settings/components/AddMcpServerModal';
+import SecondBrainConnectCard from '@/renderer/pages/conversation/Workspace/vault/SecondBrainConnectCard';
 import McpServerItem from '@/renderer/pages/settings/ToolsSettings/McpServerItem';
 import { useMcpServers, useMcpConnection, useMcpModal, useMcpServerCRUD, useMcpOAuth } from '@/renderer/hooks/mcp';
 import classNames from 'classnames';
@@ -223,6 +224,13 @@ const ModalMcpManagementSection: React.FC<{
         <div className='text-14px text-t-primary'>{t('settings.mcpSettings')}</div>
         <div>{renderAddButton()}</div>
       </div>
+
+      <SecondBrainConnectCard
+        servers={mcpServers}
+        onConnect={wrappedHandleAddMcpServer}
+        onUpdate={wrappedHandleEditMcpServer}
+        onDisconnect={handleDeleteMcpServer}
+      />
 
       <div className='flex-1 min-h-0'>
         {visibleMcpServers.length === 0 && extensionMcpServers.length === 0 ? (

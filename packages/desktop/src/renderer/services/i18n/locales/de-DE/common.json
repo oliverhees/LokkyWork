@@ -60,10 +60,10 @@
   "more": "Mehr",
   "refresh": "Aktualisieren",
   "readOnly": "Schreibgeschützt",
-  "tray.showWindow": "AionUi anzeigen",
+  "tray.showWindow": "LokkyWork anzeigen",
   "tray.newChat": "Neuer Chat",
   "tray.closeToTray": "In Taskleiste minimieren",
-  "tray.about": "Über AionUi",
+  "tray.about": "Über LokkyWork",
   "tray.restart": "App neu starten",
   "tray.quit": "Beenden",
   "tray.runningTasks": "Laufende Aufgaben",
@@ -74,22 +74,22 @@
   "backendStartup": {
     "incompatibleRuntime": {
       "title": "Dieses System wird vom gebündelten Backend nicht unterstützt",
-      "description": "AionUi wurde geöffnet, aber das lokale AionCore-Backend kann auf dieser Linux-Version nicht ausgeführt werden. Bitte upgrade auf eine unterstützte Linux-Distribution und starte AionUi neu.",
+      "description": "LokkyWork wurde geöffnet, aber das lokale AionCore-Backend kann auf dieser Linux-Version nicht ausgeführt werden. Bitte upgrade auf eine unterstützte Linux-Distribution und starte LokkyWork neu.",
       "requiredVersions": "Erforderliche Runtime-Symbole: {{versions}}"
     },
     "incompleteInstallation": {
-      "title": "AionUi-Installation ist unvollständig",
-      "description": "Diese Installation fehlen erforderliche lokale Ressourcen, daher kann AionCore nicht starten. Bitte lade die neueste Version von AionUi herunter und installiere sie neu. Wenn das Problem nach der Neuinstallation erneut auftritt, überprüfe, ob Sicherheits- oder Antivirus-Software AionCore unter Quarantäne gestellt hat.",
+      "title": "LokkyWork-Installation ist unvollständig",
+      "description": "Diese Installation fehlen erforderliche lokale Ressourcen, daher kann AionCore nicht starten. Bitte lade die neueste Version von LokkyWork herunter und installiere sie neu. Wenn das Problem nach der Neuinstallation erneut auftritt, überprüfe, ob Sicherheits- oder Antivirus-Software AionCore unter Quarantäne gestellt hat.",
       "downloadLatest": "Neueste Version herunterladen",
       "sendDiagnostics": "Diagnose senden",
       "diagnosticsSent": "Diagnose gesendet",
       "diagnosticsReportSuccess": "Diagnosebericht gesendet",
       "diagnosticsReportFailed": "Fehler beim Senden des Diagnoseberichts",
-      "runtimeComponentDescription": "Diese Installation fehlen erforderliche gebündelte Runtime-Komponenten, daher kann {{resource}} nicht starten. Installiere das neueste AionUi-Paket neu. Wenn es nach der Neuinstallation immer noch auftritt, überprüfe, ob Sicherheits- oder Antivirus-Software AionUi-Komponenten unter Quarantäne gestellt hat."
+      "runtimeComponentDescription": "Diese Installation fehlen erforderliche gebündelte Runtime-Komponenten, daher kann {{resource}} nicht starten. Installiere das neueste LokkyWork-Paket neu. Wenn es nach der Neuinstallation immer noch auftritt, überprüfe, ob Sicherheits- oder Antivirus-Software LokkyWork-Komponenten unter Quarantäne gestellt hat."
     },
     "packageArchitectureMismatch": {
-      "title": "AionUi-Paket-Architektur-Fehlanpassung",
-      "description": "Dieses AionUi-Paket ist für {{packageArch}}, aber dieser Mac ist {{deviceArch}}. Möglicherweise hast du das falsche Paket heruntergeladen. Bitte lade das {{expectedArch}}-Paket herunter und installiere es."
+      "title": "LokkyWork-Paket-Architektur-Fehlanpassung",
+      "description": "Dieses LokkyWork-Paket ist für {{packageArch}}, aber dieser Mac ist {{deviceArch}}. Möglicherweise hast du das falsche Paket heruntergeladen. Bitte lade das {{expectedArch}}-Paket herunter und installiere es."
     }
   },
   "fileAttach.addFiles": "Dateien hinzufügen",

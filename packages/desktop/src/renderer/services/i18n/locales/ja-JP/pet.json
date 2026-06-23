@@ -16,5 +16,8 @@
   "desktopOnly": "デスクトップペットはデスクトップアプリでのみ利用可能です。WebUIブラウザモードでは使用できません。",
   "skin": "ペットスキン",
   "skinDefault": "クラシック",
-  "skinDragon3d": "Dragon 3D"
+  "skinDragon3d": "Dragon 3D",
+  "skinDragon2d": "Dragon 2D",
+  "skinGroupClassic": "クラシック",
+  "skinGroupDragon": "ドラゴン"
 }

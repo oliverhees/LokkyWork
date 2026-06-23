@@ -122,8 +122,11 @@ const PetSettings: React.FC = () => {
       key: 'skin',
       label: t('pet.skin'),
       component: (
-        <Radio.Group value={skin} onChange={handleSkinChange} disabled={!enabled}>
+        <Radio.Group value={skin} onChange={handleSkinChange} disabled={!enabled} direction='vertical'>
+          <div className='text-12px text-t-tertiary mb-2px'>{t('pet.skinGroupClassic')}</div>
           <Radio value='default'>{t('pet.skinDefault')}</Radio>
+          <div className='text-12px text-t-tertiary mt-8px mb-2px'>{t('pet.skinGroupDragon')}</div>
+          <Radio value='dragon-2d'>{t('pet.skinDragon2d')}</Radio>
           <Radio value='dragon-3d'>{t('pet.skinDragon3d')}</Radio>
         </Radio.Group>
       ),

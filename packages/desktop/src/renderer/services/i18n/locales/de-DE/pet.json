@@ -13,8 +13,5 @@
   "resetPosition": "Position zurücksetzen",
   "hide": "Ausblenden",
   "showHide": "Anzeigen/Ausblenden",
-  "desktopOnly": "Desktop-Begleiter ist nur in der Desktop-Anwendung verfügbar. Er kann nicht im WebUI-Browser-Modus verwendet werden.",
-  "skin": "Pet-Skin",
-  "skinDefault": "Klassisch",
-  "skinDragon3d": "Drache 3D"
+  "desktopOnly": "Desktop-Begleiter ist nur in der Desktop-Anwendung verfügbar. Er kann nicht im WebUI-Browser-Modus verwendet werden."
 }
